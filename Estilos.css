@@ -30,6 +30,10 @@ body.stage-2 {
     overflow: hidden;
     z-index: 0;
     pointer-events: none;
+    background-image: url('astronauta.jpg');
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
     transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
@@ -43,6 +47,7 @@ body.stage-2 .menu-video-bg {
     height: 100%;
     object-fit: cover;
     filter: brightness(0.65) contrast(1.15);
+    opacity: 0;
 }
 
 #Seccion_suprema,
@@ -142,27 +147,79 @@ body.intro-active {
                                                                                             LA SECCION 01*/
 
 .Texto_Principal { /*ESTE ES EL TITULO DE IRON FIST*/
-    font-family: 'Press Start 2P', cursive; text-align: center;
-    font-size: 3.8vw;
+    font-family: 'Orbitron', 'Segoe UI', sans-serif;
     text-align: center;
+    font-size: clamp(1.1rem, 1.7vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
     position: relative;
     top: -12%;
+    color: #ebf8ff;
+    text-shadow: 0 0 12px rgba(102, 180, 255, 0.9), 0 0 24px rgba(80, 160, 255, 0.7), 0 0 40px rgba(102, 180, 255, 0.5);
 }
 
 .Nombre{ /*ESTE ES LA PREGUNTA DEBAJO DEL NOMBRE*/
-    font-family: 'Press Start 2P', cursive; text-align: center;
-    font-size: 5.9vw;
+    font-family: 'Orbitron', 'Segoe UI', sans-serif;
     text-align: center;
+    font-size: clamp(4rem, 8vw, 11rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     position: relative;
     top: 0%;
     padding-bottom: 0%;
-
+    line-height: 0.9;
+    color: transparent;
+    background: linear-gradient(180deg, #edf7ff 0%, #bcd5ef 16%, #ebf7ff 28%, #8da9d1 48%, #eef8ff 68%, #bfd7f6 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 2px rgba(174, 216, 255, 0.7);
+    filter: drop-shadow(0 0 14px rgba(145, 200, 255, 0.8)) drop-shadow(0 0 28px rgba(77, 144, 255, 0.45));
 }
 
-.Boton {width: 20vw; height: 4vw; background: rgb(144, 90, 196); /*Este es el boton de JUGAR*/
-cursor: pointer;font-family: 'Press Start 2P', cursive;
-color: white; border-radius: 2px; border: none;
-margin-left: auto; margin-right: auto; margin: auto; margin-top: -3%; }
+.Boton {
+    position: relative;
+    width: min(36vw, 640px);
+    height: clamp(58px, 4vw, 96px);
+    background: linear-gradient(180deg, rgba(8, 22, 36, 0.9), rgba(13, 35, 53, 0.9));
+    cursor: pointer;
+    font-family: 'Orbitron', 'Segoe UI', sans-serif;
+    font-size: clamp(1rem, 1.2vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #eefbff;
+    border-radius: 18px;
+    border: 2px solid rgba(97, 192, 255, 0.9);
+    box-shadow: 0 0 0 1px rgba(147, 214, 255, 0.88), 0 0 12px rgba(103, 189, 255, 0.9), 0 0 28px rgba(64, 143, 255, 0.75), inset 0 0 18px rgba(88, 175, 255, 0.25);
+    margin-left: auto;
+    margin-right: auto;
+    margin: auto;
+    margin-top: -3%;
+    padding: 0 36px;
+    text-transform: uppercase;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, filter 0.25s ease;
+}
+
+.Boton::before {
+    content: "";
+    position: absolute;
+    inset: 8px 10px;
+    border: 1px solid rgba(154, 228, 255, 0.6);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.Boton:hover {
+    transform: translateY(-2px) scale(1.015);
+    border-color: rgba(145, 220, 255, 1);
+    box-shadow: 0 0 0 1px rgba(180, 232, 255, 0.9), 0 0 18px rgba(123, 212, 255, 1), 0 0 40px rgba(70, 155, 255, 0.9), inset 0 0 22px rgba(108, 207, 255, 0.35);
+    filter: brightness(1.08);
+}
+
+.Boton:active {
+    transform: translateY(0) scale(0.995);
+}
 
 /*SECCION REGLAS ------------------------------------------------------------------------------------------------------*/
 

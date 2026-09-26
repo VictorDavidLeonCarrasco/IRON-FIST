@@ -310,12 +310,126 @@ width: 100%;
     background: url(IMG/Fondo.jpg) no-repeat 50% 50%; 
     background-size: cover; position: relative; top: 4%; overflow: hidden;  }
 
+    #NIVEL_01:fullscreen {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        width: 100vw;
+        height: 100vh;
+        background: #020612;
+        padding: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    #NIVEL_01:fullscreen .Cabezera {
+        position: relative;
+        width: 100vw !important;
+        max-width: none !important;
+        height: auto;
+        min-height: 92px;
+        flex: 0 0 auto;
+        margin: 0;
+        box-sizing: border-box;
+        border-right: 5px dashed purple;
+        border-left: 5px dashed purple;
+        border-top: 5px dashed purple;
+        border-bottom: none;
+        top: 0;
+        left: 0;
+        padding: 10px 16px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #NIVEL_01:fullscreen > .Contenedor:not(.Cabezera) {
+        position: relative;
+        width: 100vw !important;
+        max-width: none !important;
+        height: auto;
+        min-height: 0;
+        flex: 1 1 0;
+        margin: 0;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+        border-right: 5px dashed purple;
+        border-left: 5px dashed purple;
+        border-bottom: 5px dashed purple;
+        border-top: none;
+    }
+
+    #NIVEL_01:fullscreen .Start,
+    #NIVEL_01:fullscreen .Pausa_Pantalla,
+    #NIVEL_01:fullscreen .FinJuegoNivel1,
+    #NIVEL_01:fullscreen .GANASTE_PANTALLA {
+        inset: 0;
+    }
+
+    #NIVEL_01:fullscreen .Contenedor_Mensaje_Star {
+        top: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(8px, 2vh, 24px);
+    }
+
+    #NIVEL_01:fullscreen .Contenedor_Mensaje_Star > div {
+        position: static !important;
+        align-items: center;
+    }
+
+    #NIVEL_01:fullscreen .Contenedor_Mensaje_Star > br {
+        display: none;
+    }
+
+    #NIVEL_01:fullscreen .Texo {
+        margin: 0;
+        font-size: clamp(14px, 3.5vh, 36px);
+        line-height: 1.6;
+    }
+
+    #NIVEL_01:fullscreen .Pollo {
+        margin: 0;
+        font-size: clamp(10px, 2.5vh, 24px);
+    }
+
+    #NIVEL_01:fullscreen #chems1,
+    #NIVEL_01:fullscreen #chems2 {
+        width: auto;
+        height: clamp(36px, 15vh, 150px);
+    }
+
+    #NIVEL_01:fullscreen .Contenedor_Mensaje_Star > .Play {
+        width: auto !important;
+        height: auto;
+        margin: 0;
+        padding: 16px 28px;
+        flex-shrink: 0;
+    }
+
     /*CABEZARA DENTRO DEL JUEGO*/
-    .Cabezera {height: 70px; 
-    border: 5px dashed purple; 
-    background: rgba(255, 255, 255, 0.363); 
-    border-bottom: none; display: flex; 
-    align-items: center; position: relative; }
+    .Cabezera {
+        height: 90px;
+        width: 900px;
+        border: 5px dashed purple;
+        background: rgba(255, 255, 255, 0.363);
+        border-bottom: none;
+        display: grid;
+        grid-template-columns: 120px 120px 120px 210px 58px 200px;
+        align-items: center;
+        column-gap: 12px;
+        position: relative;
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
     
     /*Pantalla start del inicio del juego*/
     .Start {width: 100%; height: 100%; background: rgba(0, 0, 0, 0.582);
@@ -354,6 +468,47 @@ width: 100%;
     .Pausa_Pantalla {position: absolute; top: 0%; width: 100%;
     height: 100%; background: rgba(0, 0, 0, 0.541);
     text-align: center; z-index: 1000000000; display: none;}
+
+    .FinJuegoNivel1 {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 0, 21, 0.88);
+        z-index: 150000;
+    }
+
+    .TarjetaFinJuegoNivel1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 30px 28px;
+        border: 4px solid #ff4d4d;
+        background: rgba(42, 7, 7, 0.92);
+        box-shadow: 0 0 24px rgba(255, 77, 77, 0.7);
+        text-align: center;
+    }
+
+    .TarjetaFinJuegoNivel1 h2 {
+        margin: 0;
+        font-family: 'Press Start 2P', cursive;
+        font-size: clamp(1.5rem, 2vw, 2.3rem);
+        color: #ffffff;
+        text-shadow: 0 0 12px rgba(255, 77, 77, 0.8);
+    }
+
+    .BotonReiniciarNivel1 {
+        border: none;
+        background: #ff3d5a;
+        color: white;
+        padding: 12px 18px;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 0.75rem;
+        cursor: pointer;
+    }
 
     .GANASTE_PANTALLA {position: absolute; width: 100%; height: 100%; background: rgba(47, 255, 57, 0.63);
     z-index: 900; top: 0%; display: flex; justify-content: center; align-items: center; flex-direction: column; display: none;}
@@ -398,25 +553,191 @@ width: 100%;
     border-left: 5px dashed white; 
     position: absolute; top: 0%; left: 70%;}
     
+    .VidasNivel1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 110px;
+        width: 110px;
+        color: black;
+        font-size: 13px;
+        line-height: 1vh;
+    }
+
+    .IconosVidasNivel1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 6px;
+    }
+
+    .VidaNivel1 {
+        font-size: 1.6rem;
+        color: #ff3d5a;
+        text-shadow: 0 0 8px rgba(255, 61, 90, 0.8);
+        transition: all 0.2s ease;
+    }
+
+    .VidaNivel1.perdida {
+        color: rgba(0, 0, 0, 0.38);
+        text-shadow: none;
+    }
+
+    .ControlVolumenNivel1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 200px;
+        min-width: 200px;
+        color: black;
+        font-size: 13px;
+        padding: 4px 8px;
+        border: 2px solid rgba(0, 0, 0, 0.35);
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .ControlVolumenNivel1 input {
+        width: 88px;
+        accent-color: #1ca5ff;
+        cursor: pointer;
+    }
+
+    .PantallaCompletaNivel1 {
+        width: 58px;
+        height: 46px;
+        border: 0;
+        background: #1e7bff;
+        color: white;
+        font-size: 1.4rem;
+        cursor: pointer;
+        border-radius: 10px;
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+        transition: transform 0.2s ease, filter 0.2s ease;
+        justify-self: center;
+    }
+
+    .PantallaCompletaNivel1:hover {
+        transform: scale(1.04);
+        filter: brightness(1.1);
+    }
+
     /*ESTILOS DEL SPAN Y DEL TEXTO DE TIEMPO*/
     .Tiempo {display: flex; align-items: center;
     flex-direction: column;
-    width: 14%; height: 70%; color: black; 
-    font-size: 13px; line-height: 1vh ;  }
+    width: 110px; height: 70%; color: black; 
+    font-size: 13px; line-height: 1vh; justify-self: start; }
     
     /*ESTILOS DEL SPAN Y DEL TEXTO DE PUNTAJE*/
     .Puntaje {display: flex; align-items: center; 
     flex-direction: column; 
-    width: 14%; height: 70%; color: black; 
-    font-size: 13px; line-height: 1vh;  }
+    width: 110px; height: 70%; color: black; 
+    font-size: 13px; line-height: 1vh; justify-self: start; }
     
     /*ESTILOS DEL BOTON DE PAUSE*/
-    .Pause {width: 20%; height: 70%; font-size: 14px;
+    .Pause {width: 200px; min-width: 200px; height: 70%; font-size: 14px;
     background: purple; display: flex;
     align-items: center; justify-content: center;
     color: white; cursor: pointer; position: relative;
-    left: 50%; }
+    left: 0; justify-self: end; }
     
+    /*Barra del nivel 1: mismo reparto en vista normal y pantalla completa.*/
+    #NIVEL_01 .Cabezera,
+    #NIVEL_01:fullscreen .Cabezera {
+        width: 910px;
+        height: auto;
+        min-height: 74px;
+        padding: 10px 12px;
+        top: 0;
+        border: 5px dashed #008cff;
+        border-bottom: none;
+        background: rgba(128, 128, 128, 0.78);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        font-family: Arial, sans-serif;
+        overflow: visible;
+    }
+
+    #NIVEL_01 > .Contenedor:not(.Cabezera),
+    #NIVEL_01:fullscreen > .Contenedor:not(.Cabezera) {
+        top: 0;
+        margin: 0;
+        border: 5px dashed #008cff;
+    }
+
+    #NIVEL_01 .Tiempo,
+    #NIVEL_01 .Puntaje,
+    #NIVEL_01 .VidasNivel1 {
+        width: 110px;
+        min-width: 0;
+        height: auto;
+        flex: 0 0 110px;
+        gap: 6px;
+        line-height: 1;
+        font-size: 14px;
+    }
+
+    #NIVEL_01 .Cabezera h3 {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    #NIVEL_01 .IconosVidasNivel1 {
+        margin: 0;
+        gap: 4px;
+    }
+
+    #NIVEL_01 .ControlVolumenNivel1 {
+        width: auto;
+        min-width: 0;
+        padding: 0;
+        gap: 12px;
+        border: 0;
+        background: transparent;
+    }
+
+    #NIVEL_01 .ControlVolumenNivel1 input {
+        width: 100px;
+        margin: 0;
+        accent-color: #008cff;
+    }
+
+    #NIVEL_01 #PorcentajeVolumenNivel1 {
+        display: none;
+    }
+
+    #NIVEL_01 .PantallaCompletaNivel1 {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        background: transparent;
+        border-radius: 0;
+        box-shadow: none;
+        font-size: 24px;
+    }
+
+    #NIVEL_01 .Pause {
+        width: 180px;
+        min-width: 180px;
+        height: 46px;
+        margin-left: auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: #007bff;
+        font: bold 14px Arial, sans-serif;
+    }
+
+    #NIVEL_01 .Pause:hover {
+        background: #0069df;
+    }
+
     /*MENSAJE DENTRO DE PAUSE*/
     .Mensaje_Pause{font-size: 50px; color: white;
      display: table-cell; vertical-align: middle;

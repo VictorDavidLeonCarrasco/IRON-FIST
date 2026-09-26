@@ -111,7 +111,21 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
             <div class="Cabezera Contenedor">
             <div class="Tiempo"><h3>TIEMPO</h3><span id="Tiempo">70</span></div><!--Tiempo con su span para la el final del minuto--> 
             <div class="Puntaje"><h3>PUNTAJE</h3><span id="Puntaje">0&nbsp;/&nbsp;27</span></div><!--Puntaje con su span que indica el puntaje-->
-            <div class="Pause" id="Pause"><h3>PAUSE / REANUDA</h3></div><!--Boton de pause-->
+            <div class="VidasNivel1" id="VidasNivel1">
+                <h3>VIDAS</h3>
+                <div class="IconosVidasNivel1" aria-label="Vidas restantes del nivel 1">
+                    <span class="VidaNivel1 activa">♥</span>
+                    <span class="VidaNivel1 activa">♥</span>
+                    <span class="VidaNivel1 activa">♥</span>
+                </div>
+            </div>
+            <div class="ControlVolumenNivel1" aria-label="Control de volumen del nivel 1">
+                <span class="IconoVolumenNivel1">🔊</span>
+                <input type="range" id="VolumenNivel1" aria-label="Volumen del nivel 1" min="0" max="100" value="70" step="1">
+                <span id="PorcentajeVolumenNivel1">70%</span>
+            </div>
+            <button class="PantallaCompletaNivel1" id="PantallaCompletaNivel1" type="button" title="Pantalla completa">⛶</button>
+            <button class="Pause" id="Pause" type="button">PAUSAR</button><!--Boton de pause-->
         
             </div>
     
@@ -159,6 +173,13 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
             <!--PANTALLA AL PRECIONAR PAUSE---------------------------------------------->
             <div class="Pausa_Pantalla" id="Pausa_Pantalla">
             <h1 class="Mensaje_Pause">EL JUEGO ESTA<br> EN PAUSE</h1><!--Mensaje del juego al estar en pausa-->
+            </div>
+
+            <div class="FinJuegoNivel1" id="FinJuegoNivel1" aria-live="assertive">
+                <div class="TarjetaFinJuegoNivel1">
+                    <h2>Fin del juego</h2>
+                    <button type="button" class="BotonReiniciarNivel1" id="BotonReiniciarNivel1">REINICIAR</button>
+                </div>
             </div>
     
             <!--CONTENEDOR DE AL GANAR EL JUEGO-->

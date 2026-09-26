@@ -1,7 +1,119 @@
 
 Tiempo = 71 //VARIBLE DE INICIO TIEMPO
 Puntaje = 0 //VARIABLE DE INICIO PUNTOS
+let vidasNivel1 = 3;
+let vidasNivel1Impactadas = { Meteiorito: false, Meteiorito2: false };
+let finDelJuegoNivel1 = false;
+const volumenNivel1Default = 0.7;
 
+function alturaAleatoriaNivel1() {
+    const tablero = document.querySelector('#NIVEL_01 > .Contenedor:not(.Cabezera)');
+    const meteoritos = tablero.querySelectorAll('.Meteiorito');
+    const alturaMeteorito = Math.max(...Array.from(meteoritos, meteorito => meteorito.offsetHeight));
+    return Math.round(Math.random() * Math.max(0, tablero.clientHeight - alturaMeteorito));
+}
+
+function actualizarVidasNivel1() {
+    const vidas = document.querySelectorAll('.VidaNivel1');
+    vidas.forEach((vida, index) => {
+        const restante = index < vidasNivel1;
+        vida.classList.toggle('perdida', !restante);
+        vida.textContent = restante ? '♥' : '♡';
+    });
+}
+
+function aplicarVolumenNivel1(valor) {
+    const volumen = Math.max(0, Math.min(1, valor / 100));
+    const elementosAudio = [
+        document.getElementById('Fondo_Ciberpunk'),
+        document.getElementById('Perdiste_sound'),
+        document.getElementById('Puntos_sound'),
+        document.getElementById('Punto2'),
+        document.getElementById('Punto3'),
+        document.getElementById('Punto4'),
+        document.getElementById('narracion'),
+        document.getElementById('Triunfo'),
+        document.getElementById('Ganaste'),
+        document.getElementById('Musica_Final')
+    ];
+
+    elementosAudio.forEach((audio) => {
+        if (audio) audio.volume = volumen;
+    });
+
+    const etiqueta = document.getElementById('PorcentajeVolumenNivel1');
+    if (etiqueta) etiqueta.textContent = `${Math.round(volumen * 100)}%`;
+}
+
+function mostrarFinJuegoNivel1() {
+    finDelJuegoNivel1 = true;
+    clearInterval(Restar_Tiempo);
+    clearInterval(Reanudar_trayectoria);
+    clearInterval(Reanudar_trayectoria2);
+    document.getElementById('Fondo_Ciberpunk').pause();
+    const finOverlay = document.getElementById('FinJuegoNivel1');
+    if (finOverlay) {
+        finOverlay.style.display = 'flex';
+    }
+}
+
+function reiniciarNivel1() {
+    document.getElementById('Pause').textContent = 'PAUSAR';
+    vidasNivel1 = 3;
+    finDelJuegoNivel1 = false;
+    vidasNivel1Impactadas.Meteiorito = false;
+    vidasNivel1Impactadas.Meteiorito2 = false;
+    Tiempo = 71;
+    Puntaje = 0;
+    document.getElementById('Tiempo').innerHTML = Tiempo;
+    document.getElementById('Puntaje').innerHTML = '0&nbsp;/&nbsp;27';
+    actualizarVidasNivel1();
+    const finOverlay = document.getElementById('FinJuegoNivel1');
+    if (finOverlay) {
+        finOverlay.style.display = 'none';
+    }
+    document.getElementById('Meteiorito').style.left = '-70%';
+    document.getElementById('Meteiorito').style.transition = '0s';
+    document.getElementById('Meteiorito2').style.left = '-70%';
+    document.getElementById('Meteiorito2').style.transition = '0s';
+    if (document.getElementById('Fondo_Ciberpunk')) {
+        document.getElementById('Fondo_Ciberpunk').currentTime = 0;
+    }
+    document.getElementById('Start').style.display = 'flex';
+    document.getElementById('Contenedor_contador').style.display = 'table';
+    document.getElementById('RGB').innerHTML = '4';
+    Conteo = 4;
+}
+
+const controlVolumenNivel1 = document.getElementById('VolumenNivel1');
+if (controlVolumenNivel1) {
+    controlVolumenNivel1.addEventListener('input', (event) => {
+        aplicarVolumenNivel1(event.target.value);
+    });
+}
+
+const botonPantallaCompletaNivel1 = document.getElementById('PantallaCompletaNivel1');
+if (botonPantallaCompletaNivel1) {
+    botonPantallaCompletaNivel1.addEventListener('click', () => {
+        const juegoNivel1 = document.getElementById('NIVEL_01');
+        if (!document.fullscreenElement) {
+            if (juegoNivel1 && juegoNivel1.requestFullscreen) juegoNivel1.requestFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    });
+}
+
+const botonReiniciarNivel1 = document.getElementById('BotonReiniciarNivel1');
+if (botonReiniciarNivel1) {
+    botonReiniciarNivel1.addEventListener('click', () => {
+        reiniciarNivel1();
+        document.getElementById('Start').style.display = 'flex';
+    });
+}
+
+aplicarVolumenNivel1(volumenNivel1Default * 100);
+actualizarVidasNivel1();
 
 
 //FUNCION DE NARRACIONES
@@ -125,14 +237,16 @@ Graficos = 1
 function JUEGO(){
 
     function Tiempo_Disminur(){ //FUNCION QUE REDUCE EL TIEMPO Y RESETEAL EL RESULTADO UNA VEZ LLEGUE A 0
+        if (finDelJuegoNivel1) return;
         Tiempo--;
         document.getElementById("Tiempo").innerHTML = Tiempo
         if(Tiempo == 0){
             Tiempo = 71
             Puntaje = 0
             document.getElementById("Perdiste_sound").play()
-            alert("Lo lamento perdiste")} }
-
+            mostrarFinJuegoNivel1();
+            document.getElementById("Tiempo").innerHTML = 70;
+            document.getElementById("Puntaje").innerHTML = "0&nbsp;/&nbsp;27";} }
     
         Restar_Tiempo = setInterval(Tiempo_Disminur, 1000)
 
@@ -201,8 +315,10 @@ function JUEGO(){
 
         //ESTA FUNCION DIRIGE AL PRIMER METIORITO 1 A LA TIERRA 
         function Metiorito_Direccion(){
+            if (finDelJuegoNivel1) return;
             Distancia1 = 80
-            Altura1 = Math.round(Math.random()* 450)
+            Altura1 = alturaAleatoriaNivel1()
+            vidasNivel1Impactadas.Meteiorito = false;
 
             document.getElementById("Meteiorito").style.left = Distancia1 + "%"
             document.getElementById("Meteiorito").style.top = Altura1 + "px"}
@@ -213,8 +329,10 @@ function JUEGO(){
 
         //ESTA FUNCION DIRIGE AL PRIMER METIORITO 2 A LA TIERRA         
         function Metiorito_Direccion2(){
+            if (finDelJuegoNivel1) return;
             Distancia2 = 80
-            Altura2 = Math.round(Math.random()* 450)
+            Altura2 = alturaAleatoriaNivel1()
+            vidasNivel1Impactadas.Meteiorito2 = false;
 
             document.getElementById("Meteiorito2").style.left = Distancia2 + "%"
             document.getElementById("Meteiorito2").style.top = Altura2 + "px"}
@@ -232,7 +350,7 @@ function JUEGO(){
         function Explulsar (){
             document.getElementById("Puntos_sound").play()
             Distancia = "-500"
-            Altura = Math.round(Math.random()* 450)
+            Altura = alturaAleatoriaNivel1()
 
             document.getElementById("Meteiorito").style.left = Distancia + "px"
             document.getElementById("Meteiorito").style.top = Altura + "px"
@@ -243,7 +361,7 @@ function JUEGO(){
         function Explulsar2 (){
             document.getElementById("Punto2").play()
             Distancia = "-500"
-            Altura = Math.round(Math.random()* 450)
+            Altura = alturaAleatoriaNivel1()
     
             document.getElementById("Meteiorito2").style.left = Distancia + "px"
             document.getElementById("Meteiorito2").style.top = Altura + "px"
@@ -256,19 +374,34 @@ function JUEGO(){
         //ESTA FUNCION SE ENCARGA DE ALERTARTE UNA VEZ EL METIORITO CRUZE LA LINEA CON UN PERDISTE
         //TAMBIEN RESETEA LOS VALORES Y LLEVA A LOS METIORITOS FUERA DEL MAPA DE MANERA INSTANTANEA
         function perdiste (){
-            if((document.getElementById("Meteiorito").offsetLeft > 630) ||
-            (document.getElementById("Meteiorito2").offsetLeft > 630)) {
+            if (finDelJuegoNivel1) return;
+            if(document.getElementById("Meteiorito").offsetLeft > document.querySelector('#NIVEL_01 .Limite').offsetLeft && !vidasNivel1Impactadas.Meteiorito) {
+                vidasNivel1Impactadas.Meteiorito = true;
+                vidasNivel1--;
+                actualizarVidasNivel1();
+                document.getElementById("Perdiste_sound").play();
+                document.getElementById("Meteiorito").style.left = "-70%";
+                document.getElementById("Meteiorito").style.transition = "0s";
 
-                document.getElementById("Perdiste_sound").play()
-                alert("YA ES DEMASIADO TARDE, LOS METEORITOS DESTRUYERON GRAN PARTE DEL CONTINENTE Y LO MEJOR ES ESPERAR LO PEOR")
-                document.getElementById("Meteiorito").style.left = "-70%"
-                document.getElementById("Meteiorito").style.transition = "0s"
+                if (vidasNivel1 <= 0) {
+                    mostrarFinJuegoNivel1();
+                    return;
+                }
+            }
 
-                document.getElementById("Meteiorito2").style.left = "-70%"
-                document.getElementById("Meteiorito2").style.transition = "0s"
-                
-                Tiempo = 71
-                Puntaje = 0 }
+            if(document.getElementById("Meteiorito2").offsetLeft > document.querySelector('#NIVEL_01 .Limite').offsetLeft && !vidasNivel1Impactadas.Meteiorito2) {
+                vidasNivel1Impactadas.Meteiorito2 = true;
+                vidasNivel1--;
+                actualizarVidasNivel1();
+                document.getElementById("Perdiste_sound").play();
+                document.getElementById("Meteiorito2").style.left = "-70%";
+                document.getElementById("Meteiorito2").style.transition = "0s";
+
+                if (vidasNivel1 <= 0) {
+                    mostrarFinJuegoNivel1();
+                    return;
+                }
+            }
         
             else {
                 document.getElementById("Meteiorito").style.transition = "2.4s"
@@ -286,6 +419,7 @@ function JUEGO(){
             
             //ESTA FUNCION EJECUTA UN CONJUNTO DE ACCIONES AL PRESIONAR JUGAR
             function PLAY(){
+                reiniciarNivel1();
                 document.getElementById("Fondo_Ciberpunk").play()
                 //MUEVE EL TITULO FUERA DEL CONTENEDOR UNA VEZ DE CLICK A JUGAR
                 document.getElementById("Texo").style.left = "-900px" 
@@ -326,6 +460,7 @@ function JUEGO(){
                     function PAUSE(){ //Colocar la funcion de pausa y reanudar
                         //SI LLEGA A UNA EJECUTA LA FUNCION PAUSE
                         if (Activo == 1){
+                        document.getElementById('Pause').textContent = 'REANUDAR';
                         
                         document.getElementById("Fondo_Ciberpunk").pause()
                         document.getElementById("Pausa_Pantalla").style.display = "table"
@@ -345,6 +480,7 @@ function JUEGO(){
                             Activo = 2} //CAMBIAMOS EL VALOR PARA QUE AL VOLVER A DARLE CLICK EJECUTE LA CONDICIONAL DE REANUDAR
 
                         else { //LA FUNCION DE REANUDAR
+                            document.getElementById('Pause').textContent = 'PAUSAR';
                             clearInterval(Pusae_offf) //BORRAMOS LA FUNCION, PARA QUE EL REANUDAR PUEDA EJECUTARSE DE NUEVO
                             document.getElementById("Pausa_Pantalla").style.display = "none"
                             document.getElementById("Fondo_Ciberpunk").play()
@@ -379,7 +515,7 @@ function JUEGO(){
                         
                         function Metiorito_Direccion(){
                             Distancia1 = 80
-                            Altura1 = Math.round(Math.random()* 450)
+                            Altura1 = alturaAleatoriaNivel1()
                 
                             document.getElementById("Meteiorito").style.left = Distancia1 + "%"
                             document.getElementById("Meteiorito").style.top = Altura1 + "px"}
@@ -391,7 +527,7 @@ function JUEGO(){
                         //ESTA FUNCION DIRIGE AL PRIMER METIORITO 2 A LA TIERRA         
                         function Metiorito_Direccion2(){
                             Distancia2 = 80
-                            Altura2 = Math.round(Math.random()* 450)
+                            Altura2 = alturaAleatoriaNivel1()
                 
                             document.getElementById("Meteiorito2").style.left = Distancia2 + "%"
                             document.getElementById("Meteiorito2").style.top = Altura2 + "px"}

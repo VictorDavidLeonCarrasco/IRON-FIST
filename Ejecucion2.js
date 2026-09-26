@@ -1,333 +1,618 @@
-Tiempolvl2 = 61 //VARIBLE DE INICIO TIEMPO
-Puntajelvl2 = 0 //VARIABLE DE INICIO PUNTOS
+let Tiempolvl2 = 61;
+let Puntajelvl2 = 0;
+let Vidaslvl2 = 3;
 
+let juegoActivoLvl2 = false;
+let pausadoLvl2 = false;
+let impactoEnProcesoLvl2 = false;
+let colaImpactosLvl2 = [];
 
+let intervaloTiempoLvl2;
+let intervaloImpactosLvl2;
+let temporizadoresMeteoritosLvl2 = [];
+let intervalosMeteoritosLvl2 = [];
 
+/* HALLAZGO 14 y 15: temporizadores del aviso de impacto y del destello del planeta. */
+let temporizadorAvisoImpactoLvl2 = null;
+let temporizadorDestelloPlanetaLvl2 = null;
 
+const tableroLvl2 = document.querySelector(
+    "#NIVEL_02 .Contenedorlvl2:not(.Cabezeralvl2)"
+);
 
-//CONTENEDOR QUE CONTEIENE TOO EL JUEGO
-//DE POR SI ESTA FUNCION NO SE EJECUTA HASTA QUE SE LA LLAMA, MAS ADELANTE LA LLAMAREMOS
-//PARA QUE EL JUEGO INICIE UNA VEZ SE PRESIONE JUGAR
-function JUEGOlvl2(){
+const planetaLvl2 = document.getElementById("PlanetaLvl2");
+const naveJugadorLvl2 = document.getElementById("NaveJugadorLvl2");
+const limiteLvl2 = document.querySelector("#NIVEL_02 .Limitelvl2");
+const inicioLvl2 = document.getElementById("Startlvl2");
+const derrotaLvl2 = document.getElementById("PerdistePantallaLvl2");
+const victoriaLvl2 = document.getElementById("GanastePantallaLvL2");
 
-    function Tiempo_Disminurlvl2(){ //FUNCION QUE REDUCE EL TIEMPO Y RESETEAL EL RESULTADO UNA VEZ LLEGUE A 0
-        Tiempolvl2--;
-        document.getElementById("Tiempolvl2").innerHTML = Tiempolvl2
-        if(Tiempolvl2 == 0){
-            Tiempolvl2 = 61
-            Puntajelvl2 = 0
-            alert("El tiempo se agotó, lo lamento, de seguro lo lograrás para la siguiente")} }
+const meteoritosLvl2 = [
+    document.getElementById("Meteioritolvl2"),
+    document.getElementById("Meteiorito2lvl2"),
+    document.getElementById("Meteiorito3lvl2")
+];
 
-    
-        Restar_Tiempolvl2 = setInterval(Tiempo_Disminurlvl2, 1000)
+const imagenesPlanetaLvl2 = [
+    "IMG/planetas_lvl2/planeta_0.png",
+    "IMG/planetas_lvl2/planeta_1.png",
+    "IMG/planetas_lvl2/planeta_2.png",
+    "IMG/planetas_lvl2/planeta_3.png"
+];
 
-        //AÑADIMOS LA FUNCION AUMENTAR PUNTOS AL PASAR EL CURSOR SOBRE LOS METIORITOS
-        document.getElementById("Meteioritolvl2").addEventListener('mouseover', Aumentar_Puntoslvl2)
-        document.getElementById("Meteiorito2lvl2").addEventListener('mouseover', Aumentar_Puntoslvl2)
-        document.getElementById("Meteiorito3lvl2").addEventListener('mouseover', Aumentar_Puntoslvl2)
+function ActualizarVidaslvl2() {
+    for (let numeroVida = 1; numeroVida <= 3; numeroVida++) {
+        const vida = document.getElementById(
+            "Vida" + numeroVida + "Lvl2"
+        );
 
+        vida.classList.toggle(
+            "VidaPerdidaLvl2",
+            numeroVida > Vidaslvl2
+        );
+    }
 
-        //FUNCION QUE UNICAMENTE AUMENTA PUNTOS Y RESETEA LAS VARIABLES AL LLEGAR A CIERTO LIMITE
-        function Aumentar_Puntoslvl2(){
-            Puntajelvl2++;
-            document.getElementById("Puntajelvl2").innerHTML = Puntajelvl2 + " / 4"
-            if(Puntajelvl2 == 4){
-                Puntajelvl2 = 0 
-                Tiempolvl2 = 61
+    planetaLvl2.src = imagenesPlanetaLvl2[3 - Vidaslvl2];
+}
 
-                document.getElementById("Tiempolvl2").innerHTML = 60
-                document.getElementById("Puntajelvl2").innerHTML = 0+"&nbsp;/&nbsp;"+34
-                document.getElementById("Fondo_Ciberpunk").pause()
-                document.getElementById("Triunfo").play()
-                document.getElementById("NEXT").addEventListener('click', Habilitar_Siguienten_LVL)
-                function Habilitar_Siguienten_LVL(){
-                document.getElementById("NIVEL_01").style.display = "none"
-                document.getElementById("NIVEL_02").style.display = "none"
-                document.getElementById("NIVEL3").style.display = "block"}
-                            
-                function Ganaste_Pantallalvl2(){
+function actualizarMarcadoresLvl2() {
+    document.getElementById("Tiempolvl2").innerHTML = Tiempolvl2;
+    document.getElementById("Puntajelvl2").innerHTML =
+        Puntajelvl2 + " / 35";
+}
 
-                    clearInterval(Reanudar_trayectorialvl2)
-                    clearTimeout(Activador_iniciallvl2)
-                    clearInterval(Reanudar_trayectoria2lvl2)
-                    clearTimeout(Activador_inicial2lvl2)
-                    clearInterval(Reanudar_trayectoria3lvl2)
-                    clearTimeout(Activador_inicial3lvl2) 
-                    clearInterval(Restar_Tiempolvl2) 
+function detenerMeteoritosLvl2() {
+    temporizadoresMeteoritosLvl2.forEach(clearTimeout);
+    intervalosMeteoritosLvl2.forEach(clearInterval);
 
-                    document.getElementById("Meteioritolvl2").style.left = "-70%"
-                    document.getElementById("Meteioritolvl2").style.transition = "0s"
+    temporizadoresMeteoritosLvl2 = [];
+    intervalosMeteoritosLvl2 = [];
+}
 
-                    document.getElementById("Meteiorito2lvl2").style.left = "-70%"
-                    document.getElementById("Meteiorito2lvl2").style.transition = "0s"
-                    
-                    document.getElementById("Meteiorito3lvl2").style.left = "-70%"
-                    document.getElementById("Meteiorito3lvl2").style.transition = "0s"}
+function retirarMeteoritoLvl2(meteorito) {
+    meteorito.style.transition = "none";
+    meteorito.style.left = "-500px";
+    meteorito.dataset.bloqueado = "false";
+}
 
-                    setInterval(Ganaste_Pantallalvl2, 1)
-
-
-                document.getElementById("GanastePantallaLvL2").style.display = "flex"
-                
-
-                                }
-                                    }
-
-
-        //ESTA FUNCION DIRIGE AL PRIMER METIORITO 1 A LA TIERRA 
-        function Metiorito_Direccionlvl2(){
-            Distancia1lvl2 = 80
-            Altura1lvl2 = Math.round(Math.random()* 450)
-
-            document.getElementById("Meteioritolvl2").style.left = Distancia1lvl2 + "%"
-            document.getElementById("Meteioritolvl2").style.top = Altura1lvl2 + "px"}
-
-            Activador_iniciallvl2 = setTimeout(Metiorito_Direccionlvl2, 3500)//PRIMERO VA A SER EJECUTADO A LOS DOS PRIMEROS SEGUNDOS
-            Reanudar_trayectorialvl2 = setInterval(Metiorito_Direccionlvl2, 2030)//LUEGO SE VA A LLAMAR A LOS METIORITOS CADA 2,4 SEGUNDOS
-
-
-        //ESTA FUNCION DIRIGE AL PRIMER METIORITO 2 A LA TIERRA         
-        function Metiorito_Direccion2lvl2(){
-            Distancia2lvl2 = 80
-            Altura2lvl2 = Math.round(Math.random()* 450)
-
-            document.getElementById("Meteiorito2lvl2").style.left = Distancia2lvl2 + "%"
-            document.getElementById("Meteiorito2lvl2").style.top = Altura2lvl2 + "px"}
-
-            Activador_inicial2lvl2 = setTimeout(Metiorito_Direccion2lvl2, 3000)//PRIMERO VA A SER EJECUTADO A LOS DOS PRIMEROS SEGUNDOS
-            Reanudar_trayectoria2lvl2 = setInterval(Metiorito_Direccion2lvl2, 2750)//LUEGO SE VA A LLAMAR A LOS METIORITOS CADA 2,3 SEGUNDOS
-
-            //ESTA FUNCION DIRIGE AL PRIMER METIORITO 3 A LA TIERRA
-            function Metiorito_Direccion3lvl2(){
-                Distancia3lvl2 = 80
-                Altura3lvl2 = Math.round(Math.random()* 450)
-    
-                document.getElementById("Meteiorito3lvl2").style.left = Distancia3lvl2 + "%"
-                document.getElementById("Meteiorito3lvl2").style.top = Altura3lvl2 + "px"}
-    
-            Activador_inicial3lvl2  = setTimeout(Metiorito_Direccion3lvl2, 2200)//PRIMERO VA A SER EJECUTADO A LOS DOS PRIMEROS SEGUNDOS
-            Reanudar_trayectoria3lvl2 = setInterval(Metiorito_Direccion3lvl2, 2470)//LUEGO SE VA A LLAMAR A LOS METIORITOS CADA 2,3 SEGUNDOS
-       
-
-
-        //AQUI ADJUNTAMOS LA ACCION DE LA FUNCION EXPULZAR AL PASAR SOBRE EL METIORITO
-        document.getElementById("Meteioritolvl2").addEventListener('mouseover', Explulsarlvl2)
-        document.getElementById("Meteiorito2lvl2").addEventListener('mouseover', Explulsar2lvl2)
-        document.getElementById("Meteiorito3lvl2").addEventListener('mouseover', Explulsar3lvl2)
-
-        //ESTA ES LA FUNCION QUE EXPULSA AL METEORITO 1 DE MANERA ALEATORIA FUERA DEL MAPA
-        function Explulsarlvl2 (){
-            document.getElementById("Puntos_sound").play()
-            Distancialvl2 = "-500"
-            Alturalvl2 = Math.round(Math.random()* 450)
-            document.getElementById("Meteioritolvl2").style.left = Distancialvl2 + "px"
-            document.getElementById("Meteioritolvl2").style.top = Alturalvl2 + "px"
-            document.getElementById("Meteioritolvl2").style.transition = "1.8s"}
-
-
-        //ESTA ES LA FUNCION QUE EXPULSA AL METEORITO 2 DE MANERA ALEATORIA FUERA DEL MAPA
-        function Explulsar2lvl2 (){
-            document.getElementById("Punto2").play()
-            Distancialvl2 = "-500"
-            Alturalvl2 = Math.round(Math.random()* 450)
-            document.getElementById("Meteiorito2lvl2").style.left = Distancialvl2 + "px"
-            document.getElementById("Meteiorito2lvl2").style.top = Alturalvl2 + "px"
-            document.getElementById("Meteiorito2lvl2").style.transition = "1.8s"}
-
-         //ESTA ES LA FUNCION QUE EXPULSA AL METEORITO 3 DE MANERA ALEATORIA FUERA DEL MAPA
-        function Explulsar3lvl2 (){
-            document.getElementById("Punto3").play()
-            Distancialvl2 = "-500"
-            Alturalvl2 = Math.round(Math.random()* 450)
-            document.getElementById("Meteiorito3lvl2").style.left = Distancialvl2 + "px"
-            document.getElementById("Meteiorito3lvl2").style.top = Alturalvl2 + "px"
-            document.getElementById("Meteiorito3lvl2").style.transition = "1.8s"}
-
-
-
-
-        
-        //ESTA FUNCION SE ENCARGA DE ALERTARTE UNA VEZ EL METIORITO CRUZE LA LINEA CON UN PERDISTE
-        //TAMBIEN RESETEA LOS VALORES Y LLEVA A LOS METIORITOS FUERA DEL MAPA DE MANERA INSTANTANEA
-        function perdistelvl2 (){
-
-    const planeta = document.querySelector("#NIVEL_02 .Planetalvl2");
-    const limiteImpacto = planeta.offsetLeft;
-
+function moverMeteoritoLvl2(meteorito) {
     if (
-        document.getElementById("Meteioritolvl2").offsetLeft >= limiteImpacto ||
-        document.getElementById("Meteiorito2lvl2").offsetLeft >= limiteImpacto ||
-        document.getElementById("Meteiorito3lvl2").offsetLeft >= limiteImpacto
-    )
-    {
-                document.getElementById("Perdiste_sound").play()
-            
-                alert("YA ES DEMASIADO TARDE, LOS METEORITOS DESTRUYERON GRAN PARTE DEL CONTINENTE Y LO MEJOR ES ESPERAR LO PEOR")
+        !juegoActivoLvl2 ||
+        pausadoLvl2 ||
+        meteorito.dataset.bloqueado === "true"
+    ) {
+        return;
+    }
 
+    meteorito.style.transition = "2s";
+    meteorito.style.left = "80%";
+    meteorito.style.top = Math.round(Math.random() * 450) + "px";
+}
 
-                document.getElementById("Meteioritolvl2").style.left = "-70%"
-                document.getElementById("Meteioritolvl2").style.transition = "0s"
+function iniciarMeteoritosLvl2() {
+    detenerMeteoritosLvl2();
 
-                document.getElementById("Meteiorito2lvl2").style.left = "-70%"
-                document.getElementById("Meteiorito2lvl2").style.transition = "0s"
+    const esperas = [3500, 3000, 2200];
+    const frecuencias = [2030, 2750, 2470];
 
-                document.getElementById("Meteiorito3lvl2").style.left = "-70%"
-                document.getElementById("Meteiorito3lvl2").style.transition = "0s"
+    meteoritosLvl2.forEach(function (meteorito, indice) {
+        temporizadoresMeteoritosLvl2.push(
+            setTimeout(function () {
+                moverMeteoritoLvl2(meteorito);
+            }, esperas[indice])
+        );
 
-                Tiempolvl2 = 61
-                Puntajelvl2 = 0 }
-        
-            else {
-                document.getElementById("Meteioritolvl2").style.transition = "2s"
-                document.getElementById("Meteiorito2lvl2").style.transition = "2s"
-                document.getElementById("Meteiorito3lvl2").style.transition = "2s"           
-            } }
+        intervalosMeteoritosLvl2.push(
+            setInterval(function () {
+                moverMeteoritoLvl2(meteorito);
+            }, frecuencias[indice])
+        );
+    });
+}
 
-        setInterval(perdistelvl2, 1)//LE COLOCAMOS UNO PARA QUE SIEMPRE SE ESTE EJECUTANDO, DADO A 
-        //QUE NO SABEMOS CUANDO EL METIORITO VA A SUPERAR EL LIMITE
+function mostrarExplosionLvl2(x, y) {
+    const explosion = document.createElement("img");
+
+    explosion.className = "ExplosionMeteoritoLvl2";
+    explosion.style.left = x + "px";
+    explosion.style.top = y + "px";
+
+    tableroLvl2.appendChild(explosion);
+
+    let cuadro = 1;
+
+    const animacion = setInterval(function () {
+        explosion.src =
+            "IMG/explosion_lvl2/Explosion_" +
+            String(cuadro).padStart(3, "0") +
+            ".png";
+
+        cuadro++;
+
+        if (cuadro > 10) {
+            clearInterval(animacion);
+            explosion.remove();
+        }
+    }, 70);
+}
+
+/*
+HALLAZGO 14: Aviso visual temporal cuando un meteorito impacta el planeta.
+Se muestra dentro del tablero, dura ~1s y se elimina solo.
+No usa alert(), no reinicia el juego y no se duplica.
+*/
+function mostrarAvisoImpactoLvl2() {
+    const avisoAnterior = tableroLvl2.querySelector(".AvisoImpactoLvl2");
+
+    if (avisoAnterior) {
+        avisoAnterior.remove();
+    }
+
+    if (temporizadorAvisoImpactoLvl2) {
+        clearTimeout(temporizadorAvisoImpactoLvl2);
+        temporizadorAvisoImpactoLvl2 = null;
+    }
+
+    const mensajesImpactoLvl2 = [
+        "¡IMPACTO DETECTADO!",
+        "¡VIDA PERDIDA!"
+    ];
+
+    const mensaje =
+        mensajesImpactoLvl2[
+            Math.floor(Math.random() * mensajesImpactoLvl2.length)
+        ];
+
+    const aviso = document.createElement("div");
+
+    aviso.className = "AvisoImpactoLvl2";
+    aviso.textContent = mensaje;
+
+    tableroLvl2.appendChild(aviso);
+
+    temporizadorAvisoImpactoLvl2 = setTimeout(function () {
+        aviso.remove();
+        temporizadorAvisoImpactoLvl2 = null;
+    }, 1000);
+}
+
+/*
+HALLAZGO 15: Efecto visual corto en el planeta al momento del impacto
+(destello rojo). No mueve ni deforma el planeta de forma permanente:
+solo agrega y luego quita una clase con una animación de "filter".
+La imagen dañada actual (planeta_X.png) se conserva intacta.
+*/
+function efectoImpactoPlanetaLvl2() {
+    planetaLvl2.classList.remove("ImpactoPlanetaLvl2");
+
+    /* Fuerza un reflow para poder reiniciar la animación si llega otro impacto seguido. */
+    void planetaLvl2.offsetWidth;
+
+    planetaLvl2.classList.add("ImpactoPlanetaLvl2");
+
+    if (temporizadorDestelloPlanetaLvl2) {
+        clearTimeout(temporizadorDestelloPlanetaLvl2);
+    }
+
+    temporizadorDestelloPlanetaLvl2 = setTimeout(function () {
+        planetaLvl2.classList.remove("ImpactoPlanetaLvl2");
+        temporizadorDestelloPlanetaLvl2 = null;
+    }, 450);
+}
+
+function Habilitar_Siguienten_LVL() {
+    document.getElementById("NIVEL_01").style.display = "none";
+    document.getElementById("NIVEL_02").style.display = "none";
+    document.getElementById("NIVEL3").style.display = "block";
+}
+
+function ganarLvl2() {
+    if (!juegoActivoLvl2) {
+        return;
+    }
+
+    juegoActivoLvl2 = false;
+
+    detenerMeteoritosLvl2();
+    clearInterval(intervaloTiempoLvl2);
+    clearInterval(intervaloImpactosLvl2);
+
+    meteoritosLvl2.forEach(retirarMeteoritoLvl2);
+
+    naveJugadorLvl2.style.opacity = "0";
+
+    document.getElementById("Fondo_Ciberpunk").pause();
+    document.getElementById("Triunfo").play();
+
+    victoriaLvl2.style.display = "flex";
+
+    document.getElementById("NEXT").onclick =
+        Habilitar_Siguienten_LVL;
+}
+
+function destruirMeteoritoLvl2(meteorito) {
+    if (
+        !juegoActivoLvl2 ||
+        meteorito.dataset.bloqueado === "true"
+    ) {
+        return;
+    }
+
+    meteorito.dataset.bloqueado = "true";
+
+    document.getElementById("Puntos_sound").play();
+
+    Puntajelvl2 = Math.min(Puntajelvl2 + 5, 35);
+    actualizarMarcadoresLvl2();
+
+    mostrarExplosionLvl2(
+        meteorito.offsetLeft,
+        meteorito.offsetTop
+    );
+
+    setTimeout(function () {
+        retirarMeteoritoLvl2(meteorito);
+    }, 650);
+
+    if (Puntajelvl2 >= 35) {
+        ganarLvl2();
+    }
+}
+
+function perderLvl2() {
+    if (!juegoActivoLvl2) {
+        return;
+    }
+
+    juegoActivoLvl2 = false;
+    colaImpactosLvl2 = [];
+
+    detenerMeteoritosLvl2();
+    clearInterval(intervaloTiempoLvl2);
+    clearInterval(intervaloImpactosLvl2);
+
+    naveJugadorLvl2.style.opacity = "0";
+
+    document.getElementById("Fondo_Ciberpunk").pause();
+    document.getElementById("Perdiste_sound").play();
+
+    setTimeout(function () {
+        meteoritosLvl2.forEach(retirarMeteoritoLvl2);
+        derrotaLvl2.style.display = "flex";
+    }, 1000);
+}
+
+function revisarImpactoPlanetaLvl2() {
+    if (
+        !juegoActivoLvl2 ||
+        pausadoLvl2 ||
+        Vidaslvl2 <= 0
+    ) {
+        return;
+    }
+
+    const planetaRect = planetaLvl2.getBoundingClientRect();
+
+    meteoritosLvl2.forEach(function (meteorito) {
+        if (meteorito.dataset.bloqueado === "true") {
+            return;
         }
 
-        
-        //LE DECIMOS QUE AL PRECIONAR EL BOTON JUGAR EJECUTARA LA FUNCION PLAY     
-        document.getElementById("Playlvl2").addEventListener('click', PLAYlvl2)
+        const rect = meteorito.getBoundingClientRect();
 
-        Conteolvl2 = 4 //ESTE ES EL CONTEO DE LA CUENTA REGRESIVA QUE SE DA DESPUEZ DE PRESINAR JUGAR
-            
-            //ESTA FUNCION EJECUTA UN CONJUNTO DE ACCIONES AL PRESIONAR JUGAR
-            function PLAYlvl2(){
-                document.getElementById("Fondo_Ciberpunk").play()
-                //MUEVE EL TITULO FUERA DEL CONTENEDOR UNA VEZ DE CLICK A JUGAR
-                document.getElementById("Texolvl2").style.left = "-900px" 
-                //MUEVE AL BOTON PLAY TRANS PRESIONAR PRESIONAR AL MISMO BOTON
-                document.getElementById("Playlvl2").style.left = "-900px" 
-                document.getElementById("Dificultad").style.left = "-900px"
-                    //ESTA FUNCION CONTIENE AL JUEGO COMO TAL
-                    function ARRACARlvl2(){    
-                        JUEGOlvl2()}
-                //INVOCA AL JUEGO UNA VEZ PASEN 4 SEGUNDO - OSEA UNA VEZ TERMINE EL CONTADOR
-                tiempo_de_arranquelvl2 =  setTimeout(ARRACARlvl2, 4100)
-                //ESTA FUNCION EJECUTA LA CUENTA REGRESIVA Y RETIRA LA PANTALLA START 
-                function ESPERARlvl2(){
-                    function Cuenta_rglvl2(){
-                        Conteolvl2--;
-                        document.getElementById("RGBlvl2").innerHTML = Conteolvl2
-                        if(Conteolvl2 == -1){
-                        document.getElementById("Contenedor_contadorlvl2").style.display = "none"
-                        function Borrarlvl2(){
-                        document.getElementById("Startlvl2").style.display = "none"
+        const tocoPlaneta =
+            rect.right >= planetaRect.left &&
+            rect.left <= planetaRect.right &&
+            rect.bottom >= planetaRect.top &&
+            rect.top <= planetaRect.bottom;
 
-                            DETENER_JUEGOlvl2() }//HABILITA LA FUNCION DE PAUSE Y REANUDAR UNA VEZ CARGUE EL JUEGO
-                        setTimeout(Borrarlvl2, 500) }  }
-                        setInterval (Cuenta_rglvl2, 1000)}
+        if (tocoPlaneta) {
+            /* Lo detiene justo cuando toca el planeta. */
+            meteorito.dataset.bloqueado = "true";
+            meteorito.style.transition = "none";
+            meteorito.style.left = meteorito.offsetLeft + "px";
+            meteorito.style.top = meteorito.offsetTop + "px";
 
-                        setTimeout(ESPERARlvl2, 350)}//SE EJECUTARA EN UN LAPSO DE 350, DESPUES DE PRESIONAR EL BOTON
+            /*
+            Si llegaron varios meteoritos juntos, quedan guardados
+            para contar el impacto 1, luego el 2 y después el 3.
+            */
+            colaImpactosLvl2.push(meteorito);
+        }
+    });
 
+    if (
+        impactoEnProcesoLvl2 ||
+        colaImpactosLvl2.length === 0
+    ) {
+        return;
+    }
 
-            //ESTA FUNCION CONTIENE EL REANUDE Y PAUSE DEL BOTON
-            function DETENER_JUEGOlvl2 (){
-                //INDICA QUE LA FUNCION DE PAUSE SE EJECUTARA UNA VEZ SE DE CLICK AL BOTON DE PAUSE        
-                document.getElementById("Pauselvl2").addEventListener('click', PAUSElvl2)
-                //ESTA VARIABLE INDICA SI SE EJECUTA O NO EL DESPAUSEO
-                Activolvl2 = 1 
-                    //HACE QUE EL JUEGO SE DETENGA
-                    function PAUSElvl2(){
-                        //SI LLEGA A UNA EJECUTA LA FUNCION PAUSE
-                        if (Activolvl2 == 1){
-                        document.getElementById("TextoPauselvl2").innerHTML = "REANUDAR";
-                        document.getElementById("Pausa_Pantallalvl2").style.display = "table"
-                        document.getElementById("Fondo_Ciberpunk").pause()
-                        clearInterval(Restar_Tiempolvl2)//BORRAMOS LA FUNCION DE TIEMPO
-                        document.getElementById("Tiempolvl2").innerHTML = Tiempolvl2
-                            clearInterval(Reanudar_trayectorialvl2)
-                            clearInterval(Reanudar_trayectoria2lvl2)
-                            clearInterval(Reanudar_trayectoria3lvl2)
+    impactoEnProcesoLvl2 = true;
 
-                            function Metiorito_detenerlvl2 (){   
-                            document.getElementById("Meteioritolvl2").style.left = document.getElementById("Meteioritolvl2").offsetLeft + "px" 
-                            document.getElementById("Meteiorito2lvl2").style.left = document.getElementById("Meteiorito2lvl2").offsetLeft + "px" 
-                            document.getElementById("Meteiorito3lvl2").style.left = document.getElementById("Meteiorito3lvl2").offsetLeft + "px" 
+    const meteoritoImpactado = colaImpactosLvl2.shift();
 
-                            document.getElementById("Meteioritolvl2").style.top = document.getElementById("Meteioritolvl2").offsetTop + "px" 
-                            document.getElementById("Meteiorito2lvl2").style.top = document.getElementById("Meteiorito2lvl2").offsetTop + "px" 
-                            document.getElementById("Meteiorito3lvl2").style.top = document.getElementById("Meteiorito3lvl2").offsetTop + "px" }
+    Vidaslvl2--;
+    ActualizarVidaslvl2();
 
-                            Pusae_offflvl2 = setInterval(Metiorito_detenerlvl2, 0.01) //LE ASEGNAMOS UNA ID, PARA BORRALO UNA VEZ SE DESPAUSEE
-                            Activolvl2 = 2} //CAMBIAMOS EL VALOR PARA QUE AL VOLVER A DARLE CLICK EJECUTE LA CONDICIONAL DE REANUDAR
+    const sinVidas = Vidaslvl2 === 0;
 
-                        else { //LA FUNCION DE REANUDAR
-                            document.getElementById("TextoPauselvl2").innerHTML = "PAUSAR";
-                            clearInterval(Pusae_offflvl2) 
-                            document.getElementById("Pausa_Pantallalvl2").style.display = "none"
-                            document.getElementById("Fondo_Ciberpunk").play()
-                            function Tiempo_Disminurlvl2(){//VOLVEMOS A CREAR LA FUNCION DE TIEMPO PARA QUE REANUEDE EL CONTEO
-                                Tiempolvl2--;
-                                document.getElementById("Tiempolvl2").innerHTML = Tiempolvl2
-                                if(Tiempolvl2 == 0){
-                                    Tiempolvl2 = 61
-                                    Puntajelvl2 = 0
-                                alert("Lo lamento perdiste") } }
+    /* HALLAZGO 15: destello del planeta en todo impacto que resta una vida. */
+    efectoImpactoPlanetaLvl2();
 
-                                Restar_Tiempolvl2 = setInterval(Tiempo_Disminurlvl2, 1000)
-        
-                        document.getElementById("Meteioritolvl2").style.left = Distancia1lvl2 + "%"
-                        document.getElementById("Meteioritolvl2").style.top = Altura1lvl2 + "px"
-                        document.getElementById("Meteioritolvl2").style.transition = "2s"
+    /* HALLAZGO 14: aviso temporal, excepto si ya se perdió la última vida. */
+    if (!sinVidas) {
+        mostrarAvisoImpactoLvl2();
+    }
 
-                        document.getElementById("Meteiorito2lvl2").style.left = Distancia2lvl2 + "%"
-                        document.getElementById("Meteiorito2lvl2").style.top = Altura2lvl2 + "px"
-                        document.getElementById("Meteiorito2lvl2").style.transition = "2s"
+    setTimeout(function () {
+        retirarMeteoritoLvl2(meteoritoImpactado);
+        impactoEnProcesoLvl2 = false;
 
-                        document.getElementById("Meteiorito3lvl2").style.left = Distancia3lvl2 + "%"
-                        document.getElementById("Meteiorito3lvl2").style.top = Altura3lvl2 + "px"
-                        document.getElementById("Meteiorito3lvl2").style.transition = "2s"
+        if (!sinVidas) {
+            revisarImpactoPlanetaLvl2();
+        }
+    }, 650);
 
-                        function Metiorito_Direccionlvl2(){
-                            Distancia1lvl2 = 90
-                            Altura1lvl2 = Math.round(Math.random()* 450)
-                
-                            document.getElementById("Meteioritolvl2").style.left = Distancia1lvl2 + "%"
-                            document.getElementById("Meteioritolvl2").style.top = Altura1lvl2 + "px"}
-                
-                            setTimeout(Metiorito_Direccionlvl2, 1700)//PRIMERO VA A SER EJECUTADO A LOS DOS PRIMEROS SEGUNDOS
-                            Reanudar_trayectorialvl2 = setInterval(Metiorito_Direccionlvl2, 2430)//LUEGO SE VA A LLAMAR A LOS METIORITOS CADA 2,4 SEGUNDOS
-                
-                
-                            function Metiorito_Direccion2lvl2(){
-                                Distancia2lvl2 = 90
-                                Altura2lvl2 = Math.round(Math.random()* 400)
-                
-                                document.getElementById("Meteiorito2lvl2").style.left = Distancia2lvl2 + "%"
-                                document.getElementById("Meteiorito2lvl2").style.top = Altura2lvl2 + "px"}
-                
-                                setTimeout(Metiorito_Direccion2lvl2, 1)
-                                Reanudar_trayectoria2lvl2 = setInterval(Metiorito_Direccion2lvl2, 2050)
-                
-                            
-                            function Metiorito_Direccion3lvl2(){
-                                Distancia3lvl2 = 90
-                                Altura3lvl2 = Math.round(Math.random()* 350)
-                    
-                                document.getElementById("Meteiorito3lvl2").style.left = Distancia3lvl2 + "%"
-                                document.getElementById("Meteiorito3lvl2").style.top = Altura3lvl2 + "px"}
-                    
-                                setTimeout(Metiorito_Direccion3lvl2, 1700)//PRIMERO VA A SER EJECUTADO A LOS DOS PRIMEROS SEGUNDOS
-                                Reanudar_trayectoria3lvl2 = setInterval(Metiorito_Direccion3lvl2, 2570)//LUEGO SE VA A LLAMAR A LOS METIORITOS CADA 2,3 SEGUNDOS
+    if (sinVidas) {
+        /*
+        planeta_3.png queda visible un momento y recién
+        después aparece MISIÓN FALLIDA.
+        */
+        setTimeout(perderLvl2, 1000);
+    }
+}
 
-                        Activolvl2 = 1 } } } //CAMBIAMOS EL VALOR DE NUEVO A 1 PARA QUE AL SIGUIENTE CLICK SE EJECUTE EL PAUSE  S 
-                        const volumen = document.getElementById("VolumenLvl2");
+function iniciarJuegoLvl2() {
+    juegoActivoLvl2 = true;
+    pausadoLvl2 = false;
+    impactoEnProcesoLvl2 = false;
+    colaImpactosLvl2 = [];
 
-                        volumen.addEventListener("input", function () {
-                        document.getElementById("Fondo_Ciberpunk").volume = volumen.value;
-                        document.getElementById("Puntos_sound").volume = volumen.value;
-                        document.getElementById("Perdiste_sound").volume = volumen.value;
-                        document.getElementById("Triunfo").volume = volumen.value;
-                        });
-                        document.addEventListener("fullscreenchange", function () {
-                            if (
-                            !document.fullscreenElement &&
-                            typeof Activolvl2 !== "undefined" &&
-                            Activolvl2 === 1
-                            ) {
-                                document.getElementById("Pauselvl2").click();
-                            }
-                                });
+    document.getElementById("Fondo_Ciberpunk").play();
+
+    iniciarMeteoritosLvl2();
+
+    intervaloTiempoLvl2 = setInterval(function () {
+        if (pausadoLvl2) {
+            return;
+        }
+
+        Tiempolvl2--;
+        actualizarMarcadoresLvl2();
+
+        if (Tiempolvl2 <= 0) {
+            perderLvl2();
+        }
+    }, 1000);
+
+    intervaloImpactosLvl2 = setInterval(
+        revisarImpactoPlanetaLvl2,
+        20
+    );
+}
+
+function reiniciarLvl2() {
+    clearInterval(intervaloTiempoLvl2);
+    clearInterval(intervaloImpactosLvl2);
+
+    detenerMeteoritosLvl2();
+
+    Tiempolvl2 = 61;
+    Puntajelvl2 = 0;
+    Vidaslvl2 = 3;
+
+    impactoEnProcesoLvl2 = false;
+    colaImpactosLvl2 = [];
+
+    /* Limpieza de HALLAZGO 14 y 15 al reiniciar el nivel. */
+    if (temporizadorAvisoImpactoLvl2) {
+        clearTimeout(temporizadorAvisoImpactoLvl2);
+        temporizadorAvisoImpactoLvl2 = null;
+    }
+
+    const avisoResidual = tableroLvl2.querySelector(".AvisoImpactoLvl2");
+    if (avisoResidual) {
+        avisoResidual.remove();
+    }
+
+    if (temporizadorDestelloPlanetaLvl2) {
+        clearTimeout(temporizadorDestelloPlanetaLvl2);
+        temporizadorDestelloPlanetaLvl2 = null;
+    }
+
+    planetaLvl2.classList.remove("ImpactoPlanetaLvl2");
+
+    derrotaLvl2.style.display = "none";
+
+    meteoritosLvl2.forEach(retirarMeteoritoLvl2);
+
+    ActualizarVidaslvl2();
+    actualizarMarcadoresLvl2();
+
+    iniciarJuegoLvl2();
+}
+
+document.getElementById("ReintentarLvl2").onclick = reiniciarLvl2;
+
+document.getElementById("Playlvl2").addEventListener(
+    "click",
+    function () {
+        document.getElementById("Fondo_Ciberpunk").play();
+
+        document.getElementById("Texolvl2").style.left = "-900px";
+        document.getElementById("Playlvl2").style.left = "-900px";
+        document.getElementById("Dificultad").style.left = "-900px";
+
+        let conteo = 4;
+
+        const contador = setInterval(function () {
+            conteo--;
+
+            document.getElementById("RGBlvl2").innerHTML = conteo;
+
+            if (conteo === -1) {
+                clearInterval(contador);
+
+                document.getElementById(
+                    "Contenedor_contadorlvl2"
+                ).style.display = "none";
+
+                inicioLvl2.style.display = "none";
+
+                iniciarJuegoLvl2();
+            }
+        }, 1000);
+    }
+);
+
+document.getElementById("Pauselvl2").addEventListener(
+    "click",
+    function () {
+        if (!juegoActivoLvl2) {
+            return;
+        }
+
+        pausadoLvl2 = !pausadoLvl2;
+
+        document.getElementById("TextoPauselvl2").innerHTML =
+            pausadoLvl2 ? "REANUDAR" : "PAUSAR";
+
+        document.getElementById(
+            "Pausa_Pantallalvl2"
+        ).style.display = pausadoLvl2 ? "table" : "none";
+
+        if (pausadoLvl2) {
+            document.getElementById("Fondo_Ciberpunk").pause();
+
+            detenerMeteoritosLvl2();
+
+            meteoritosLvl2.forEach(function (meteorito) {
+                meteorito.style.transition = "none";
+                meteorito.style.left = meteorito.offsetLeft + "px";
+                meteorito.style.top = meteorito.offsetTop + "px";
+            });
+        } else {
+            document.getElementById("Fondo_Ciberpunk").play();
+            iniciarMeteoritosLvl2();
+        }
+    }
+);
+
+document.getElementById("VolumenLvl2").addEventListener(
+    "input",
+    function (evento) {
+        const volumen = evento.target.value;
+
+        [
+            "Fondo_Ciberpunk",
+            "Puntos_sound",
+            "Perdiste_sound",
+            "Triunfo"
+        ].forEach(function (id) {
+            document.getElementById(id).volume = volumen;
+        });
+    }
+);
+
+document.addEventListener("fullscreenchange", function () {
+    if (
+        !document.fullscreenElement &&
+        juegoActivoLvl2 &&
+        !pausadoLvl2
+    ) {
+        document.getElementById("Pauselvl2").click();
+    }
+});
+
+tableroLvl2.addEventListener("mousemove", function (evento) {
+    if (!juegoActivoLvl2 || pausadoLvl2) {
+        naveJugadorLvl2.style.opacity = "0";
+        return;
+    }
+
+    const area = tableroLvl2.getBoundingClientRect();
+
+    const limiteSeguro =
+        limiteLvl2.offsetLeft -
+        naveJugadorLvl2.offsetWidth / 2 -
+        10;
+
+    naveJugadorLvl2.style.left =
+        Math.min(evento.clientX - area.left, limiteSeguro) + "px";
+
+    naveJugadorLvl2.style.top =
+        evento.clientY - area.top + "px";
+
+    naveJugadorLvl2.style.opacity = "1";
+});
+
+tableroLvl2.addEventListener("mouseleave", function () {
+    naveJugadorLvl2.style.opacity = "0";
+});
+
+meteoritosLvl2.forEach(function (meteorito) {
+    meteorito.addEventListener("click", function (evento) {
+        evento.stopPropagation();
+        destruirMeteoritoLvl2(meteorito);
+    });
+});
+
+tableroLvl2.addEventListener("click", function (evento) {
+    if (
+        !juegoActivoLvl2 ||
+        pausadoLvl2 ||
+        evento.target.classList.contains("Meteioritolvl2")
+    ) {
+        return;
+    }
+
+    const laser = document.createElement("img");
+
+    laser.src = "laser_jugador.png";
+    laser.className = "LaserJugadorLvl2";
+
+    laser.style.left =
+        naveJugadorLvl2.offsetLeft -
+        naveJugadorLvl2.offsetWidth / 2 -
+        10 +
+        "px";
+
+    laser.style.top = naveJugadorLvl2.offsetTop + "px";
+
+    tableroLvl2.appendChild(laser);
+
+    setTimeout(function () {
+        laser.style.left = "-80px";
+    }, 20);
+
+    const detectorLaser = setInterval(function () {
+        const laserRect = laser.getBoundingClientRect();
+
+        const objetivo = meteoritosLvl2.find(function (meteorito) {
+            const rect = meteorito.getBoundingClientRect();
+
+            return (
+                meteorito.dataset.bloqueado !== "true" &&
+                laserRect.left < rect.right &&
+                laserRect.right > rect.left &&
+                laserRect.top < rect.bottom &&
+                laserRect.bottom > rect.top
+            );
+        });
+
+        if (objetivo) {
+            clearInterval(detectorLaser);
+            destruirMeteoritoLvl2(objetivo);
+            laser.remove();
+        }
+    }, 20);
+
+    setTimeout(function () {
+        clearInterval(detectorLaser);
+        laser.remove();
+    }, 1300);
+});
+
+ActualizarVidaslvl2();
+actualizarMarcadoresLvl2();

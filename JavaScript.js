@@ -1,22 +1,3 @@
-Swal.fire({
-    title : '¿Preparado para salvar el mundo? <br><br> <img src="IMG/planeta_tierra.png" width = "120px"><br>',
-    html: 'IRON FIST, es un juego que mejorara tus reflejos a medida que pases de nivel, retandote cada vez mas a medida que avances y desbloqueando grandes logros al final de cada nivel, esperamos te diviertas y disfrutes de este gran juego   ',
-    icon: 'sucess',
-    confirmButtonText: 'ESTOY PREPARADO',
-    width: '50%',
-    height: '80%',
-    timer: 100000,
-    
-    
-    timerProgressbar: true,
-    /*Funcion de cerrar la alerta*/
-    allowOutsideClick: true,
-    allowEscapeKey: false,
-    allowEnterkey: false,
-    stopKeydownPropagation: false,
-    });
-
-
 
 Tiempo = 71 //VARIBLE DE INICIO TIEMPO
 Puntaje = 0 //VARIABLE DE INICIO PUNTOS
@@ -42,6 +23,75 @@ function Iniciar_narracion(){
     }
 }
 
+// La intro se activa con un botón para evitar que el navegador la bloquee.
+const introOverlay = document.getElementById("intro-overlay");
+const introVideo = document.getElementById("intro-video");
+const introAudio = document.getElementById("intro-audio");
+const introPlayBtn = document.getElementById("intro-play");
+const introAudioCandidates = ["cinematicaAdio.mp3", "cinematicaAudio.mp3"];
+
+if (introOverlay && introVideo) {
+    document.body.classList.add("intro-active");
+
+    if (introAudio) {
+        const audioSrcActual = introAudio.getAttribute("src");
+        if (!introAudioCandidates.includes(audioSrcActual)) {
+            introAudio.setAttribute("src", introAudioCandidates[0]);
+        }
+    }
+
+    const pausarIntro = () => {
+        try { introVideo.pause(); } catch (error) {}
+        if (introAudio) {
+            try { introAudio.pause(); } catch (error) {}
+        }
+    };
+
+    const ocultarIntro = () => {
+        introOverlay.classList.add("hidden");
+        document.body.classList.remove("intro-active");
+        pausarIntro();
+    };
+
+    const iniciarIntro = async () => {
+        introVideo.muted = false;
+        introVideo.volume = 1;
+
+        if (introAudio) {
+            introAudio.muted = false;
+            introAudio.volume = 1;
+        }
+
+        try {
+            await introVideo.play();
+        } catch (error) {}
+
+        if (introAudio) {
+            try {
+                introAudio.currentTime = 0;
+                await introAudio.play();
+            } catch (error) {}
+        }
+    };
+
+    if (introPlayBtn) {
+        introPlayBtn.addEventListener("click", async () => {
+            await iniciarIntro();
+        });
+    }
+
+    introVideo.addEventListener("ended", ocultarIntro);
+    introAudio && introAudio.addEventListener("ended", ocultarIntro);
+
+    document.addEventListener("keydown", (event) => {
+        if (event.code === "Space" && !introOverlay.classList.contains("hidden")) {
+            event.preventDefault();
+            ocultarIntro();
+        }
+    });
+
+    introVideo.addEventListener("click", ocultarIntro);
+}
 
 
 
@@ -368,6 +418,9 @@ function JUEGO(){
 
 
 function Mover() {//TRANSICION DE LA PRIMERA SECCION A LA SEGUNDA
+    document.body.classList.add("stage-2")
+    document.getElementById("Fondo").style.backgroundImage = "url(IMG/Fondo_Espacio2.jpg)"
+
     var contenedor = document.getElementById("Seccion_01")
     contenedor.style.top = "-100%"
     contenedor.style.transition = "2s"
@@ -480,7 +533,12 @@ function Reloj_Tiempo(){
             var semana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
             pDia_Semana.textContent = semana [diaSemana];
             pDia.textContent = dia
-            var Mes_Actual = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Nomviembre', 'Diciembre']
+            var Mes_Actual = ['Enero', 'Febrero',
+                 'Marzo', 'Abril', 'Mayo', 
+                 'Junio', 'Julio', 'Agosto', 
+                 'Septiembre', 'Octubre', 
+                 'Nomviembre', 'Diciembre']
+                 
             pMes.textContent = Mes_Actual[mes];
             pAño.textContent = Año
 

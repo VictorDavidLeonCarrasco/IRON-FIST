@@ -1,9 +1,131 @@
 html body{margin: 0; padding: 0; font-family: sans-serif;}/*RESTABLESCO LA PAGINA, SI MARGEN EN LOS BORDES*/
 
+body {
+    background: #050914;
+    color: white;
+    transition: background 0.8s ease;
+}
 
-#Fondo {background-image: url(IMG/Fondo_Espacio.gif) ; color: white; background-attachment: fixed; background-repeat: no-repeat;
-background-size: 100% 120%;
- }
+#Fondo {
+    background-color: #050914;
+    color: white;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 100% 120%;
+    background-image: none;
+}
+
+body.stage-2 {
+    background-image: url(IMG/Fondo_Espacio2.jpg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: 100% 120%;
+}
+
+.menu-video-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+body.stage-2 .menu-video-bg {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#menu-background-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.65) contrast(1.15);
+}
+
+#Seccion_suprema,
+#Seccion_01,
+#Reglas,
+#Seccion_2,
+#Seccion_Juego,
+#NIVEL_02,
+#NIVEL3,
+.Contenedor_LVL {
+    position: relative;
+    z-index: 1;
+}
+
+/*nuevo para el video de introducción*/
+
+
+body.intro-active {
+    overflow: hidden;
+}
+
+.intro-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.intro-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#intro-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+}
+
+.intro-controls {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    bottom: 28px;
+    right: 32px;
+}
+
+.intro-play-btn {
+    border: none;
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.intro-play-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.intro-skip {
+    padding: 10px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    letter-spacing: 1px;
+    border-radius: 999px;
+    backdrop-filter: blur(2px);
+}
 
 
 /*CONTENEDOR DE TODOS LOS CONTENEDORES*/
@@ -13,12 +135,6 @@ background-size: 100% 120%;
                                                                     CONTENEDOR*/
 
 /*PRIMERA SECCION------------------------------------------------------------------------------------------------------*/
-
-.Contenedor_RC {width: 7vw; height: 3vw; border-radius: 3rem; background: transparent; border: 3px solid white; position: relative;
-left: 44%; top: 4%; cursor: pointer;}
-.Recursos {width: 40%; height: 100%; border-radius: 50%; background: white; margin-left: 0%; transition: 1s;}
-
-
 
 /*PRIMERA SECCION------------------------------------------------------------------------------------------------------*/
 

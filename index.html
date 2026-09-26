@@ -14,6 +14,21 @@
 </head>
 <body id="Fondo" >
 
+<!--NUEVO-------------------------------------------------------------->
+
+<div id="menu-video-bg" class="menu-video-bg">
+    <video id="menu-background-video" src="fondo.mp4" autoplay muted loop playsinline></video>
+</div>
+
+<div id="intro-overlay" class="intro-overlay">
+    <video id="intro-video" src="cinematica.mp4" playsinline preload="auto"></video>
+    <audio id="intro-audio" src="cinematicaAdio.mp3" preload="auto"></audio>
+    <div class="intro-controls">
+        <button id="intro-play" class="intro-play-btn" type="button">INICIAR INTRO</button>
+        <div id="intro-skip" class="intro-skip">PRESIONA ESPACIO PARA OMITIR</div>
+    </div>
+</div>
+
 <!--SECCION - CONTENEDOR GENERAL-------------------------------------------------------------->
 
 <section id="Seccion_suprema"  class="Contenedor_Supremo"> 
@@ -24,9 +39,8 @@
 <!--SECCION - 1 ------------------------------------------------------------------------------------------------------->
 
 <section class="Seccion_01" id="Seccion_01"  >
-<div class="Contenedor_RC" id="Contenedor_RC" onclick="Graficos_fondo()"><div class="Recursos" id="Recursos"></div></div>
 <h1 class="Nombre">IRON FIST</h1><h1 class="Texto_Principal">¿LISTO PARA DEFENDER<br> EL PLANETA?</h1>
-<button class="Boton" id="Juego" onclick="Mover()">JUGAR</button>
+<button class="Boton" id="Juego" onclick="Mover()">INICIAR MISIÓN</button>
 </section>
 <!--SECCION - 3 ------------------------------------------------------------------------------------------------------->
 

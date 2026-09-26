@@ -1,10 +1,18 @@
 
-Tiempo = 71 //VARIBLE DE INICIO TIEMPO
+Tiempo = 70 //VARIBLE DE INICIO TIEMPO
 Puntaje = 0 //VARIABLE DE INICIO PUNTOS
 let vidasNivel1 = 3;
 let vidasNivel1Impactadas = { Meteiorito: false, Meteiorito2: false };
 let finDelJuegoNivel1 = false;
 const volumenNivel1Default = 0.7;
+const objetivoPuntosNivel1 = 15;
+const segundosCuentaNivel1 = 3;
+let intervaloCuentaNivel1 = null;
+let Conteo = segundosCuentaNivel1;
+
+function actualizarPuntajeNivel1() {
+    document.getElementById('Puntaje').textContent = `${Puntaje} / ${objetivoPuntosNivel1}`;
+}
 
 function alturaAleatoriaNivel1() {
     const tablero = document.querySelector('#NIVEL_01 > .Contenedor:not(.Cabezera)');
@@ -58,15 +66,17 @@ function mostrarFinJuegoNivel1() {
 }
 
 function reiniciarNivel1() {
+    clearInterval(intervaloCuentaNivel1);
+    intervaloCuentaNivel1 = null;
     document.getElementById('Pause').textContent = 'PAUSAR';
     vidasNivel1 = 3;
     finDelJuegoNivel1 = false;
     vidasNivel1Impactadas.Meteiorito = false;
     vidasNivel1Impactadas.Meteiorito2 = false;
-    Tiempo = 71;
+    Tiempo = 70;
     Puntaje = 0;
     document.getElementById('Tiempo').innerHTML = Tiempo;
-    document.getElementById('Puntaje').innerHTML = '0&nbsp;/&nbsp;27';
+    actualizarPuntajeNivel1();
     actualizarVidasNivel1();
     const finOverlay = document.getElementById('FinJuegoNivel1');
     if (finOverlay) {
@@ -81,8 +91,10 @@ function reiniciarNivel1() {
     }
     document.getElementById('Start').style.display = 'flex';
     document.getElementById('Contenedor_contador').style.display = 'table';
-    document.getElementById('RGB').innerHTML = '4';
-    Conteo = 4;
+    document.getElementById('RGB').textContent = segundosCuentaNivel1;
+    Conteo = segundosCuentaNivel1;
+    document.getElementById('Contenedor_Mensaje_Star').style.left = '0%';
+    document.getElementById('Contenedor_contador').style.display = 'none';
 }
 
 const controlVolumenNivel1 = document.getElementById('VolumenNivel1');
@@ -241,12 +253,12 @@ function JUEGO(){
         Tiempo--;
         document.getElementById("Tiempo").innerHTML = Tiempo
         if(Tiempo == 0){
-            Tiempo = 71
+            Tiempo = 70
             Puntaje = 0
             document.getElementById("Perdiste_sound").play()
             mostrarFinJuegoNivel1();
             document.getElementById("Tiempo").innerHTML = 70;
-            document.getElementById("Puntaje").innerHTML = "0&nbsp;/&nbsp;27";} }
+            actualizarPuntajeNivel1();} }
     
         Restar_Tiempo = setInterval(Tiempo_Disminur, 1000)
 
@@ -257,11 +269,12 @@ function JUEGO(){
 
         //FUNCION QUE UNICAMENTE AUMENTA PUNTOS Y RESETEA LAS VARIABLES AL LLEGAR A CIERTO LIMITE
         function Aumentar_Puntos(){
+            if (finDelJuegoNivel1) return;
             Puntaje++;
-            document.getElementById("Puntaje").innerHTML = Puntaje + "&nbsp;/&nbsp;5"
-            if(Puntaje == 5){
-                Puntaje = 0 
-                Tiempo = 71
+            actualizarPuntajeNivel1();
+            if(Puntaje >= objetivoPuntosNivel1){
+                finDelJuegoNivel1 = true;
+                Tiempo = 70
 
 
                 document.getElementById("NEXT").addEventListener('click', Habilitar_Siguienten_LVL)
@@ -269,7 +282,7 @@ function JUEGO(){
                 document.getElementById("NIVEL_01").style.display = "none"
                 document.getElementById("NIVEL_02").style.display = "block"}
                 document.getElementById("Tiempo").innerHTML = 70
-                document.getElementById("Puntaje").innerHTML = 0+"&nbsp;/&nbsp;"+27
+                actualizarPuntajeNivel1();
                 document.getElementById("Triunfo").play()
                 document.getElementById("Fondo_Ciberpunk").pause()
                 document.getElementById("Puntos_sound").pause()
@@ -415,41 +428,26 @@ function JUEGO(){
         //LE DECIMOS QUE AL PRECIONAR EL BOTON JUGAR EJECUTARA LA FUNCION PLAY     
         document.getElementById("Play").addEventListener('click', PLAY)
 
-        Conteo = 4 //ESTE ES EL CONTEO DE LA CUENTA REGRESIVA QUE SE DA DESPUEZ DE PRESINAR JUGAR
-            
-            //ESTA FUNCION EJECUTA UN CONJUNTO DE ACCIONES AL PRESIONAR JUGAR
-            function PLAY(){
-                reiniciarNivel1();
-                document.getElementById("Fondo_Ciberpunk").play()
-                //MUEVE EL TITULO FUERA DEL CONTENEDOR UNA VEZ DE CLICK A JUGAR
-                document.getElementById("Texo").style.left = "-900px" 
-                //MUEVE AL BOTON PLAY TRANS PRESIONAR PRESIONAR AL MISMO BOTON
-                document.getElementById("Contenedor_Mensaje_Star").style.left = "-100%" 
-                    //ESTA FUNCION CONTIENE AL JUEGO COMO TAL
-                    function ARRACAR(){    
-                        JUEGO()}
-                //INVOCA AL JUEGO UNA VEZ PASEN 4 SEGUNDO - OSEA UNA VEZ TERMINE EL CONTADOR
-                tiempo_de_arranque =  setTimeout(ARRACAR, 4100)
-                //ESTA FUNCION EJECUTA LA CUENTA REGRESIVA Y RETIRA LA PANTALLA START 
-                function ESPERAR(){
-                    function Cuenta_rg(){
-                        Conteo--;
-                        document.getElementById("RGB").innerHTML = Conteo
-                        if(Conteo == -1){
-                        document.getElementById("Contenedor_contador").style.display = "none"
-                        function Borrar(){
-                        document.getElementById("Start").style.display = "none"
-
-                            DETENER_JUEGO() }//HABILITA LA FUNCION DE PAUSE Y REANUDAR UNA VEZ CARGUE EL JUEGO
-                        setTimeout(Borrar, 500) }  }
-                        setInterval (Cuenta_rg, 1000)}
-
-                        setTimeout(ESPERAR, 350)}//SE EJECUTARA EN UN LAPSO DE 350, DESPUES DE PRESIONAR EL BOTON
-
-
-
-
-
+        // La cuenta visible controla tambien el momento de iniciar la partida.
+        function PLAY() {
+            if (intervaloCuentaNivel1 !== null) return;
+            reiniciarNivel1();
+            document.getElementById('Fondo_Ciberpunk').play();
+            document.getElementById('Contenedor_Mensaje_Star').style.left = '-100%';
+            document.getElementById('Contenedor_contador').style.display = 'table';
+            intervaloCuentaNivel1 = setInterval(() => {
+                Conteo--;
+                document.getElementById('RGB').textContent = Conteo;
+                if (Conteo <= 0) {
+                    clearInterval(intervaloCuentaNivel1);
+                    intervaloCuentaNivel1 = null;
+                    document.getElementById('Contenedor_contador').style.display = 'none';
+                    document.getElementById('Start').style.display = 'none';
+                    JUEGO();
+                    DETENER_JUEGO();
+                }
+            }, 1000);
+        }
             //ESTA FUNCION CONTIENE EL REANUDE Y PAUSE DEL BOTON
             function DETENER_JUEGO (){
                 //INDICA QUE LA FUNCION DE PAUSE SE EJECUTARA UNA VEZ SE DE CLICK AL BOTON DE PAUSE        

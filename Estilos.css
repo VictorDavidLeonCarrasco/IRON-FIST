@@ -290,10 +290,19 @@ font-size: 60px;position: relative; top: 0%; left: -110%; padding-bottom: 2%;}
 position: absolute; top: 20%; overflow: hidden; transition: 2.3s;}
 
 /*FONDO DE LA SECCION PRINCIPAL*/
-.Seccion_Juego {width: 100%; height: 160vh; 
-    background-size: cover; display: flex;
-    align-items: center; justify-content: center;
-    flex-direction: column; position: absolute; top: -12%; left: -100%;  transition: 2s;       }
+.Seccion_Juego {
+width: 100%;
+    height: 100vh;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    top: 0%;
+    left: -100%;
+    transition: 2s;
+}
     
     /*ESTILOS DENTRO DEL CONTENEDOR DEL JUEGO*/
     .Contenedor {width: 900px; height: 500px; 
@@ -532,13 +541,27 @@ margin-left: 12%; }
     #Meteiorito2lvl2{ top: 0%; position: absolute; left: -30%; transition: 2s;}
     #Meteiorito3lvl2{top: 0%; position: absolute; left: -30%; transition: 2s;}
     /*ESTILO DEL PLANETA*/
-    .Planetalvl2 {position: absolute; top: 12%; left: 80%;
-        animation-name: rotation;
-        animation-duration: 10s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
+#NIVEL_02 .Contenedorlvl2:not(.Cabezeralvl2) .Planetalvl2 {
+    position: absolute !important;
+    top: 50% !important;
+    right: 2% !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: 26% !important;
+    height: auto !important;
+    margin: 0 !important;
+    z-index: 500 !important;
+    animation: rotationLvl2 10s linear infinite !important;
+}
+@keyframes rotationLvl2 {
+    from {
+        transform: translateY(-50%) rotate(0deg);
     }
-    
+
+    to {
+        transform: translateY(-50%) rotate(360deg);
+    }
+}
     @keyframes rotation {
       0% {
         transform:rotate(0deg);
@@ -546,6 +569,50 @@ margin-left: 12%; }
       100% {
         transform:rotate(360deg);
       }
+    }
+
+    /* ===================== HALLAZGO 14 ===================== */
+    /* Aviso visual temporal dentro del tablero al perder una vida. */
+    .AvisoImpactoLvl2 {
+        position: absolute;
+        top: 38%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 20000;
+        pointer-events: none;
+        color: #ffffff;
+        background: rgba(170, 0, 0, 0.8);
+        border: 3px solid #ff4d4d;
+        border-radius: 6px;
+        padding: 10px 22px;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 16px;
+        text-align: center;
+        white-space: nowrap;
+        text-shadow: 0 0 8px rgba(255, 0, 0, 0.9);
+        animation: AvisoImpactoLvl2Anim 1s ease-in-out forwards;
+    }
+
+    @keyframes AvisoImpactoLvl2Anim {
+        0%   { opacity: 0; transform: translate(-50%, -60%) scale(0.85); }
+        15%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        80%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+    }
+
+    /* ===================== HALLAZGO 15 ===================== */
+    /* Destello rojo breve del planeta al momento del impacto. */
+    /* Se suma a la animación de rotación existente (rotationLvl2) sin reemplazarla, */
+    /* y no usa "transform" para no mover ni deformar el planeta de forma permanente. */
+    #NIVEL_02 .Contenedorlvl2:not(.Cabezeralvl2) .Planetalvl2.ImpactoPlanetaLvl2 {
+        animation: rotationLvl2 10s linear infinite,
+            DestelloPlanetaLvl2Anim 0.45s ease-in-out !important;
+    }
+
+    @keyframes DestelloPlanetaLvl2Anim {
+        0%   { filter: drop-shadow(0 0 0 rgba(255, 0, 0, 0)) brightness(1); }
+        30%  { filter: drop-shadow(0 0 30px rgba(255, 30, 30, 0.95)) brightness(1.5) saturate(1.6); }
+        100% { filter: drop-shadow(0 0 0 rgba(255, 0, 0, 0)) brightness(1); }
     }
     
     /*ESTILO DEL LIMITE EN EL JUEGO*/
@@ -898,3 +965,535 @@ margin-left: 12%; }
         vertical-align: middle;
         font-family: 'Press Start 2P', cursive;
     }
+    /* MEJORA VISUAL 2: Diseño adaptable para distintas resoluciones */
+
+/* Título adaptable */
+.Tituloar_Juego_5 {
+    font-size: clamp(32px, 3vw, 52px);
+    margin: clamp(8px, 1vh, 14px) 0 10px;
+}
+
+/* Ancho adaptable del Nivel 2 */
+.Contenedorlvl2 {
+    width: clamp(640px, 52vw, 900px);
+    margin: 0 auto;
+    top: 0%;
+}
+
+/* Tablero: mantiene una proporción adecuada */
+.Contenedorlvl2:not(.Cabezeralvl2) {
+    height: auto;
+    aspect-ratio: 2 / 1;
+    max-height: 450px;
+}
+
+/* Cabecera adaptable */
+.Cabezeralvl2 {
+    height: clamp(54px, 3.5vw, 66px);
+}
+
+.Tiempolvl2,
+.Puntajelvl2 {
+    font-size: clamp(10px, 0.7vw, 13px);
+}
+
+.Pauselvl2 {
+    font-size: clamp(10px, 0.7vw, 13px);
+}
+
+/* Planeta proporcional al tablero */
+.Planetalvl2 {
+    width: clamp(250px, 18vw, 360px);
+    top: 10%;
+    left: 78%;
+}
+
+/* Pantalla de victoria más legible */
+.GanastePantallaLvL2 h1 {
+    font-size: clamp(1rem, 1.7vw, 1.7rem);
+}
+
+.GanastePantallaLvL2 h3 {
+    font-size: clamp(0.65rem, 0.9vw, 0.9rem);
+    line-height: 1.4;
+}
+
+/* Bloque inferior adaptable */
+.Contenedor_LVL {
+    top: 2%;
+    transform: scale(0.9);
+    transform-origin: top center;
+}
+
+/* Ajuste extra para laptops pequeñas */
+@media (max-width: 1366px), (max-height: 800px) {
+    .Tituloar_Juego_5 {
+        font-size: 36px;
+    }
+
+    .Contenedorlvl2 {
+        width: 700px;
+    }
+
+    .Contenedor_LVL {
+        transform: scale(0.82);
+    }
+}
+
+/* Ajuste para pantallas angostas */
+@media (max-width: 750px) {
+    .Tituloar_Juego_5 {
+        font-size: 28px;
+    }
+
+    .Contenedorlvl2 {
+        width: 92vw;
+    }
+
+    .Contenedor_LVL {
+        transform: scale(0.7);
+    }
+}
+/* AJUSTE PARA PANTALLAS BAJAS: evita que el título se corte */
+@media (max-height: 700px) {
+    .Tituloar_Juego_5 {
+        font-size: 30px;
+        margin: 6px 0;
+    }
+
+    .Contenedorlvl2 {
+        width: 620px;
+    }
+
+    .Contenedorlvl2:not(.Cabezeralvl2) {
+        height: 300px;
+        aspect-ratio: auto;
+    }
+
+    .Cabezeralvl2 {
+        height: 50px;
+    }
+
+    .Texolvl2 {
+        font-size: 26px;
+        line-height: 46px;
+        top: -10%;
+    }
+
+    #Dificultad h1 {
+        font-size: 18px !important;
+    }
+
+    .Contenedor_LVL {
+        top: 1%;
+        transform: scale(0.72);
+        transform-origin: top center;
+    }
+}
+/* HALLAZGO 3: Corrección visual de la pantalla de victoria */
+.GanastePantallaLvL2 {
+    background: rgba(5, 14, 48, 0.94);
+    border: 3px solid #36cfff;
+    box-shadow: 0 0 28px rgba(54, 207, 255, 0.8);
+    backdrop-filter: blur(4px);
+}
+
+.GanastePantallaLvL2 h1 {
+    color: #ffffff;
+    font-size: clamp(1.1rem, 2vw, 2rem);
+    line-height: 1.35;
+    text-align: center;
+    text-shadow: 0 0 12px #36cfff;
+    margin: 0 8% 18px;
+}
+
+.GanastePantallaLvL2 h1::before {
+    content: "★";
+    display: block;
+    color: #ffd54a;
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.GanastePantallaLvL2 h3 {
+    color: #d9ecff;
+    max-width: 70%;
+    padding: 0;
+    font-size: clamp(0.68rem, 1vw, 1rem);
+    line-height: 1.6;
+    text-align: center;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+.ControlVolumenLvl2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 15px;
+}
+
+#VolumenLvl2 {
+    width: 100px;
+    cursor: pointer;
+    accent-color: #1687ff;
+}
+
+.Cabezeralvl2 .Pauselvl2 {
+    left: auto;
+    margin-left: auto;
+    margin-right: 10px;
+}
+/* HALLAZGO 4: Botón de pantalla completa */
+.PantallaCompletaLvl2 {
+    width: 42px;
+    height: 42px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.PantallaCompletaLvl2:hover {
+    background: transparent;
+    color: #36cfff;
+    transform: scale(1.12);
+}
+/* Pantalla completa: ocupa toda la pantalla */
+#NIVEL_02:fullscreen {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+#NIVEL_02:fullscreen .Cabezeralvl2 {
+    width: 100vw !important;
+    height: 10vh !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+#NIVEL_02:fullscreen .Contenedorlvl2:not(.Cabezeralvl2) {
+    width: 100vw !important;
+    height: 90vh !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+/* Centrar y adaptar la pantalla inicial del Nivel 2 */
+#NIVEL_02:fullscreen .Startlvl2 {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#NIVEL_02:fullscreen .Texolvl2 {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 25px;
+    font-size: clamp(24px, 3vw, 52px);
+    line-height: 1.35;
+}
+
+#NIVEL_02:fullscreen #Dificultad {
+    position: static !important;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#NIVEL_02:fullscreen .Playlvl2 {
+    position: static !important;
+    left: auto !important;
+    width: clamp(150px, 18vw, 260px);
+    height: 55px;
+    margin: 0 auto;
+}
+
+#NIVEL_02:fullscreen #Contenedor_contadorlvl2 {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+#NIVEL_02:fullscreen #RGBlvl2 {
+    font-size: clamp(130px, 18vw, 280px);
+}
+/* Pantalla de victoria: trofeo del Nivel 2 */
+.GanastePantallaLvL2 {
+    padding: 16px;
+    box-sizing: border-box;
+    background: rgba(4, 12, 40, 0.94);
+    border: 3px solid #36cfff;
+    box-shadow: 0 0 28px rgba(54, 207, 255, 0.8);
+}
+
+.TarjetaTrofeoLvl2 {
+    width: min(86%, 620px);
+    padding: clamp(18px, 3vw, 34px);
+    border: 2px solid #208cff;
+    background: rgba(1, 10, 35, 0.88);
+    box-shadow: 0 0 20px rgba(32, 140, 255, 0.45);
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.TrofeoLvl2 {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.ParteTrofeoLvl2 {
+    width: clamp(36px, 5vw, 58px);
+    height: clamp(42px, 6vw, 64px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #36cfff;
+    border-radius: 8px;
+    font-size: clamp(18px, 2.5vw, 30px);
+}
+
+.ParteActivaLvl2 {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ffdb4d, #e68a00);
+    box-shadow: 0 0 14px #ffd54a;
+}
+
+.ParteBloqueadaLvl2 {
+    color: #52708d;
+    background: #0a2442;
+}
+
+.ProgresoTrofeoLvl2,
+.EtiquetaLogroLvl2 {
+    color: #80dcff;
+    font-size: clamp(0.6rem, 1vw, 0.85rem);
+    margin: 12px 0;
+}
+
+.TarjetaTrofeoLvl2 h1 {
+    color: #ffffff;
+    font-size: clamp(1.05rem, 2.1vw, 2rem);
+    line-height: 1.35;
+    margin: 14px 0;
+    text-shadow: 0 0 12px #36cfff;
+}
+
+.TarjetaTrofeoLvl2 h2 {
+    color: #ffd54a;
+    font-size: clamp(0.8rem, 1.4vw, 1.2rem);
+    line-height: 1.4;
+    margin: 12px 0 24px;
+}
+
+.BotonSiguienteLvl2 {
+    border: 2px solid #36cfff;
+    background: #087ee8;
+    color: white;
+    padding: 15px 22px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(54, 207, 255, 0.7);
+}
+
+.BotonSiguienteLvl2:hover {
+    background: #36cfff;
+    color: #03122e;
+    transform: scale(1.05);
+}
+.TrofeoLvl2 img {
+    width: min(46vw, 235px);
+    height: auto;
+    display: block;
+    margin: 0 auto 8px;
+    filter: drop-shadow(0 0 12px rgba(41, 211, 255, 0.65));
+}
+/* Pantalla visual de derrota del Nivel 2 */
+.PerdistePantallaLvl2 {
+    position: absolute;
+    inset: 0;
+    z-index: 100000000001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    box-sizing: border-box;
+    background: rgba(1, 8, 35, 0.94);
+}
+
+.TarjetaDerrotaLvl2 {
+    width: min(86%, 620px);
+    padding: clamp(22px, 4vw, 38px);
+    text-align: center;
+    background: rgba(2, 15, 50, 0.95);
+    border: 3px solid #20c7ff;
+    box-shadow: 0 0 28px #168dff;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.MeteoritoDerrotaLvl2 {
+    width: min(34vw, 165px);
+    height: auto;
+    display: block;
+    margin: 0 auto 8px;
+    filter: drop-shadow(0 0 12px rgba(255, 80, 0, 0.85));
+}
+
+.TarjetaDerrotaLvl2 h1 {
+    margin: 12px 0 18px;
+    color: #fff;
+    font-size: clamp(1.3rem, 3vw, 2.4rem);
+    line-height: 1.3;
+    text-shadow: 0 0 12px #ff3a00;
+}
+
+.TarjetaDerrotaLvl2 p {
+    color: #8fe9ff;
+    font-size: clamp(0.75rem, 1.3vw, 1rem);
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.BotonReintentarLvl2 {
+    padding: 15px 22px;
+    border: 3px solid #29d7ff;
+    background: #087ee8;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(41, 215, 255, 0.75);
+}
+@media (max-width: 800px), (max-height: 650px) {
+
+    .PerdistePantallaLvl2 {
+        padding: 8px;
+    }
+
+    .TarjetaDerrotaLvl2 {
+        width: 92%;
+        max-height: 94%;
+        padding: 12px 16px;
+        box-sizing: border-box;
+    }
+
+    .MeteoritoDerrotaLvl2 {
+        width: min(24vw, 100px);
+        margin-bottom: 2px;
+    }
+
+    .TarjetaDerrotaLvl2 h1 {
+        margin: 6px 0 10px;
+        font-size: clamp(1.1rem, 6vw, 1.7rem);
+    }
+
+    .TarjetaDerrotaLvl2 p {
+        margin: 0 0 14px;
+        font-size: clamp(0.65rem, 3vw, 0.85rem);
+    }
+
+    .BotonReintentarLvl2 {
+        padding: 11px 14px;
+        font-size: clamp(0.6rem, 2.6vw, 0.78rem);
+    }
+}
+/* NAVE DEL JUGADOR - NIVEL 2 */
+.Contenedorlvl2:not(.Cabezeralvl2) {
+    cursor: none;
+}
+
+.Startlvl2 {
+    cursor: default;
+}
+
+.NaveJugadorLvl2 {
+    position: absolute;
+    width: clamp(36px, 5vw, 58px);
+    height: auto;
+    left: 50%;
+    top: 50%;
+    z-index: 1500;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: opacity 0.15s ease;
+    filter: drop-shadow(0 0 10px rgba(255, 60, 60, 0.9));
+}
+/* CURSOR NORMAL CUANDO APARECE LA DERROTA */
+.PerdistePantallaLvl2,
+.PerdistePantallaLvl2 * {
+    cursor: default !important;
+}
+
+.BotonReintentarLvl2 {
+    cursor: pointer !important;
+}
+
+/* PROYECTIL DE LA NAVE - NIVEL 2 */
+.LaserJugadorLvl2 {
+    position: absolute;
+    width: 16px;
+    height: auto;
+    z-index: 1600;
+    pointer-events: none;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    filter: drop-shadow(0 0 10px #00d9ff);
+    transition: left 0.75s linear, opacity 0.15s ease;
+}
+/* INDICADOR VISUAL DE VIDAS - NIVEL 2 */
+.VidasLvl2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 105px;
+    color: #111;
+    font-size: clamp(10px, 0.8vw, 13px);
+}
+
+.VidasLvl2 h3 {
+    margin: 0 0 4px;
+    font-size: inherit;
+}
+
+.IconosVidasLvl2 {
+    display: flex;
+    gap: 5px;
+}
+
+.IconosVidasLvl2 span {
+    color: #ff274c;
+    font-size: clamp(20px, 2vw, 29px);
+    line-height: 1;
+    text-shadow: 0 0 6px rgba(255, 0, 65, 0.65);
+}
+/* CORAZÓN PERDIDO - NIVEL 2 */
+.VidaPerdidaLvl2 {
+    color: #8b8b8b;
+    opacity: 1;
+    filter: grayscale(1);
+    transform: scale(0.9);
+    text-shadow: none;
+}

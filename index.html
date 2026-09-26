@@ -184,9 +184,18 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
         <div class="Cabezeralvl2 Contenedorlvl2">
             <div class="Tiempolvl2"><h3>TIEMPO</h3><span id="Tiempolvl2">60</span></div><!--Tiempo con su span para la el final del minuto--> 
             <div class="Puntajelvl2"><h3>PUNTAJE</h3><span id="Puntajelvl2">0 / 34</span></div><!--Puntaje con su span que indica el puntaje-->
-            <div class="Pauselvl2" id="Pauselvl2"><h3>PAUSE / REANUDA</h3></div><!--Boton de pause-->
-        
-            </div>
+            <div class="ControlVolumenLvl2">
+    🔊 <input type="range" id="VolumenLvl2" min="0" max="1" value="0.45" step="0.05">
+
+    <button class="PantallaCompletaLvl2" id="PantallaCompletaLvl2" title="Pantalla completa" onclick="const juego = document.getElementById('NIVEL_02'); if (!document.fullscreenElement) { juego.requestFullscreen(); } else { document.exitFullscreen(); }">⛶</button>
+</div>
+
+<div class="Pauselvl2" id="Pauselvl2">
+    <h3 id="TextoPauselvl2">PAUSAR</h3>
+</div>
+
+</div> <!-- Fin de ControlVolumenLvl2 -->
+</div> <!-- Fin de la cabecera del Nivel 2 -->
     
             <!--CCMIENZO DEL JUEGO------------------------------------------------------>
     
@@ -196,7 +205,8 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
             <img src="IMG/Metiorito.png" width="70px" class="Meteioritolvl2" id="Meteioritolvl2">
             <img src="IMG/Metiorito.png" width="70px" class="Meteioritolvl2" id="Meteiorito2lvl2">
             <img src="IMG/Metiorito.png" width="70px" class="Meteioritolvl2" id="Meteiorito3lvl2"> 
-            <img src="IMG/planeta_tierra.png" width="400px" class="Planetalvl2">
+            <img src="IMG/planeta_tierra.png" class="Planetalvl2" style="position: absolute; top: 50%; right: 2%; left: 
+            auto; bottom: auto; width: 26%; height: auto; animation: rotationLvl2 10s linear infinite;">
             <!--Limite dentro del tablero del juego-->
             <div class="Limitelvl2"></div>
     

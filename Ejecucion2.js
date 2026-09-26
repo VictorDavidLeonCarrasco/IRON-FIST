@@ -31,7 +31,7 @@ function JUEGOlvl2(){
         function Aumentar_Puntoslvl2(){
             Puntajelvl2++;
             document.getElementById("Puntajelvl2").innerHTML = Puntajelvl2 + " / 4"
-            if(Puntajelvl2 == 2){
+            if(Puntajelvl2 == 4){
                 Puntajelvl2 = 0 
                 Tiempolvl2 = 61
 
@@ -64,30 +64,14 @@ function JUEGOlvl2(){
                     document.getElementById("Meteiorito3lvl2").style.left = "-70%"
                     document.getElementById("Meteiorito3lvl2").style.transition = "0s"}
 
-                     setInterval(Ganaste_Pantallalvl2, 1)
+                    setInterval(Ganaste_Pantallalvl2, 1)
 
 
                 document.getElementById("GanastePantallaLvL2").style.display = "flex"
-                Swal.fire({
-                    title : 'FELICIDADES POR SUPERAR <br> EL NIVEL <br><br> <img src="IMG/Check.png" width = "120px"><br>',
-                    html: '¿VERDAD QUE FUE DIFÍCIL?. Prepárate para el siguiente nivel que las cosas van a empeorar. Agradecemos tu dedicación en pasar este nivel, esperemos que puedas seguir defendiendo la tierra de esa manera y mejores tu habilidad de reacción ',
-                    icon: 'sucess',
-                    confirmButtonText: 'QUIERO CONTINUAR',
-                    width: '50%',
-                    height: '80%',
-                    timer: 100000,
-                    
-                    
-                    timerProgressbar: true,
-                    /*Funcion de cerrar la alerta*/
-                    allowOutsideClick: true,
-                    allowEscapeKey: false,
-                    allowEnterkey: false,
-                    stopKeydownPropagation: false,
-                    });
+                
 
                                 }
-                                     }
+                                    }
 
 
         //ESTA FUNCION DIRIGE AL PRIMER METIORITO 1 A LA TIERRA 
@@ -166,11 +150,16 @@ function JUEGOlvl2(){
         //ESTA FUNCION SE ENCARGA DE ALERTARTE UNA VEZ EL METIORITO CRUZE LA LINEA CON UN PERDISTE
         //TAMBIEN RESETEA LOS VALORES Y LLEVA A LOS METIORITOS FUERA DEL MAPA DE MANERA INSTANTANEA
         function perdistelvl2 (){
-            if((document.getElementById("Meteioritolvl2").offsetLeft > 630) ||
-            (document.getElementById("Meteiorito2lvl2").offsetLeft > 630) ||
-            (document.getElementById("Meteiorito3lvl2").offsetLeft > 630))
-            
-            {
+
+    const planeta = document.querySelector("#NIVEL_02 .Planetalvl2");
+    const limiteImpacto = planeta.offsetLeft;
+
+    if (
+        document.getElementById("Meteioritolvl2").offsetLeft >= limiteImpacto ||
+        document.getElementById("Meteiorito2lvl2").offsetLeft >= limiteImpacto ||
+        document.getElementById("Meteiorito3lvl2").offsetLeft >= limiteImpacto
+    )
+    {
                 document.getElementById("Perdiste_sound").play()
             
                 alert("YA ES DEMASIADO TARDE, LOS METEORITOS DESTRUYERON GRAN PARTE DEL CONTINENTE Y LO MEJOR ES ESPERAR LO PEOR")
@@ -244,6 +233,7 @@ function JUEGOlvl2(){
                     function PAUSElvl2(){
                         //SI LLEGA A UNA EJECUTA LA FUNCION PAUSE
                         if (Activolvl2 == 1){
+                        document.getElementById("TextoPauselvl2").innerHTML = "REANUDAR";
                         document.getElementById("Pausa_Pantallalvl2").style.display = "table"
                         document.getElementById("Fondo_Ciberpunk").pause()
                         clearInterval(Restar_Tiempolvl2)//BORRAMOS LA FUNCION DE TIEMPO
@@ -265,6 +255,7 @@ function JUEGOlvl2(){
                             Activolvl2 = 2} //CAMBIAMOS EL VALOR PARA QUE AL VOLVER A DARLE CLICK EJECUTE LA CONDICIONAL DE REANUDAR
 
                         else { //LA FUNCION DE REANUDAR
+                            document.getElementById("TextoPauselvl2").innerHTML = "PAUSAR";
                             clearInterval(Pusae_offflvl2) 
                             document.getElementById("Pausa_Pantallalvl2").style.display = "none"
                             document.getElementById("Fondo_Ciberpunk").play()
@@ -291,7 +282,7 @@ function JUEGOlvl2(){
                         document.getElementById("Meteiorito3lvl2").style.transition = "2s"
 
                         function Metiorito_Direccionlvl2(){
-                            Distancia1lvl2 = 80
+                            Distancia1lvl2 = 90
                             Altura1lvl2 = Math.round(Math.random()* 450)
                 
                             document.getElementById("Meteioritolvl2").style.left = Distancia1lvl2 + "%"
@@ -302,7 +293,7 @@ function JUEGOlvl2(){
                 
                 
                             function Metiorito_Direccion2lvl2(){
-                                Distancia2lvl2 = 80
+                                Distancia2lvl2 = 90
                                 Altura2lvl2 = Math.round(Math.random()* 400)
                 
                                 document.getElementById("Meteiorito2lvl2").style.left = Distancia2lvl2 + "%"
@@ -313,7 +304,7 @@ function JUEGOlvl2(){
                 
                             
                             function Metiorito_Direccion3lvl2(){
-                                Distancia3lvl2 = 80
+                                Distancia3lvl2 = 90
                                 Altura3lvl2 = Math.round(Math.random()* 350)
                     
                                 document.getElementById("Meteiorito3lvl2").style.left = Distancia3lvl2 + "%"
@@ -323,5 +314,20 @@ function JUEGOlvl2(){
                                 Reanudar_trayectoria3lvl2 = setInterval(Metiorito_Direccion3lvl2, 2570)//LUEGO SE VA A LLAMAR A LOS METIORITOS CADA 2,3 SEGUNDOS
 
                         Activolvl2 = 1 } } } //CAMBIAMOS EL VALOR DE NUEVO A 1 PARA QUE AL SIGUIENTE CLICK SE EJECUTE EL PAUSE  S 
+                        const volumen = document.getElementById("VolumenLvl2");
 
-                
+                        volumen.addEventListener("input", function () {
+                        document.getElementById("Fondo_Ciberpunk").volume = volumen.value;
+                        document.getElementById("Puntos_sound").volume = volumen.value;
+                        document.getElementById("Perdiste_sound").volume = volumen.value;
+                        document.getElementById("Triunfo").volume = volumen.value;
+                        });
+                        document.addEventListener("fullscreenchange", function () {
+                            if (
+                            !document.fullscreenElement &&
+                            typeof Activolvl2 !== "undefined" &&
+                            Activolvl2 === 1
+                            ) {
+                                document.getElementById("Pauselvl2").click();
+                            }
+                                });

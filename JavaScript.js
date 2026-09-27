@@ -283,8 +283,11 @@ function mascaraNivel1(imagen, ancho, alto) {
 }
 
 function impactoNivel1(disparo, meteoro) {
-    const ancho = meteoro.elemento.offsetWidth;
-    const alto = meteoro.elemento.offsetHeight;
+    if (!disparo || !meteoro || !meteoro.elemento) return false;
+    if (!Number.isFinite(disparo.x) || !Number.isFinite(disparo.y) || !Number.isFinite(meteoro.x) || !Number.isFinite(meteoro.y)) return false;
+    const ancho = Number(meteoro.elemento.offsetWidth) || 0;
+    const alto = Number(meteoro.elemento.offsetHeight) || 0;
+    if (!ancho || !alto) return false;
     const izquierda = Math.max(disparo.x, meteoro.x, 0);
     const derecha = Math.min(disparo.x + 42, meteoro.x + ancho);
     const arriba = Math.max(disparo.y, meteoro.y, 0);
@@ -296,8 +299,13 @@ function impactoNivel1(disparo, meteoro) {
     // Ignora el margen transparente de ambos sprites, incluso en impactos de borde.
     for (let y = arriba; y < abajo; y++) {
         for (let x = izquierda; x < derecha; x++) {
-            const b = (Math.floor(y - disparo.y) * 42 + Math.floor(x - disparo.x)) * 4 + 3;
-            const m = (Math.floor(y - meteoro.y) * ancho + Math.floor(x - meteoro.x)) * 4 + 3;
+            const bx = Math.floor(x - disparo.x);
+            const my = Math.floor(x - meteoro.x);
+            const by = Math.floor(y - disparo.y);
+            const myY = Math.floor(y - meteoro.y);
+            if (bx < 0 || bx >= 42 || by < 0 || by >= 18 || my < 0 || my >= ancho || myY < 0 || myY >= alto) continue;
+            const b = (by * 42 + bx) * 4 + 3;
+            const m = (myY * ancho + my) * 4 + 3;
             if (bala[b] > 32 && roca[m] > 32) return true;
         }
     }
@@ -433,32 +441,43 @@ function pasoNivel1(dt) {
 }
 
 function animarNivel1(ahora) {
-    const dt = ultimoFrameNivel1 === null ? 0 : Math.min((ahora - ultimoFrameNivel1) / 1000, 0.05);
-    ultimoFrameNivel1 = ahora;
-    if (!pausadoNivel1) {
-        if (jugandoNivel1) {
-            relojNivel1 += dt;
-            Tiempo = Math.max(0, 70 - Math.floor(relojNivel1));
-            document.getElementById('Tiempo').textContent = Tiempo;
-            if (Tiempo === 0) { sonidoNivel1('Perdiste_sound'); mostrarFinJuegoNivel1(); return; }
-            // Subpasos de como máximo 1 px relativo: una bala rápida no atraviesa una roca.
-            const pasos = Math.max(1, Math.ceil(dt * (720 + tableroNivel1.clientWidth / 4)));
-            for (let i = 0; i < pasos && jugandoNivel1; i++) pasoNivel1(dt / pasos);
-            meteoritosNivel1.forEach(m => {
-                m.elemento.style.left = m.x + 'px';
-                m.elemento.style.top = m.y + 'px';
+    try {
+        const dt = ultimoFrameNivel1 === null ? 0 : Math.min((ahora - ultimoFrameNivel1) / 1000, 0.05);
+        ultimoFrameNivel1 = ahora;
+        if (!pausadoNivel1) {
+            if (jugandoNivel1) {
+                relojNivel1 += dt;
+                Tiempo = Math.max(0, 70 - Math.floor(relojNivel1));
+                document.getElementById('Tiempo').textContent = Tiempo;
+                if (Tiempo === 0) { sonidoNivel1('Perdiste_sound'); mostrarFinJuegoNivel1(); return; }
+                // Subpasos de como máximo 1 px relativo: una bala rápida no atraviesa una roca.
+                const pasos = Math.max(1, Math.ceil(dt * (720 + tableroNivel1.clientWidth / 4)));
+                for (let i = 0; i < pasos && jugandoNivel1; i++) pasoNivel1(dt / pasos);
+                meteoritosNivel1.forEach(m => {
+                    if (!m || !m.elemento) return;
+                    m.elemento.style.left = m.x + 'px';
+                    m.elemento.style.top = m.y + 'px';
+                });
+                disparosNivel1.forEach(d => { if (d && d.elemento) d.elemento.style.left = d.x + 'px'; });
+            }
+            explosionesNivel1 = explosionesNivel1.filter(e => {
+                if (!e || !e.elemento) return false;
+                e.tiempo -= dt;
+                e.elemento.style.opacity = Math.min(1, e.tiempo / 0.15);
+                if (e.tiempo <= 0) { e.elemento.remove(); return false; }
+                return true;
             });
-            disparosNivel1.forEach(d => { d.elemento.style.left = d.x + 'px'; });
         }
-        explosionesNivel1 = explosionesNivel1.filter(e => {
-            e.tiempo -= dt;
-            e.elemento.style.opacity = Math.min(1, e.tiempo / 0.15);
-            if (e.tiempo <= 0) { e.elemento.remove(); return false; }
-            return true;
-        });
+        if (jugandoNivel1 || explosionesNivel1.length) frameNivel1 = requestAnimationFrame(animarNivel1);
+        else detenerMotorNivel1();
+    } catch (error) {
+        console.error('Error en el nivel 1:', error);
+        if (jugandoNivel1) {
+            frameNivel1 = requestAnimationFrame(animarNivel1);
+        } else {
+            detenerMotorNivel1();
+        }
     }
-    if (jugandoNivel1 || explosionesNivel1.length) frameNivel1 = requestAnimationFrame(animarNivel1);
-    else detenerMotorNivel1();
 }
 
 function JUEGO() {
@@ -576,14 +595,16 @@ function Mover_3 (){//TRANSICION DE LA SEGUNDA SECCION A LA TERCERA
 
 var contenedor_2 = document.getElementById("Seccion_2")
 var Supremo = document.getElementById("Seccion_suprema")
+const narracion = document.getElementById("narracion");
+if (narracion) narracion.pause();
+if (contenedor_2) {
+    contenedor_2.style.top = "-100%"
+    contenedor_2.style.transition = "1.4s"
+}
+if (Supremo) Supremo.style.height = "160vh" //Le aumente para que no tape al contenedor del juego
 
-document.getElementById("narracion").pause()
-contenedor_2.style.top = "-100%"
-contenedor_2.style.transition = "1.4s"
-Supremo.style.height = "160vh" //Le aumente para que no tape al contenedor del juego
 
-
-    function Desaparaceer3(){
+    function abrirJuego(){
     var Seccion_Juego = document.getElementById("Seccion_Juego")
     var contenedor_2 = document.getElementById("Seccion_2")
     var juego = document.getElementById("Registraar")
@@ -591,19 +612,27 @@ Supremo.style.height = "160vh" //Le aumente para que no tape al contenedor del j
     var Contenedor_juego = document.getElementById("Contenedor_Juego")
     var Cabezara = document.getElementById("Cabezera")
 
-        Seccion_Juego.style.left = "0%"
-        contenedor_2.style.display = "none"
-        juego.style.top = "0%"
-        juego.style.transition = "0s"
-        Titulo_jugar.style.left = "0%"
-        Titulo_jugar.style.transition = "0.8s"
-        Contenedor_juego.style.left = "0%"
-        Contenedor_juego.style.transition = "1.2s"
-        Cabezara.style.left = "0%"
-        Cabezara.style.transition = "1.2s"
+        if (Seccion_Juego) Seccion_Juego.style.left = "0%"
+        if (contenedor_2) contenedor_2.style.display = "none"
+        if (juego) {
+            juego.style.top = "0%"
+            juego.style.transition = "0s"
+        }
+        if (Titulo_jugar) {
+            Titulo_jugar.style.left = "0%"
+            Titulo_jugar.style.transition = "0.8s"
+        }
+        if (Contenedor_juego) {
+            Contenedor_juego.style.left = "0%"
+            Contenedor_juego.style.transition = "1.2s"
+        }
+        if (Cabezara) {
+            Cabezara.style.left = "0%"
+            Cabezara.style.transition = "1.2s"
+        }
     }
 
-    setTimeout(Desaparaceer3, 900)
+    setTimeout(abrirJuego, 900)
 }
 
 //RELOJ

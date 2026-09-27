@@ -155,7 +155,31 @@ const introOverlay = document.getElementById("intro-overlay");
 const introVideo = document.getElementById("intro-video");
 const introAudio = document.getElementById("intro-audio");
 const introPlayBtn = document.getElementById("intro-play");
+const menuAudio = document.getElementById("menu-audio");
 const introAudioCandidates = ["cinematicaAdio.mp3", "cinematicaAudio.mp3"];
+
+const iniciarMenuAudio = async () => {
+    if (!menuAudio) return;
+    menuAudio.muted = false;
+    menuAudio.volume = 0.45;
+    menuAudio.loop = true;
+    try {
+        if (menuAudio.paused) {
+            await menuAudio.play();
+        }
+    } catch (error) {}
+};
+
+const detenerMenuAudio = () => {
+    if (!menuAudio) return;
+    menuAudio.pause();
+    menuAudio.currentTime = 0;
+};
+
+const activarMenuAudioEnInteraccion = () => {
+    if (!menuAudio) return;
+    iniciarMenuAudio();
+};
 
 if (introOverlay && introVideo) {
     document.body.classList.add("intro-active");
@@ -178,6 +202,9 @@ if (introOverlay && introVideo) {
         introOverlay.classList.add("hidden");
         document.body.classList.remove("intro-active");
         pausarIntro();
+        if (menuAudio) {
+            iniciarMenuAudio();
+        }
     };
 
     const iniciarIntro = async () => {
@@ -203,6 +230,7 @@ if (introOverlay && introVideo) {
 
     if (introPlayBtn) {
         introPlayBtn.addEventListener("click", async () => {
+            detenerMenuAudio();
             await iniciarIntro();
         });
     }
@@ -221,6 +249,12 @@ if (introOverlay && introVideo) {
     if (window.location.hash === '#inicio') ocultarIntro();
 }
 
+if (menuAudio) {
+    const botonJuego = document.getElementById("Juego");
+    if (botonJuego) {
+        botonJuego.addEventListener("click", detenerMenuAudio);
+    }
+}
 
 
 Graficos = 1 //Este es el medidor de graficos
@@ -556,6 +590,7 @@ document.addEventListener('visibilitychange', () => {
 
 
 function Mover() {//TRANSICION DE LA PRIMERA SECCION A LA SEGUNDA
+    detenerMenuAudio();
     document.body.classList.add("stage-2")
     document.getElementById("Fondo").style.backgroundImage = "url(IMG/Fondo_Espacio2.jpg)"
 

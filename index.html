@@ -109,85 +109,40 @@
 <!--SECCION - 4 ------------------------------------------------------------------------------------------------------->
 
 <section id="Seccion_2">
-  <!-- BARRAS SUPERIORES DE RECURSOS HUD -->
-  <div class="hud-top-bar">
-    <div class="hud-stat"><i class="fas fa-bolt"></i> <span>Energía Planetaria</span> <strong>491.382</strong></div>
-    <div class="hud-stat"><i class="fas fa-cube"></i> <span>Recursos de Defensa</span> <strong>45.926</strong></div>
-    <div class="hud-stat"><i class="fas fa-shield-alt"></i> <span>Recursos de Defensa</span> <strong>253.733</strong></div>
+  <!-- TÍTULO SUPERIOR (ID usador por tu JS: Titulo_historia) -->
+  <div id="Titulo_historia" class="titulo-historia">
+    Todo empezo cuando...
   </div>
 
-  <!-- TÍTULO PRINCIPAL (Utilizado por tu JS: id="Titulo_historia") -->
-  <div id="Titulo_historia" class="hud-main-header">
-    <span>REDUCCIÓN DEL CHRONOS - INFORME DEL ORIGEN</span>
+  <!-- IMAGEN DE METEORITOS (ID usado por tu JS: Imagen) -->
+  <div id="Imagen" class="contenedor-imagen">
+    <img src="IMG/Metioritos_Callendo.jpg" alt="Meteoritos cayendo" class="imagen-historia">
   </div>
 
-  <!-- MAPA MUNDIAL EN LA ESQUINA DERECHA -->
-  <div class="hud-earth-sector">
-    <div class="hud-sector-title">EARTH DEFENSE SECTOR</div>
-    <img src="IMG/world_map_hud.png" alt="Mapa Sectorial" class="hud-map-img">
-  </div>
-
-  <!-- PANEL LATERAL IZQUIERDO DE NAVEGACIÓN -->
-  <div class="hud-side-panel">
-    <div class="hud-menu-cat">• ANTERIORES</div>
-    <div class="hud-menu-item active">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
-    <div class="hud-menu-item">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
-    <div class="hud-menu-item">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
-    <div class="hud-menu-cat">• FUTURO</div>
-    <div class="hud-menu-item active-selected">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
-    <div class="hud-menu-item">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
-    <div class="hud-menu-item">CAPÍTULO I: NUESTRA SALVACIÓN</div>
-  </div>
-
-  <!-- MARCO DE IMAGEN PRINCIPAL (Utilizado por tu JS: id="Imagen") -->
-  <div id="Imagen" class="hud-video-frame">
-    <img src="IMG/Metioritos_Callendo.jpg" alt="Meteoritos cayendo" class="hud-img-escena">
-  </div>
-
-  <!-- TEXTO NARRATIVO (Utilizado por tu JS: id="Mensaje") -->
-  <div id="Mensaje" class="hud-text-frame">
-    <!-- PESTAÑAS HUD -->
-    <div class="hud-tabs">
-      <span class="tab active">CAPÍTULO</span>
-      <span class="tab">INFORME</span>
-      <span class="tab">PROYECTO</span>
-      <span class="tab">ACTUALIZACIONES</span>
-    </div>
-
-    <h3>CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</h3>
-    <h4>SITUACIÓN ACTUAL:</h4>
+  <!-- TARJETA DE TEXTO BLANCA/GRIS (ID usado por tu JS: Mensaje) -->
+  <div id="Mensaje" class="tarjeta-mensaje">
+    <h3>CAPÍTULO I: NUESTRA SALVACIÓN</h3>
     <p>
-      En cierto día, las noticias de todo el mundo anunciaron que muy pronto se acercarían meteoritos 
-      de gran tamaño a la tierra y que solo era cuestión de horas para que comenzaran a llegar; 
-      el resultado de esto fue inmediato ya que miles de personas comenzaron a alertarse y a hacer disturbios, 
-      en centros comerciales y áreas públicas, para que el gobierno les diera alguna respuesta...
+      En cierto día, las noticias de todo el mundo anunciaron que muy pronto se acercarían 
+      meteoritos de gran tamaño a la tierra y que solo era cuestión de horas para que 
+      comenzaran a llegar; el resultado de esto fue inmediato ya que miles de personas 
+      comenzaron a alertarse y a hacer disturbios, en centros comerciales y áreas públicas, 
+      para que el gobierno les diera alguna respuesta; pero el gobierno ya tenía un plan de 
+      contingencia, ya que ellos se habían enterado de la llegada de estos con días de 
+      antelación preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", 
+      que consistía en los proyectiles más letales de la tierra y nuestra única salvación.
     </p>
 
-    <div class="hud-live-tag">• TRANSMISIÓN EN VIVO // REGISTRO #018</div>
-  </div>
-
-  <!-- BOTONES DE ACCIÓN INFERIORES -->
-  <div class="hud-bottom-actions">
-    <button class="hud-btn-preparado" onclick="Mover_3()">¿ESTÁS PREPARADO?</button>
-    <button class="hud-btn-start" onclick="Mover_3()">
-      <i class="fas fa-rocket"></i>
-      <div>
-        <span>START</span>
-        <small>SIMULATION</small>
+    <!-- BOTONES DENTRO DE LA TARJETA -->
+    <div class="contenedor-botones-tarjeta">
+      <button class="btn-preparado" onclick="Mover_3()">¿Estas preparado?</button>
+      
+      <!-- CONTROL DE AUDIO / REPRODUCCIÓN -->
+      <div class="Contenedor_narracion" id="Contenedor_narracion">
+        <i class="fas fa-play" id="VOLUMEN"></i>
+        <i class="fas fa-pause" id="PAUSE" style="display: none;"></i>
       </div>
-    </button>
-    
-    <!-- CONTROL DE NARRACIÓN AUDIO (Tu JS) -->
-    <div class="Contenedor_narracion" id="Contenedor_narracion">
-      <i class="fas fa-play" id="VOLUMEN"></i>
-      <i class="fas fa-pause" id="PAUSE" style="display: none;"></i>
     </div>
-  </div>
-
-  <!-- BARRA DE ESTADO INFERIOR -->
-  <div class="hud-footer-status">
-    <span>IRON FIST INITIATIVE STATUS</span>
-    <div class="hud-progress-bar"><div class="hud-progress-fill"></div></div>
   </div>
 </section>
 

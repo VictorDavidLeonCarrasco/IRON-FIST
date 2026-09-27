@@ -46,39 +46,61 @@
 <button class="Boton" id="Juego" onclick="Mover()">INICIAR MISIÓN</button>
 </section>
 <!--SECCION - 3 ------------------------------------------------------------------------------------------------------->
+<section id="Reglas">
 
-<section  id="Reglas">
-    <h1 class="Titulo_Reglas">Antes de empezar lee,<br><br> las reglas.</h1>
-    <img src="IMG/JUEGO.jpg"  class="Img_reglas">
-    <div class="Reglas_estilos" id="R1">
-        <h3>REGLA : 1</h3>
-        <p>Lo que se encuentra señalado son los puntos, que segun tu progreso, se irán incrementando al destruir
-            meteoritos. En el primer nivel, mueve el cursor para pilotar la nave y haz clic para disparar hacia la izquierda, si los puntos obtenidos
-            llegan a 30, es una victoria automática, pero recuerda que los meteoritos son impredecibles en su ataque así que
-            tienes que estar atento a su llegada
-        </p>
+    <h1 class="Titulo_Reglas">REGLAS DEL JUEGO</h1>
+
+    <div class="Contenedor_Reglas">
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">01</span>
+            <div>
+                <h3>CONTROLA LA NAVE</h3>
+                <p>
+                    Mueve el cursor para pilotar la nave
+                    y haz clic para disparar.
+                </p>
+            </div>
+        </div>
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">02</span>
+            <div>
+                <h3>CUMPLE EL OBJETIVO</h3>
+                <p>
+                    Cada nivel tiene un objetivo diferente.
+                    Complétalo antes de que termine el tiempo.
+                </p>
+            </div>
+        </div>
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">03</span>
+            <div>
+                <h3>EVITA LOS METEORITOS</h3>
+                <p>
+                    No permitas que los meteoritos lleguen
+                    al planeta.
+                </p>
+            </div>
+        </div>
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">04</span>
+            <div>
+                <h3>NO PIERDAS TUS VIDAS</h3>
+                <p>
+                    Los impactos reducen tus vidas.
+                    Si pierdes todas, terminará la partida.
+                </p>
+            </div>
+        </div>
+
     </div>
 
-
-    <div class="Reglas_estilos" id="R2">
-        <h3>REGLA : 2</h3>
-        <p>El tiempo que se señala es el límite máximo que puede aguantar la defensa, siendo unos 60 segundos, en los que
-            el jugador debe cumplir el límite de puntos o sera un GAMER OVER automático, asi que recuerda ser rápido recolectando
-            puntos.
-        </p>
+    <div class="Listo" onclick="Mover_2()">
+        ¿ESTÁS LISTO?
     </div>
-
-
-    <div class="Reglas_estilos" id="R3_4">
-        <h3>REGLA : 3 y 4</h3>
-        <p>Estos son los meteoritos que debes evitar que ingresen a la tierra, por lo general suelen ser rápidos así que 
-            recuerda: no te descuides o confies por que en el momento que lo hagas, estos llegarán a la tierra, es por ello
-            que una raya señala el límite por el cual ya es inevitable nuestra salvación (GAME OVER)
-        </p>
-    </div>
-
-<div class="Listo" onclick="Mover_2()">¿Estas listo?</div>
-
 
 </section>
 
@@ -87,17 +109,86 @@
 <!--SECCION - 4 ------------------------------------------------------------------------------------------------------->
 
 <section id="Seccion_2">
-<h1 class="Titulo_historia" id="Titulo_historia">Todo empezo cuando...</h1>
-<div class="Contenedor_Historia" id="Mensaje"><h3 style="margin-top: -1%;">CAPÍTULO I: NUESTRA SALVACIÓN</h3>
-En cierto día, las noticias de todo el mundo anunciaron que muy pronto se acercarían meteoritos de gran
-tamaño a la tierra y que solo era cuestión de horas para que comenzaran a llegar; el resultado de esto fue inmediato ya que 
-miles de personas comenzaron a alertarse y a hacer disturbios, en centros comerciales y areas publicas, para que el gobierno les
-diera alguna respuesta; pero el gobierno ya tenía un plan de contingencia, ya que ellos se habían enterado de la llegada de estos con días de antelación
-preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que consistía en los proyectiles más letales de la tierra y nuestra única salvación
-<div class="BOTONES_2"><div class="Boton_preparado" onclick="Mover_3()">¿Estas preparado? </div><div class="Contenedor_narracion" id="Contenedor_narracion">
-<i class="fas fa-play" id="VOLUMEN"></i><i class="fas fa-pause" id="PAUSE"></i></div></div>
-</div>
-<img src="IMG/Metioritos_Callendo.jpg" class="Imgane_metiorito" id="Imagen" >
+  <!-- BARRAS SUPERIORES DE RECURSOS HUD -->
+  <div class="hud-top-bar">
+    <div class="hud-stat"><i class="fas fa-bolt"></i> <span>Energía Planetaria</span> <strong>491.382</strong></div>
+    <div class="hud-stat"><i class="fas fa-cube"></i> <span>Recursos de Defensa</span> <strong>45.926</strong></div>
+    <div class="hud-stat"><i class="fas fa-shield-alt"></i> <span>Recursos de Defensa</span> <strong>253.733</strong></div>
+  </div>
+
+  <!-- TÍTULO PRINCIPAL (Utilizado por tu JS: id="Titulo_historia") -->
+  <div id="Titulo_historia" class="hud-main-header">
+    <span>REDUCCIÓN DEL CHRONOS - INFORME DEL ORIGEN</span>
+  </div>
+
+  <!-- MAPA MUNDIAL EN LA ESQUINA DERECHA -->
+  <div class="hud-earth-sector">
+    <div class="hud-sector-title">EARTH DEFENSE SECTOR</div>
+    <img src="IMG/world_map_hud.png" alt="Mapa Sectorial" class="hud-map-img">
+  </div>
+
+  <!-- PANEL LATERAL IZQUIERDO DE NAVEGACIÓN -->
+  <div class="hud-side-panel">
+    <div class="hud-menu-cat">• ANTERIORES</div>
+    <div class="hud-menu-item active">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
+    <div class="hud-menu-item">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
+    <div class="hud-menu-item">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
+    <div class="hud-menu-cat">• FUTURO</div>
+    <div class="hud-menu-item active-selected">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
+    <div class="hud-menu-item">CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</div>
+    <div class="hud-menu-item">CAPÍTULO I: NUESTRA SALVACIÓN</div>
+  </div>
+
+  <!-- MARCO DE IMAGEN PRINCIPAL (Utilizado por tu JS: id="Imagen") -->
+  <div id="Imagen" class="hud-video-frame">
+    <img src="IMG/Metioritos_Callendo.jpg" alt="Meteoritos cayendo" class="hud-img-escena">
+  </div>
+
+  <!-- TEXTO NARRATIVO (Utilizado por tu JS: id="Mensaje") -->
+  <div id="Mensaje" class="hud-text-frame">
+    <!-- PESTAÑAS HUD -->
+    <div class="hud-tabs">
+      <span class="tab active">CAPÍTULO</span>
+      <span class="tab">INFORME</span>
+      <span class="tab">PROYECTO</span>
+      <span class="tab">ACTUALIZACIONES</span>
+    </div>
+
+    <h3>CAPÍTULO I: EL PROTOCOLO DE SALVACIÓN</h3>
+    <h4>SITUACIÓN ACTUAL:</h4>
+    <p>
+      En cierto día, las noticias de todo el mundo anunciaron que muy pronto se acercarían meteoritos 
+      de gran tamaño a la tierra y que solo era cuestión de horas para que comenzaran a llegar; 
+      el resultado de esto fue inmediato ya que miles de personas comenzaron a alertarse y a hacer disturbios, 
+      en centros comerciales y áreas públicas, para que el gobierno les diera alguna respuesta...
+    </p>
+
+    <div class="hud-live-tag">• TRANSMISIÓN EN VIVO // REGISTRO #018</div>
+  </div>
+
+  <!-- BOTONES DE ACCIÓN INFERIORES -->
+  <div class="hud-bottom-actions">
+    <button class="hud-btn-preparado" onclick="Mover_3()">¿ESTÁS PREPARADO?</button>
+    <button class="hud-btn-start" onclick="Mover_3()">
+      <i class="fas fa-rocket"></i>
+      <div>
+        <span>START</span>
+        <small>SIMULATION</small>
+      </div>
+    </button>
+    
+    <!-- CONTROL DE NARRACIÓN AUDIO (Tu JS) -->
+    <div class="Contenedor_narracion" id="Contenedor_narracion">
+      <i class="fas fa-play" id="VOLUMEN"></i>
+      <i class="fas fa-pause" id="PAUSE" style="display: none;"></i>
+    </div>
+  </div>
+
+  <!-- BARRA DE ESTADO INFERIOR -->
+  <div class="hud-footer-status">
+    <span>IRON FIST INITIATIVE STATUS</span>
+    <div class="hud-progress-bar"><div class="hud-progress-fill"></div></div>
+  </div>
 </section>
 
 <!--SECCION - 5 ------------------------------------------------------------------------------------------------------->

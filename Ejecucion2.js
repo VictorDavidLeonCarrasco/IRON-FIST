@@ -22,7 +22,6 @@ const tableroLvl2 = document.querySelector(
 
 const planetaLvl2 = document.getElementById("PlanetaLvl2");
 const naveJugadorLvl2 = document.getElementById("NaveJugadorLvl2");
-const limiteLvl2 = document.querySelector("#NIVEL_02 .Limitelvl2");
 const inicioLvl2 = document.getElementById("Startlvl2");
 const derrotaLvl2 = document.getElementById("PerdistePantallaLvl2");
 const victoriaLvl2 = document.getElementById("GanastePantallaLvL2");
@@ -58,7 +57,7 @@ function ActualizarVidaslvl2() {
 function actualizarMarcadoresLvl2() {
     document.getElementById("Tiempolvl2").innerHTML = Tiempolvl2;
     document.getElementById("Puntajelvl2").innerHTML =
-        Puntajelvl2 + " / 35";
+        Puntajelvl2 + " / 25"; // Actualizado: objetivo cambiado a 25 puntos
 }
 
 function detenerMeteoritosLvl2() {
@@ -84,7 +83,7 @@ function moverMeteoritoLvl2(meteorito) {
         return;
     }
 
-    meteorito.style.transition = "2s";
+    meteorito.style.transition = "6s"; /* Modificado: ahora cae más lento (6s) */
     meteorito.style.left = "80%";
     meteorito.style.top = Math.round(Math.random() * 450) + "px";
 }
@@ -93,7 +92,7 @@ function iniciarMeteoritosLvl2() {
     detenerMeteoritosLvl2();
 
     const esperas = [3500, 3000, 2200];
-    const frecuencias = [2030, 2750, 2470];
+    const frecuencias = [5000, 5500, 5200]; /* Modificado: más tiempo entre apariciones para acomodar la velocidad */
 
     meteoritosLvl2.forEach(function (meteorito, indice) {
         temporizadoresMeteoritosLvl2.push(
@@ -244,7 +243,7 @@ function destruirMeteoritoLvl2(meteorito) {
 
     document.getElementById("Puntos_sound").play();
 
-    Puntajelvl2 = Math.min(Puntajelvl2 + 5, 35);
+    Puntajelvl2 = Math.min(Puntajelvl2 + 1, 25); // Modificado: suma de 1 en 1 y límite máximo de 25
     actualizarMarcadoresLvl2();
 
     mostrarExplosionLvl2(
@@ -256,7 +255,7 @@ function destruirMeteoritoLvl2(meteorito) {
         retirarMeteoritoLvl2(meteorito);
     }, 650);
 
-    if (Puntajelvl2 >= 35) {
+    if (Puntajelvl2 >= 25) {
         ganarLvl2();
     }
 }
@@ -294,6 +293,10 @@ function revisarImpactoPlanetaLvl2() {
     }
 
     const planetaRect = planetaLvl2.getBoundingClientRect();
+    const centroPlanetaX = planetaRect.left + planetaRect.width / 2;
+    const centroPlanetaY = planetaRect.top + planetaRect.height / 2;
+    /* 0.95 = ajusta el radio al círculo visible, ignorando el borde transparente de la imagen */
+    const radioPlaneta = (Math.min(planetaRect.width, planetaRect.height) / 2) * 0.95;
 
     meteoritosLvl2.forEach(function (meteorito) {
         if (meteorito.dataset.bloqueado === "true") {
@@ -301,12 +304,17 @@ function revisarImpactoPlanetaLvl2() {
         }
 
         const rect = meteorito.getBoundingClientRect();
+        const centroMeteoritoX = rect.left + rect.width / 2;
+        const centroMeteoritoY = rect.top + rect.height / 2;
+        /* 0.85 = ajusta el radio a la roca visible del meteorito, ignorando su margen transparente */
+        const radioMeteorito = (Math.min(rect.width, rect.height) / 2) * 0.85;
 
-        const tocoPlaneta =
-            rect.right >= planetaRect.left &&
-            rect.left <= planetaRect.right &&
-            rect.bottom >= planetaRect.top &&
-            rect.top <= planetaRect.bottom;
+        const distancia = Math.hypot(
+            centroMeteoritoX - centroPlanetaX,
+            centroMeteoritoY - centroPlanetaY
+        );
+
+        const tocoPlaneta = distancia <= (radioPlaneta + radioMeteorito);
 
         if (tocoPlaneta) {
             /* Lo detiene justo cuando toca el planeta. */
@@ -315,10 +323,6 @@ function revisarImpactoPlanetaLvl2() {
             meteorito.style.left = meteorito.offsetLeft + "px";
             meteorito.style.top = meteorito.offsetTop + "px";
 
-            /*
-            Si llegaron varios meteoritos juntos, quedan guardados
-            para contar el impacto 1, luego el 2 y después el 3.
-            */
             colaImpactosLvl2.push(meteorito);
         }
     });
@@ -477,8 +481,8 @@ document.getElementById("Pauselvl2").addEventListener(
         }
 
         pausadoLvl2 = !pausadoLvl2;
-document.getElementById("TextoPauselvl2").innerHTML =
-    pausadoLvl2 ? "▶️" : "⏸️";
+        document.getElementById("TextoPauselvl2").innerHTML =
+            pausadoLvl2 ? "▶️" : "⏸️";
         document.getElementById(
             "Pausa_Pantallalvl2"
         ).style.display = pausadoLvl2 ? "table" : "none";
@@ -526,6 +530,7 @@ document.addEventListener("fullscreenchange", function () {
     }
 });
 
+/* Modificado: Movimiento libre de la nave por toda la pantalla sin restricciones */
 tableroLvl2.addEventListener("mousemove", function (evento) {
     if (!juegoActivoLvl2 || pausadoLvl2) {
         naveJugadorLvl2.style.opacity = "0";
@@ -534,17 +539,8 @@ tableroLvl2.addEventListener("mousemove", function (evento) {
 
     const area = tableroLvl2.getBoundingClientRect();
 
-    const limiteSeguro =
-        limiteLvl2.offsetLeft -
-        naveJugadorLvl2.offsetWidth / 2 -
-        10;
-
-    naveJugadorLvl2.style.left =
-        Math.min(evento.clientX - area.left, limiteSeguro) + "px";
-
-    naveJugadorLvl2.style.top =
-        evento.clientY - area.top + "px";
-
+    naveJugadorLvl2.style.left = evento.clientX - area.left + "px";
+    naveJugadorLvl2.style.top = evento.clientY - area.top + "px";
     naveJugadorLvl2.style.opacity = "1";
 });
 

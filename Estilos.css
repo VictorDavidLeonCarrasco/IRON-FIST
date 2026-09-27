@@ -900,17 +900,15 @@ margin-left: 12%; }
     #Meteiorito3lvl2{top: 0%; position: absolute; left: -30%; transition: 2s;}
     /*ESTILO DEL PLANETA*/
 #NIVEL_02 .Contenedorlvl2:not(.Cabezeralvl2) .Planetalvl2 {
-    position: absolute !important;
-    top: 50% !important;
-    right: 2% !important;
-    bottom: auto !important;
-    left: auto !important;
-    width: 26% !important;
-    height: auto !important;
-    margin: 0 !important;
-    z-index: 500 !important;
-    animation: rotationLvl2 10s linear infinite !important;
-}
+        position: absolute;
+        top: 12%;
+        left: 80%;
+        animation-name: rotation;
+        animation-duration: 10s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
+    
 @keyframes rotationLvl2 {
     from {
         transform: translateY(-50%) rotate(0deg);
@@ -985,7 +983,7 @@ margin-left: 12%; }
     border-bottom: none; display: flex; 
     align-items: center; position: relative; }
     
-    /*ESTILOS DEL SPAN Y DEL TEXTO DE TIEMPO*/
+  /*ESTILOS DEL SPAN Y DEL TEXTO DE TIEMPO*/
     .Tiempolvl2 {display: flex; align-items: center;
         flex-direction: column;
         width: 14%; height: 70%; color: black; 
@@ -1004,6 +1002,7 @@ margin-left: 12%; }
     color: white; cursor: pointer; position: relative;
     left: 50%; }
     
+
     /*MENSAJE DENTRO DE PAUSE*/
     .Mensaje_Pauselvl2{font-size: 50px; color: white; display: table-cell; vertical-align: middle; font-family: 'Press Start 2P', cursive;}
     

@@ -1918,7 +1918,7 @@ html, body {
     text-shadow: 0 0 6px rgba(255, 0, 65, 0.65);
 }
 /* CORAZÓN PERDIDO - NIVEL 2 */
-.VidaPerdidaLvl2 {
+.IconosVidasLvl2 span.VidaPerdidaLvl2 {
     color: #8b8b8b;
     opacity: 1;
     filter: grayscale(1);

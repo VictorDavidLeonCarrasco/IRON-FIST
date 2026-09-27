@@ -1855,3 +1855,32 @@ html, body {
     transform: scale(0.9);
     text-shadow: none;
 }
+
+/* Nave y combate: primer nivel. La punta de la nave apunta a la izquierda. */
+#NIVEL_01 .JugandoNivel1, #NIVEL_01 .JugandoNivel1 * { cursor: none; }
+#NIVEL_01 .Meteiorito { pointer-events: none; }
+.NaveJugadorNivel1 {
+    position: absolute;
+    width: 60px;
+    height: 70px;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1500;
+}
+.DisparoNivel1 {
+    position: absolute;
+    width: 42px;
+    height: 18px;
+    pointer-events: none;
+    z-index: 1600;
+}
+.ExplosionNivel1 {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1700;
+}

@@ -303,23 +303,7 @@ function JUEGO(){
                     
                 Desbloquear_Pantalla  =  setInterval(Ganaste_Pantalla, 1)
 
-                Swal.fire({
-                    title : 'FELICIDADES POR SUPERAR <br> EL NIVEL <br><br> <img src="IMG/Check.png" width = "120px"><br>',
-                    html: 'Al parecer nos salvamos, agradecemos tu ayuda y ezfuerzo al superar este nivel, esperamos seguir contando contigo, si algo mas sucede y por cierto, no olvides que te esperan grandes cosas al final del juego asi que no pares de intentar ',
-                    icon: 'sucess',
-                    confirmButtonText: 'QUIERO CONTINUAR',
-                    width: '50%',
-                    height: '80%',
-                    timer: 100000,
-                    
-                    
-                    timerProgressbar: true,
-                    /*Funcion de cerrar la alerta*/
-                    allowOutsideClick: true,
-                    allowEscapeKey: false,
-                    allowEnterkey: false,
-                    stopKeydownPropagation: false,
-                    });
+
                     
                         }
                     }

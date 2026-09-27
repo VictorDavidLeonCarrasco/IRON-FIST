@@ -439,13 +439,37 @@ width: 100%;
     color: white; text-align: center;}
     
     /*Boton de la pantalla start*/
-    .Play {background: purple; color: white;
-    width: 18%; height: 15%; display: flex; 
-    align-items: center; left: 0px;
-    justify-content: center; cursor: pointer;
-    position: relative;  transition: 2s; top: 18%;
-    font-family: 'Press Start 2P', cursive; margin: auto;}
+    .Play {
+        background: linear-gradient(180deg, #b7d9ff 0%, #8fbaf6 100%);
+        color: #12335a;
+        width: min(18vw, 220px);
+        height: clamp(52px, 7vh, 78px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+        top: 18%;
+        font-family: 'Press Start 2P', cursive;
+        margin: auto;
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        border-radius: 999px;
+        box-shadow: 0 0 0 2px rgba(141, 186, 255, 0.35), 0 10px 22px rgba(92, 144, 201, 0.45), 0 0 18px rgba(130, 176, 255, 0.4);
+        padding: 0 22px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
 
+    .Play:hover {
+        transform: translateY(-2px) scale(1.02);
+        filter: brightness(1.06);
+        box-shadow: 0 0 0 2px rgba(176, 210, 255, 0.5), 0 12px 26px rgba(95, 149, 201, 0.5), 0 0 22px rgba(141, 196, 255, 0.5);
+    }
+
+    .Play:active {
+        transform: translateY(0) scale(0.98);
+    }
 
     
     /*TITULO CENTRAL DE START*/
@@ -1966,3 +1990,24 @@ html, body {
 .Contenedor_LVL button:hover { background: #0568ca; }
 .Contenedor_LVL button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
 .Contenedor_LVL .NEXT[hidden] { display: none; }
+
+/* Ajuste discreto de las letras de la pantalla previa al nivel 1. */
+#NIVEL_01 .Texo {
+    font-size: 30px;
+    line-height: 1.7;
+    font-weight: 400;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, .85);
+}
+#NIVEL_01 .Pollo {
+    font-size: 22px;
+    line-height: 1.5;
+    font-weight: 400;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, .85);
+}
+#NIVEL_01 .Play {
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: .04em;
+}
+#NIVEL_01:fullscreen .Texo { font-size: clamp(18px, 3.5vh, 34px); }
+#NIVEL_01:fullscreen .Pollo { font-size: clamp(14px, 2.5vh, 24px); }

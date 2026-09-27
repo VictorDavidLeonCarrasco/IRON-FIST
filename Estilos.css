@@ -476,10 +476,10 @@ body.intro-active {
 }
 
 /* CONTENEDOR DE LA IMAGEN DE METEORITOS */
-#Imagen.contenedor-imagen {
+#Imagen.contenedor-imagen,
+#Mensaje.contenedor-video-historia {
   position: absolute !important;
   top: 150px !important;
-  left: -100%; /* Animado por tu JS */
   width: 42%;
   height: 360px;
   background: #000;
@@ -495,49 +495,25 @@ body.intro-active {
   pointer-events: none;
 }
 
-/* TARJETA GRIS CLARA PARA EL TEXTO */
-#Mensaje.tarjeta-mensaje {
-  position: absolute !important;
-  top: 150px !important;
-  right: -100%; /* Animado por tu JS */
-  width: 44%;
-  height: 360px;
-  background: #d1d5db; /* Color gris claro de fondo */
-  color: #000000;
-  padding: 25px;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+#Imagen.contenedor-imagen {
+  left: -100%;
 }
 
-#Mensaje.tarjeta-mensaje h3 {
-  font-size: 1.05rem;
-  font-weight: bold;
-  margin: 0 0 10px 0;
-  color: #000;
+#Mensaje.contenedor-video-historia {
+  right: -100%;
 }
 
-#Mensaje.tarjeta-mensaje p {
-  font-size: 0.85rem;
-  line-height: 1.45;
-  margin: 0;
-  color: #111;
-  text-align: justify;
-}
-
-/* BOTONES NEGROS DENTRO DE LA TARJETA */
-.contenedor-botones-tarjeta {
+/* Controles debajo del video izquierdo */
+.contenedor-botones-historia {
+  position: absolute;
+  top: 100%;
+  left: 0;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 15px;
-  margin-top: 15px;
+  margin-top: 24px;
 }
-
 .btn-preparado {
   background: #000000;
   color: #ffffff;
@@ -555,6 +531,9 @@ body.intro-active {
 }
 
 .Contenedor_narracion {
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
   background: #000000;
   color: #ffffff;
   width: 40px;
@@ -564,6 +543,10 @@ body.intro-active {
   justify-content: center;
   cursor: pointer;
   border-radius: 2px;
+}
+
+.Contenedor_narracion[aria-pressed="true"] {
+  background: #444;
 }
 
 .Contenedor_narracion i {

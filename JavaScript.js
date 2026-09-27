@@ -64,6 +64,7 @@ function mostrarFinJuegoNivel1() {
 }
 
 function reiniciarNivel1() {
+    document.getElementById('NEXT').hidden = true;
     detenerMotorNivel1();
     pausadoNivel1 = false;
     document.getElementById('Pausa_Pantalla').style.display = 'none';
@@ -217,6 +218,7 @@ if (introOverlay && introVideo) {
     });
 
     introVideo.addEventListener("click", ocultarIntro);
+    if (window.location.hash === '#inicio') ocultarIntro();
 }
 
 
@@ -402,7 +404,9 @@ function destruirMeteoritoNivel1(meteoro) {
         document.getElementById('Fondo_Ciberpunk').pause();
         sonidoNivel1('Triunfo');
         document.getElementById('GANASTE_PANTALLA').style.display = 'flex';
+        document.getElementById('NEXT').hidden = false;
         document.getElementById('NEXT').onclick = () => {
+            document.getElementById('NEXT').hidden = true;
             detenerMotorNivel1();
             document.getElementById('NIVEL_01').style.display = 'none';
             document.getElementById('NIVEL_02').style.display = 'block';
@@ -650,69 +654,8 @@ if (Supremo) Supremo.style.height = "160vh" //Le aumente para que no tape al con
     setTimeout(abrirJuego, 900)
 }
 
-//RELOJ
-
-
-function Reloj_Tiempo(){
-    var actualizar_Hora = function(){
-        var Fecha = new Date(),
-        Horas = Fecha.getHours(),
-        ampm,
-        Minutos = Fecha.getMinutes(),
-        Segundos = Fecha.getSeconds(),
-        diaSemana = Fecha.getDay(),
-        dia = Fecha.getDate(),
-        mes = Fecha.getMonth(),
-        Año = Fecha.getFullYear();
-
-        var pHoras = document.getElementById("Hora"),
-            pAMPM = document.getElementById("AMPM"),
-            pMinutos = document.getElementById("Minutos"),
-            pSegundos = document.getElementById("Segundos"),
-            pDia_Semana = document.getElementById("Dia_Semana"),
-            pDia = document.getElementById("dia"),
-            pMes = document.getElementById("mes"),
-            pAño = document.getElementById("año");
-
-            var semana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
-            pDia_Semana.textContent = semana [diaSemana];
-            pDia.textContent = dia
-            var Mes_Actual = ['Enero', 'Febrero',
-                 'Marzo', 'Abril', 'Mayo', 
-                 'Junio', 'Julio', 'Agosto', 
-                 'Septiembre', 'Octubre', 
-                 'Nomviembre', 'Diciembre']
-                 
-            pMes.textContent = Mes_Actual[mes];
-            pAño.textContent = Año
-
-            if(Horas >= 12){
-                Horas = Horas - 12;
-                ampm = 'PM';
-            }
-            else{ampm = 'AM';}
-
-            if(Horas == 0){
-                Horas = 12;
-            }
-            if(Horas < 10){
-                Horas = "0" + Horas
-            }
-            pHoras.textContent = Horas
-            pAMPM.textContent = ampm
-            if(Minutos < 10){
-                Minutos = "0" + Minutos
-            }
-            pMinutos.textContent = Minutos
-            if(Segundos < 10){
-                Segundos = "0" + Segundos
-            }
-            pSegundos.textContent = Segundos
-        };
-    actualizar_Hora();
-}
-
-
-Reloj_Tiempo()
-
-setInterval(Reloj_Tiempo, 1000)
+// Recargar al volver limpia los temporizadores y el estado de todos los niveles.
+document.getElementById('VolverInicio').addEventListener('click', () => {
+    window.location.hash = 'inicio';
+    window.location.reload();
+});

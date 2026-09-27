@@ -201,6 +201,7 @@ function efectoImpactoPlanetaLvl2() {
 }
 
 function Habilitar_Siguienten_LVL() {
+    document.getElementById('NEXT').hidden = true;
     document.getElementById("NIVEL_01").style.display = "none";
     document.getElementById("NIVEL_02").style.display = "none";
     document.getElementById("NIVEL3").style.display = "block";
@@ -225,6 +226,7 @@ function ganarLvl2() {
     document.getElementById("Triunfo").play();
 
     victoriaLvl2.style.display = "flex";
+    document.getElementById('NEXT').hidden = false;
 
     document.getElementById("NEXT").onclick =
         Habilitar_Siguienten_LVL;
@@ -393,6 +395,7 @@ function iniciarJuegoLvl2() {
 }
 
 function reiniciarLvl2() {
+    document.getElementById('NEXT').hidden = true;
     clearInterval(intervaloTiempoLvl2);
     clearInterval(intervaloImpactosLvl2);
 

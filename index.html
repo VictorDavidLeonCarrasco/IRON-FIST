@@ -125,7 +125,7 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
                 <span id="PorcentajeVolumenNivel1">70%</span>
             </div>
             <button class="PantallaCompletaNivel1" id="PantallaCompletaNivel1" type="button" title="Pantalla completa">⛶</button>
-            <button class="Pause" id="Pause" type="button">⏸️</button><!--Boton de pause--><!--Boton de pause-->
+            <button class="Pause" id="Pause" type="button">PAUSAR</button><!--Boton de pause--><!--Boton de pause-->
         
             </div>
     
@@ -313,9 +313,18 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
                         <span id="Puntajelvl3">0 / 40</span>
                     </div>
                     <!--Boton de pause-->
-                    <div class="Pauselvl3" id="Pauselvl3">
-                        <h3>PAUSE / REANUDAR</h3>
+                    <div class="VidasLvl3">
+                        <h3>VIDAS</h3>
+                        <div class="IconosVidasLvl3" id="VidasLvl3" aria-label="3 vidas restantes" aria-live="polite">
+                            <span>♥</span><span>♥</span><span>♥</span>
+                        </div>
                     </div>
+                    <div class="ControlVolumenLvl3">
+                        <span aria-hidden="true">🔊</span>
+                        <input type="range" id="VolumenLvl3" aria-label="Volumen del nivel 3" min="0" max="1" value="0.7" step="0.05">
+                    </div>
+                    <button class="PantallaCompletaLvl3" id="PantallaCompletaLvl3" type="button" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
+                    <button class="Pauselvl3" id="Pauselvl3" type="button" aria-pressed="false">PAUSAR</button>
                 </div>
         
                 <!--CCMIENZO DEL JUEGO------------------------------------------------------>
@@ -326,6 +335,7 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteoritolvl3">
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito2lvl3">
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito3lvl3">
+                    <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito4lvl3">
                     <img src="IMG/planeta_tierra.png" width="400px" class="Planetalvl3">
         
                     <!--Limite dentro del tablero del juego-->
@@ -391,32 +401,8 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
         </section>
 
 <div class="Contenedor_LVL">
-    
-    <div class="Contenedor_Reloj">
-        <!--Desarrollo del reloj-->
-        <div class="Fecha">
-            <p id="Dia_Semana" ></p>&nbsp;
-            <p id="dia" ></p>&nbsp;
-            <p id="mes" ></p>&nbsp; <p>del</p>&nbsp;
-            <p id="año" ></p>
-        </div>
-        
-        <!--Hora-->
-        <div class="Hora">
-            <p id="Hora"></p>&nbsp;<p>:</p>
-            <p id="Minutos"></p>&nbsp;<p>:</p>
-            <div id="Caja_ULT">
-            <span id="Segundos"></span>
-            <span id="AMPM"></span>
-            </div>
-        </div>
-        </div>
-           
-<div class="Nada" id="Nada"><h2>Una vez completes este nivel, se habilitará la opcion "SIGUIENTE".</h2><p>Recuerda que los niveles son progresivos
-    y mejorarán tu nivel de reacción ante estímulos y mucho más importante, te dará una gran sorpresa al final, así que recuerda
-    no perdértela y no parar de intentar 
-</p></div>
-<div class="NEXT" id="NEXT"><h2>SIGUIENTE NIVEL&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i></h2></div>
+    <button class="VolverInicio" id="VolverInicio" type="button">VOLVER AL INICIO</button>
+    <button class="NEXT" id="NEXT" type="button" hidden>SIGUIENTE NIVEL <span aria-hidden="true">➜</span></button>
 </div>
 
 

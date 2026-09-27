@@ -272,12 +272,21 @@ function mascaraNivel1(imagen, ancho, alto) {
     if (!imagen.complete || !imagen.naturalWidth) return null;
     let guardada = mascarasNivel1.get(imagen);
     if (guardada && guardada.ancho === ancho && guardada.alto === alto) return guardada.datos;
-    const canvas = document.createElement('canvas');
-    canvas.width = ancho;
-    canvas.height = alto;
-    const contexto = canvas.getContext('2d', { willReadFrequently: true });
-    contexto.drawImage(imagen, 0, 0, ancho, alto);
-    const datos = contexto.getImageData(0, 0, ancho, alto).data;
+    let datos = null;
+    try {
+        const canvas = document.createElement('canvas');
+        canvas.width = ancho;
+        canvas.height = alto;
+        const contexto = canvas.getContext('2d', { willReadFrequently: true });
+        if (contexto) {
+            contexto.drawImage(imagen, 0, 0, ancho, alto);
+            datos = contexto.getImageData(0, 0, ancho, alto).data;
+        }
+    } catch (error) {
+        // Los archivos locales pueden impedir leer píxeles del canvas.
+        // Conserva el resultado fallido para no repetirlo en cada subpaso.
+        if (error.name !== 'SecurityError') throw error;
+    }
     mascarasNivel1.set(imagen, { ancho, alto, datos });
     return datos;
 }
@@ -295,7 +304,13 @@ function impactoNivel1(disparo, meteoro) {
     if (izquierda >= derecha || arriba >= abajo) return false;
     const bala = mascaraNivel1(imagenDisparoNivel1, 42, 18);
     const roca = mascaraNivel1(meteoro.elemento, ancho, alto);
-    if (!bala || !roca) return false;
+    if (!bala || !roca) {
+        // Mientras cargan las imágenes no hay un sprite visible que impactar.
+        if (!imagenDisparoNivel1.complete || !imagenDisparoNivel1.naturalWidth ||
+            !meteoro.elemento.complete || !meteoro.elemento.naturalWidth) return false;
+        // Si no se pueden leer los píxeles, usa el solapamiento ya comprobado.
+        return true;
+    }
     // Ignora el margen transparente de ambos sprites, incluso en impactos de borde.
     for (let y = arriba; y < abajo; y++) {
         for (let x = izquierda; x < derecha; x++) {

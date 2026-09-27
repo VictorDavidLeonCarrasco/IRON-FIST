@@ -492,6 +492,7 @@ body.intro-active {
   height: 100%;
   object-fit: cover;
   display: block;
+  pointer-events: none;
 }
 
 /* TARJETA GRIS CLARA PARA EL TEXTO */

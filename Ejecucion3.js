@@ -300,7 +300,8 @@ function PLAYlvl3() {
     if (document.getElementById('Playlvl3').dataset.iniciado) return;
     document.getElementById('Playlvl3').dataset.iniciado = 'true';
     aplicarVolumenLvl3();
-    document.getElementById("Fondo_Ciberpunk").play()
+    document.getElementById("Fondo_Ciberpunk").currentTime = 0;
+    document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
     //MUEVE EL TITULO FUERA DEL CONTENEDOR UNA VEZ DE CLICK A JUGAR
     document.getElementById("Textolvl3").style.left = "-900px"
     //MUEVE AL BOTON PLAY TRANS PRESIONAR PRESIONAR AL MISMO BOTON

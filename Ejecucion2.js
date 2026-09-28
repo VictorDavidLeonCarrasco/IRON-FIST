@@ -382,7 +382,7 @@ function iniciarJuegoLvl2() {
     impactoEnProcesoLvl2 = false;
     colaImpactosLvl2 = [];
 
-    document.getElementById("Fondo_Ciberpunk").play();
+    document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
 
     iniciarMeteoritosLvl2();
 
@@ -406,6 +406,7 @@ function iniciarJuegoLvl2() {
 }
 
 function reiniciarLvl2() {
+    document.getElementById("Fondo_Ciberpunk").currentTime = 0;
     juegoActivoLvl2 = false;
     limpiarLasersLvl2();
     document.getElementById('NEXT').hidden = true;
@@ -459,7 +460,8 @@ document.getElementById("Playlvl2").addEventListener(
     function () {
         if (iniciandoLvl2 || juegoActivoLvl2) return;
         iniciandoLvl2 = true;
-        document.getElementById("Fondo_Ciberpunk").play();
+        document.getElementById("Fondo_Ciberpunk").currentTime = 0;
+        document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
 
         document.getElementById("Texolvl2").style.left = "-900px";
         document.getElementById("Playlvl2").style.left = "-900px";
@@ -515,7 +517,7 @@ document.getElementById("Pauselvl2").addEventListener(
                 meteorito.style.top = y + "px";
             });
         } else {
-            document.getElementById("Fondo_Ciberpunk").play();
+            document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
             iniciarMeteoritosLvl2();
         }
     }

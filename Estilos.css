@@ -874,12 +874,7 @@ margin-left: 12%; }
     color: white; text-align: center;}
     
     /*Boton de la pantalla start*/
-    .Playlvl2 {background: rgb(0, 119, 255); color: white;
-    width: 18%; height: 9%; display: flex; 
-    align-items: center; left: 0px;
-    justify-content: center; cursor: pointer;
-    position: relative; transition: 2s; margin-top: -2%;
-    font-family: 'Press Start 2P', cursive;}
+   
     
     /*TITULO CENTRAL DE START*/
     .Texolvl2 {font-size: 36px; position: relative;
@@ -1040,6 +1035,67 @@ margin-left: 12%; }
     
     
     }
+    /* Imágenes laterales (reemplazan a los tiburones) */
+.ImagenDificultadLvl2 {
+    width: 18%;
+    height: auto;
+    align-self: flex-start;   /* mismo alineado superior que tenían los tiburones */
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.8);  /* box-shadow no ocupa espacio, no mueve nada */
+}
+
+/* Botón JUGAR llamativo */
+.Playlvl2 {
+    box-sizing: border-box;
+    width: 18%;
+    height: 9%;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 0px;
+    margin-top: -2%;
+    cursor: pointer;
+
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    border: 3px solid #ffffff;
+    border-radius: 10px;
+
+    /* "left 2s" mantiene el deslizamiento que hace tu JS; los demás son rápidos */
+    transition: left 2s, transform 0.2s, box-shadow 0.2s, background 0.2s;
+    animation: PulsoPlayLvl2 1.4s ease-in-out infinite;
+}
+
+.Playlvl2:hover {
+    background: linear-gradient(135deg, #ffdd00, #ff8800);
+    transform: scale(1.1);
+    animation: none;
+    box-shadow: 0 0 25px rgba(255, 170, 0, 0.9);
+}
+
+.Playlvl2:active {
+    transform: scale(0.95);
+}
+
+@keyframes PulsoPlayLvl2 {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(0, 170, 255, 0.7);
+    }
+    50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 28px rgba(0, 200, 255, 1);
+    }
+}
+    
     
     /*TERCER NIVEL ----------------------------------------------------------------------------------------*/
 

@@ -231,7 +231,10 @@ function ganarLvl2() {
         Habilitar_Siguienten_LVL;
 }
 
-function destruirMeteoritoLvl2(meteorito) {
+/* MODIFICADO: ahora acepta xImpacto/yImpacto opcionales.
+   Si se pasan (por ejemplo, cuando lo destruye el láser), la explosión
+   se dibuja justo en el punto de contacto en vez de en la esquina del meteorito. */
+function destruirMeteoritoLvl2(meteorito, xImpacto, yImpacto) {
     if (
         !juegoActivoLvl2 ||
         meteorito.dataset.bloqueado === "true"
@@ -246,10 +249,10 @@ function destruirMeteoritoLvl2(meteorito) {
     Puntajelvl2 = Math.min(Puntajelvl2 + 1, 25); // Modificado: suma de 1 en 1 y límite máximo de 25
     actualizarMarcadoresLvl2();
 
-    mostrarExplosionLvl2(
-        meteorito.offsetLeft,
-        meteorito.offsetTop
-    );
+    const x = xImpacto !== undefined ? xImpacto : meteorito.offsetLeft;
+    const y = yImpacto !== undefined ? yImpacto : meteorito.offsetTop;
+
+    mostrarExplosionLvl2(x, y);
 
     setTimeout(function () {
         retirarMeteoritoLvl2(meteorito);
@@ -600,7 +603,20 @@ tableroLvl2.addEventListener("click", function (evento) {
 
         if (objetivo) {
             clearInterval(detectorLaser);
-            destruirMeteoritoLvl2(objetivo);
+
+            /* CORREGIDO: congelamos el láser exactamente donde está en el
+               instante del contacto (antes seguía viajando hasta el fondo
+               por la transición CSS en curso). Usamos esa misma posición
+               para dibujar la explosión, así explota justo en el punto
+               de impacto y no en la esquina del meteorito. */
+            const xImpacto = laser.offsetLeft;
+            const yImpacto = laser.offsetTop;
+
+            laser.style.transition = "none";
+            laser.style.left = xImpacto + "px";
+
+            destruirMeteoritoLvl2(objetivo, xImpacto, yImpacto);
+
             laser.remove();
         }
     }, 20);

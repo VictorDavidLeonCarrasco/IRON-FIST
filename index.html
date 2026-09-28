@@ -366,7 +366,8 @@
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito2lvl3">
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito3lvl3">
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito4lvl3">
-                    <img src="IMG/planeta_tierra.png" width="400px" class="Planetalvl3">
+                    <img src="IMG/planeta_tierra.png" width="230px" class="Planetalvl3" id="Planetalvl3" alt="Tierra que debemos proteger">
+                    <img src="nave_jugador.png" class="NaveJugadorLvl3" id="NaveJugadorLvl3" alt="Nave del jugador">
         
                     <!--Limite dentro del tablero del juego-->
                     <div class="Limitelvl3"></div>
@@ -381,10 +382,10 @@
                         <button class="Playlvl3" id="Playlvl3" type="button" onclick="PLAYlvl3()">JUGAR</button>
                         <!--Dificultad-->
                         <div class="Dificultadlvl3" id="Dificultadlvl3">
-                        <img src="IMG/nave.gif" width="13%" alt="Nave espacial">
+                        <img src="IMG/planeta_purpura.png" width="13%" alt="Agujero espacial">
                         <h1 style="font-size: 27px; font-family: 'Press Start 2P', cursive;">
-                        Dificultad: ÓRBITA EXTREMA</h1>
-                        <img src="IMG/nave.gif" width="13%" alt="Nave espacial">
+                        Dificultad:EXTREMA</h1>
+                        <img src="IMG/planeta_purpura.png" width="13%" alt="Agujero espacial">
                         </div>
                         <!--Span que contiene el conteo-->
                         <div id="Contenedor_contadorlvl3"><span id="RGBlvl3"></span></div>
@@ -418,7 +419,19 @@
                         <h4>Iron Fist 2</h4>
                     </div>
         
-                    <!--PANTALLA AL PRESIONAR PAUSE---------------------------------------------->
+                    <!-- PANTALLA AL GANAR EL NIVEL 3 -->
+                    <div class="Ganaste_Pantallalvl3" id="Ganaste_Pantallalvl3">
+                        <img src="IMG/trofeo_nivel3.png" class="TrofeoNivellvl3" alt="Trofeo espacial">
+                        <div class="TrofeoTextoNivel3">TROFEO ESPACIAL: 3 / 3</div>
+                        <div class="EstrellaTrofeoNivel3">★</div>
+                        <h1>¡NIVEL 3 SUPERADO!</h1>
+                        <div class="BrilloTrofeoNivel3">✦</div>
+                        <h2>LOGRO DESBLOQUEADO:</h2>
+                        <h3>MAESTRO DE LA GALAXIA</h3>
+                        <button id="VolverInicioNivel3" type="button">VOLVER AL INICIO</button>
+                    </div>
+
+                    <!-- PANTALLA AL PRESIONAR PAUSE -->
                     <div class="Pausa_Pantallalvl3" id="Pausa_Pantallalvl3">
                         <!--Mensaje del juego al estar en pausa-->
                         <h1 class="Mensaje_Pauselvl3">EL JUEGO ESTA<br>EN PAUSE</h1>

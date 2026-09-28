@@ -2571,7 +2571,7 @@ html, body {
 
 /* =========================================================
    CORRECCIONES EXCLUSIVAS DEL NIVEL 3
-   No modifica los estilos de los niveles 1, 2 ni de la intro.
+   
    ========================================================= */
 #NIVEL3 .Startlvl3 {
     padding: 20px;
@@ -2586,7 +2586,7 @@ html, body {
 }
 
 #NIVEL3 #Dificultadlvl3 {
-    top: 58%;
+    top: 67%;
     align-items: center;
     gap: 18px;
     pointer-events: none;
@@ -2607,7 +2607,7 @@ html, body {
 
 #NIVEL3 .Playlvl3 {
     z-index: 2;
-    margin-top: 12px;
+    margin-top: 28px;
 }
 
 /* Pantalla completa: conserva la cabecera arriba y adapta el tablero al espacio restante. */

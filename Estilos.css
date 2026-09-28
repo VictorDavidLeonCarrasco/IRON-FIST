@@ -2432,3 +2432,66 @@ html, body {
 #NIVEL3 .Pauselvl3:hover {
     background: #1596b5;
 }
+
+/* Los tres niveles comparten las dimensiones de referencia del nivel 1. */
+#NIVEL_01:not(:fullscreen) .Contenedor,
+#NIVEL_02:not(:fullscreen) .Contenedorlvl2,
+#NIVEL3:not(:fullscreen) .Contenedorlvl3 {
+    width: min(94vw, 1400px);
+    box-sizing: border-box;
+    margin: 0 auto;
+    top: 0;
+}
+
+#NIVEL_01:not(:fullscreen) .Contenedor:not(.Cabezera),
+#NIVEL_02:not(:fullscreen) .Contenedorlvl2:not(.Cabezeralvl2),
+#NIVEL3:not(:fullscreen) .Contenedorlvl3:not(.Cabezeralvl3) {
+    height: min(68vh, 820px);
+    max-height: none;
+    aspect-ratio: auto;
+}
+
+#NIVEL_01:not(:fullscreen) .Cabezera,
+#NIVEL_02:not(:fullscreen) .Cabezeralvl2,
+#NIVEL3:not(:fullscreen) .Cabezeralvl3 {
+    height: auto;
+    min-height: 74px;
+    padding: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    border: 2px solid rgba(112, 199, 220, 0.82);
+    border-bottom: none;
+    overflow: visible;
+}
+
+#NIVEL_02:not(:fullscreen) .Tiempolvl2,
+#NIVEL_02:not(:fullscreen) .Puntajelvl2,
+#NIVEL_02:not(:fullscreen) .VidasLvl2,
+#NIVEL3:not(:fullscreen) .Tiempolvl3,
+#NIVEL3:not(:fullscreen) .Puntajelvl3,
+#NIVEL3:not(:fullscreen) .VidasLvl3 {
+    width: 110px;
+    min-width: 0;
+    height: auto;
+    flex: 0 0 110px;
+    margin: 0;
+}
+
+#NIVEL_02:not(:fullscreen) .Pauselvl2,
+#NIVEL3:not(:fullscreen) .Pauselvl3 {
+    position: static;
+    width: 180px;
+    min-width: 180px;
+    height: 46px;
+    flex: 0 0 180px;
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+.Seccion_Juego .Contenedor_LVL {
+    width: min(94vw, 1400px);
+    margin: 22px auto;
+}

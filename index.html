@@ -46,58 +46,86 @@
 <button class="Boton" id="Juego" onclick="Mover()">INICIAR MISIÓN</button>
 </section>
 <!--SECCION - 3 ------------------------------------------------------------------------------------------------------->
+<section id="Reglas">
 
-<section  id="Reglas">
-    <h1 class="Titulo_Reglas">Antes de empezar lee,<br><br> las reglas.</h1>
-    <img src="IMG/JUEGO.jpg"  class="Img_reglas">
-    <div class="Reglas_estilos" id="R1">
-        <h3>REGLA : 1</h3>
-        <p>Lo que se encuentra señalado son los puntos, que segun tu progreso, se irán incrementando al destruir
-            meteoritos. En el primer nivel, mueve el cursor para pilotar la nave y haz clic para disparar hacia la izquierda, si los puntos obtenidos
-            llegan a 30, es una victoria automática, pero recuerda que los meteoritos son impredecibles en su ataque así que
-            tienes que estar atento a su llegada
-        </p>
+    <h1 class="Titulo_Reglas">REGLAS DEL JUEGO</h1>
+
+    <div class="Contenedor_Reglas">
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">01</span>
+            <div>
+                <h3>CONTROLA LA NAVE</h3>
+                <p>
+                    Mueve el cursor para pilotar la nave
+                    y haz clic para disparar.
+                </p>
+            </div>
+        </div>
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">02</span>
+            <div>
+                <h3>CUMPLE EL OBJETIVO</h3>
+                <p>
+                    Cada nivel tiene un objetivo diferente.
+                    Complétalo antes de que termine el tiempo.
+                </p>
+            </div>
+        </div>
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">03</span>
+            <div>
+                <h3>EVITA LOS METEORITOS</h3>
+                <p>
+                    No permitas que los meteoritos lleguen
+                    al planeta.
+                </p>
+            </div>
+        </div>
+
+        <div class="Regla_Card">
+            <span class="Numero_Regla">04</span>
+            <div>
+                <h3>NO PIERDAS TUS VIDAS</h3>
+                <p>
+                    Los impactos reducen tus vidas.
+                    Si pierdes todas, terminará la partida.
+                </p>
+            </div>
+        </div>
+
     </div>
 
-
-    <div class="Reglas_estilos" id="R2">
-        <h3>REGLA : 2</h3>
-        <p>El tiempo que se señala es el límite máximo que puede aguantar la defensa, siendo unos 60 segundos, en los que
-            el jugador debe cumplir el límite de puntos o sera un GAMER OVER automático, asi que recuerda ser rápido recolectando
-            puntos.
-        </p>
+    <div class="Listo" onclick="Mover_2()">
+        ¿ESTÁS LISTO?
     </div>
-
-
-    <div class="Reglas_estilos" id="R3_4">
-        <h3>REGLA : 3 y 4</h3>
-        <p>Estos son los meteoritos que debes evitar que ingresen a la tierra, por lo general suelen ser rápidos así que 
-            recuerda: no te descuides o confies por que en el momento que lo hagas, estos llegarán a la tierra, es por ello
-            que una raya señala el límite por el cual ya es inevitable nuestra salvación (GAME OVER)
-        </p>
-    </div>
-
-<div class="Listo" onclick="Mover_2()">¿Estas listo?</div>
-
 
 </section>
-
 
 
 <!--SECCION - 4 ------------------------------------------------------------------------------------------------------->
 
 <section id="Seccion_2">
-<h1 class="Titulo_historia" id="Titulo_historia">Todo empezo cuando...</h1>
-<div class="Contenedor_Historia" id="Mensaje"><h3 style="margin-top: -1%;">CAPÍTULO I: NUESTRA SALVACIÓN</h3>
-En cierto día, las noticias de todo el mundo anunciaron que muy pronto se acercarían meteoritos de gran
-tamaño a la tierra y que solo era cuestión de horas para que comenzaran a llegar; el resultado de esto fue inmediato ya que 
-miles de personas comenzaron a alertarse y a hacer disturbios, en centros comerciales y areas publicas, para que el gobierno les
-diera alguna respuesta; pero el gobierno ya tenía un plan de contingencia, ya que ellos se habían enterado de la llegada de estos con días de antelación
-preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que consistía en los proyectiles más letales de la tierra y nuestra única salvación
-<div class="BOTONES_2"><div class="Boton_preparado" onclick="Mover_3()">¿Estas preparado? </div><div class="Contenedor_narracion" id="Contenedor_narracion">
-<i class="fas fa-play" id="VOLUMEN"></i><i class="fas fa-pause" id="PAUSE"></i></div></div>
-</div>
-<img src="IMG/Metioritos_Callendo.jpg" class="Imgane_metiorito" id="Imagen" >
+  <!-- TÍTULO SUPERIOR (ID usador por tu JS: Titulo_historia) -->
+  <div id="Titulo_historia" class="titulo-historia">
+    Todo empezo cuando...
+  </div>
+
+  <!-- Videos de la historia -->
+  <div id="Imagen" class="contenedor-imagen">
+    <video src="fondo3.mp4" class="imagen-historia" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nofullscreen nodownload noremoteplayback" aria-label="Meteoritos cayendo"></video>
+    <div class="contenedor-botones-historia">
+      <button class="Contenedor_narracion" id="Contenedor_narracion" type="button" aria-label="Reproducir narración" title="Reproducir narración" aria-pressed="false">
+        <i class="fas fa-headphones" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+  <div id="Mensaje" class="contenedor-video-historia">
+    <video src="video3.mp4" class="imagen-historia" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nofullscreen nodownload noremoteplayback" aria-label="Nuestra salvación"></video>
+  </div>
+    <button class="btn-preparado" type="button" onclick="Mover_3()">¿Estás preparado?</button>
 </section>
 
 <!--SECCION - 5 ------------------------------------------------------------------------------------------------------->
@@ -122,7 +150,7 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
                 </div>
             </div>
             <div class="ControlVolumenNivel1" aria-label="Control de volumen del nivel 1">
-                <span class="IconoVolumenNivel1">🔊</span>
+                <span class="IconoVolumenNivel1" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
                 <input type="range" id="VolumenNivel1" aria-label="Volumen del nivel 1" min="0" max="100" value="70" step="1">
                 <span id="PorcentajeVolumenNivel1">70%</span>
             </div>
@@ -137,7 +165,7 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
             <div class="Contenedor"> 
             <!--EFECTOS DE SONIDO-->
             <audio id="Perdiste_sound" src="Perdiste.mp3" preload="auto"></audio>
-            <audio id="Fondo_Ciberpunk" src="Ciberpunk.mp3" preload="auto" autoplay loop></audio>
+            <audio id="Fondo_Ciberpunk" src="fondoDeJuego.mp3" preload="auto" loop></audio>
             <audio id="Puntos_sound" src="Puntos.mp3" preload="auto"></audio>
             <audio id="Punto2" src="Punto2.mp3" preload="auto"></audio>
             <audio id="Punto3" src="Punto3.mp3"preload="auto"></audio>
@@ -205,7 +233,7 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
         <!--Contenedor-Cabezera-->
         <div class="Cabezeralvl2 Contenedorlvl2">
             <div class="Tiempolvl2"><h3>TIEMPO</h3><span id="Tiempolvl2">60</span></div><!--Tiempo con su span para la el final del minuto--> 
-            <div class="Puntajelvl2"><h3>PUNTAJE</h3><span id="Puntajelvl2">0 / 35</span></div><!--Puntaje con su span que indica el puntaje-->
+            <div class="Puntajelvl2"><h3>PUNTAJE</h3><span id="Puntajelvl2">0 / 25</span></div><!--Puntaje con su span que indica el puntaje-->
             <div class="VidasLvl2">
     <h3>VIDAS</h3>
     <div class="IconosVidasLvl2">
@@ -215,7 +243,8 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
     </div>
 </div>
             <div class="ControlVolumenLvl2">
-    🔊 <input type="range" id="VolumenLvl2" min="0" max="1" value="0.45" step="0.05">
+    <span class="IconoVolumenLvl2" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
+    <input type="range" id="VolumenLvl2" min="0" max="1" value="0.45" step="0.05">
 
     <button class="PantallaCompletaLvl2" id="PantallaCompletaLvl2" title="Pantalla completa" onclick="const juego = document.getElementById('NIVEL_02'); if (!document.fullscreenElement) { juego.requestFullscreen(); } else { document.exitFullscreen(); }">⛶</button>
 </div>
@@ -321,7 +350,7 @@ preparando con la ayuda del resto de gobiernos, la iniciativa "IRON FIST", que c
                         </div>
                     </div>
                     <div class="ControlVolumenLvl3">
-                        <span aria-hidden="true">🔊</span>
+                        <span class="IconoVolumenLvl3" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
                         <input type="range" id="VolumenLvl3" aria-label="Volumen del nivel 3" min="0" max="1" value="0.7" step="0.05">
                     </div>
                     <button class="PantallaCompletaLvl3" id="PantallaCompletaLvl3" type="button" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>

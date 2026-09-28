@@ -133,23 +133,33 @@ actualizarVidasNivel1();
 
 //FUNCION DE NARRACIONES
 
-Narracion = 1
-document.getElementById("Contenedor_narracion").addEventListener('click',  Iniciar_narracion)
+const audioNarracion = document.getElementById("narracion");
+const botonNarracion = document.getElementById("Contenedor_narracion");
+botonNarracion.addEventListener('click', Iniciar_narracion);
 
-function Iniciar_narracion(){
-    if(Narracion == 1){
-    document.getElementById("narracion").play()
-    document.getElementById("VOLUMEN").style.display = "none"
-    document.getElementById("PAUSE").style.display = "table"
-    Narracion = 2}
-    else{
-        document.getElementById("narracion").pause()
-        document.getElementById("VOLUMEN").style.display = "table"
-        document.getElementById("PAUSE").style.display = "none"
-        Narracion = 1
+function actualizarControlNarracion() {
+    const reproduciendo = !audioNarracion.paused && !audioNarracion.ended;
+    const etiqueta = reproduciendo ? "Pausar narración" : "Reproducir narración";
+    botonNarracion.setAttribute("aria-pressed", String(reproduciendo));
+    botonNarracion.setAttribute("aria-label", etiqueta);
+    botonNarracion.title = etiqueta;
+}
+
+async function Iniciar_narracion() {
+    if (audioNarracion.paused) {
+        try {
+            await audioNarracion.play();
+        } catch (error) {
+            actualizarControlNarracion();
+        }
+    } else {
+        audioNarracion.pause();
     }
 }
 
+["play", "pause", "ended"].forEach(evento => {
+    audioNarracion.addEventListener(evento, actualizarControlNarracion);
+});
 // La intro se activa con un botón para evitar que el navegador la bloquee.
 const introOverlay = document.getElementById("intro-overlay");
 const introVideo = document.getElementById("intro-video");

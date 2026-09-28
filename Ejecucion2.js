@@ -1,4 +1,11 @@
-let Tiempolvl2 = 61;
+let Tiempolvl2 = 60;
+let iniciandoLvl2 = false;
+const lasersLvl2 = new Set();
+
+function limpiarLasersLvl2() {
+    lasersLvl2.forEach(limpiar => limpiar());
+    lasersLvl2.clear();
+}
 let Puntajelvl2 = 0;
 let Vidaslvl2 = 3;
 
@@ -207,11 +214,12 @@ function Habilitar_Siguienten_LVL() {
 }
 
 function ganarLvl2() {
-    if (!juegoActivoLvl2) {
+    if (!juegoActivoLvl2 || Vidaslvl2 <= 0) {
         return;
     }
 
     juegoActivoLvl2 = false;
+    limpiarLasersLvl2();
 
     detenerMeteoritosLvl2();
     clearInterval(intervaloTiempoLvl2);
@@ -237,6 +245,7 @@ function ganarLvl2() {
 function destruirMeteoritoLvl2(meteorito, xImpacto, yImpacto) {
     if (
         !juegoActivoLvl2 ||
+        pausadoLvl2 || Vidaslvl2 <= 0 ||
         meteorito.dataset.bloqueado === "true"
     ) {
         return;
@@ -254,22 +263,24 @@ function destruirMeteoritoLvl2(meteorito, xImpacto, yImpacto) {
 
     mostrarExplosionLvl2(x, y);
 
-    setTimeout(function () {
-        retirarMeteoritoLvl2(meteorito);
-    }, 650);
+    retirarMeteoritoLvl2(meteorito);
 
     if (Puntajelvl2 >= 25) {
         ganarLvl2();
     }
 }
 
-function perderLvl2() {
+function perderLvl2(motivo = "vidas") {
     if (!juegoActivoLvl2) {
         return;
     }
 
     juegoActivoLvl2 = false;
+    limpiarLasersLvl2();
     colaImpactosLvl2 = [];
+    derrotaLvl2.querySelector("p").textContent = motivo === "tiempo"
+        ? "Se acabó el tiempo. No alcanzaste los 25 puntos."
+        : "La Tierra perdió sus tres vidas.";
 
     detenerMeteoritosLvl2();
     clearInterval(intervaloTiempoLvl2);
@@ -280,10 +291,8 @@ function perderLvl2() {
     document.getElementById("Fondo_Ciberpunk").pause();
     document.getElementById("Perdiste_sound").play();
 
-    setTimeout(function () {
-        meteoritosLvl2.forEach(retirarMeteoritoLvl2);
-        derrotaLvl2.style.display = "flex";
-    }, 1000);
+    meteoritosLvl2.forEach(retirarMeteoritoLvl2);
+    derrotaLvl2.style.display = "flex";
 }
 
 function revisarImpactoPlanetaLvl2() {
@@ -354,44 +363,42 @@ function revisarImpactoPlanetaLvl2() {
         mostrarAvisoImpactoLvl2();
     }
 
-    setTimeout(function () {
-        retirarMeteoritoLvl2(meteoritoImpactado);
-        impactoEnProcesoLvl2 = false;
-
-        if (!sinVidas) {
-            revisarImpactoPlanetaLvl2();
-        }
-    }, 650);
+    retirarMeteoritoLvl2(meteoritoImpactado);
+    impactoEnProcesoLvl2 = false;
 
     if (sinVidas) {
         /*
         planeta_3.png queda visible un momento y recién
         después aparece MISIÓN FALLIDA.
         */
-        setTimeout(perderLvl2, 1000);
+        perderLvl2("vidas");
     }
 }
 
 function iniciarJuegoLvl2() {
+    if (juegoActivoLvl2) return;
+    clearInterval(intervaloTiempoLvl2);
+    clearInterval(intervaloImpactosLvl2);
+    iniciandoLvl2 = false;
     juegoActivoLvl2 = true;
     pausadoLvl2 = false;
     impactoEnProcesoLvl2 = false;
     colaImpactosLvl2 = [];
 
-    document.getElementById("Fondo_Ciberpunk").play();
+    document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
 
     iniciarMeteoritosLvl2();
 
     intervaloTiempoLvl2 = setInterval(function () {
-        if (pausadoLvl2) {
+        if (!juegoActivoLvl2 || pausadoLvl2) {
             return;
         }
 
-        Tiempolvl2--;
+        Tiempolvl2 = Math.max(0, Tiempolvl2 - 1);
         actualizarMarcadoresLvl2();
 
         if (Tiempolvl2 <= 0) {
-            perderLvl2();
+            perderLvl2("tiempo");
         }
     }, 1000);
 
@@ -402,13 +409,16 @@ function iniciarJuegoLvl2() {
 }
 
 function reiniciarLvl2() {
+    document.getElementById("Fondo_Ciberpunk").currentTime = 0;
+    juegoActivoLvl2 = false;
+    limpiarLasersLvl2();
     document.getElementById('NEXT').hidden = true;
     clearInterval(intervaloTiempoLvl2);
     clearInterval(intervaloImpactosLvl2);
 
     detenerMeteoritosLvl2();
 
-    Tiempolvl2 = 61;
+    Tiempolvl2 = 60;
     Puntajelvl2 = 0;
     Vidaslvl2 = 3;
 
@@ -434,6 +444,9 @@ function reiniciarLvl2() {
     planetaLvl2.classList.remove("ImpactoPlanetaLvl2");
 
     derrotaLvl2.style.display = "none";
+    victoriaLvl2.style.display = "none";
+    document.getElementById("Pausa_Pantallalvl2").style.display = "none";
+    document.getElementById("TextoPauselvl2").textContent = "PAUSAR";
 
     meteoritosLvl2.forEach(retirarMeteoritoLvl2);
 
@@ -448,7 +461,10 @@ document.getElementById("ReintentarLvl2").onclick = reiniciarLvl2;
 document.getElementById("Playlvl2").addEventListener(
     "click",
     function () {
-        document.getElementById("Fondo_Ciberpunk").play();
+        if (iniciandoLvl2 || juegoActivoLvl2) return;
+        iniciandoLvl2 = true;
+        document.getElementById("Fondo_Ciberpunk").currentTime = 0;
+        document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
 
         document.getElementById("Texolvl2").style.left = "-900px";
         document.getElementById("Playlvl2").style.left = "-900px";
@@ -491,17 +507,20 @@ document.getElementById("Pauselvl2").addEventListener(
         ).style.display = pausadoLvl2 ? "table" : "none";
 
         if (pausadoLvl2) {
+            limpiarLasersLvl2();
             document.getElementById("Fondo_Ciberpunk").pause();
 
             detenerMeteoritosLvl2();
 
             meteoritosLvl2.forEach(function (meteorito) {
+                const x = meteorito.offsetLeft;
+                const y = meteorito.offsetTop;
                 meteorito.style.transition = "none";
-                meteorito.style.left = meteorito.offsetLeft + "px";
-                meteorito.style.top = meteorito.offsetTop + "px";
+                meteorito.style.left = x + "px";
+                meteorito.style.top = y + "px";
             });
         } else {
-            document.getElementById("Fondo_Ciberpunk").play();
+            document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
             iniciarMeteoritosLvl2();
         }
     }
@@ -583,49 +602,62 @@ tableroLvl2.addEventListener("click", function (evento) {
     tableroLvl2.appendChild(laser);
 
     setTimeout(function () {
-        laser.style.left = "-80px";
+        if (laser.isConnected) laser.style.left = "-80px";
     }, 20);
 
+    let anteriorLaser = laser.getBoundingClientRect();
+    const anteriores = new Map(meteoritosLvl2.map(m => [m, m.getBoundingClientRect()]));
     const detectorLaser = setInterval(function () {
+        if (!juegoActivoLvl2 || pausadoLvl2) {
+            limpiar();
+            return;
+        }
         const laserRect = laser.getBoundingClientRect();
 
         const objetivo = meteoritosLvl2.find(function (meteorito) {
             const rect = meteorito.getBoundingClientRect();
-
-            return (
-                meteorito.dataset.bloqueado !== "true" &&
-                laserRect.left < rect.right &&
-                laserRect.right > rect.left &&
-                laserRect.top < rect.bottom &&
-                laserRect.bottom > rect.top
-            );
+            const previo = anteriores.get(meteorito);
+            anteriores.set(meteorito, rect);
+            return meteorito.dataset.bloqueado !== "true" && rect.right > 0 &&
+                colisionBarridaLvl2(anteriorLaser, laserRect, previo, rect);
         });
+        anteriorLaser = laserRect;
 
         if (objetivo) {
             clearInterval(detectorLaser);
-
-            /* CORREGIDO: congelamos el láser exactamente donde está en el
-               instante del contacto (antes seguía viajando hasta el fondo
-               por la transición CSS en curso). Usamos esa misma posición
-               para dibujar la explosión, así explota justo en el punto
-               de impacto y no en la esquina del meteorito. */
-            const xImpacto = laser.offsetLeft;
-            const yImpacto = laser.offsetTop;
-
-            laser.style.transition = "none";
-            laser.style.left = xImpacto + "px";
-
-            destruirMeteoritoLvl2(objetivo, xImpacto, yImpacto);
-
+            destruirMeteoritoLvl2(objetivo);
             laser.remove();
         }
     }, 20);
 
-    setTimeout(function () {
+    const caducidad = setTimeout(limpiar, 1300);
+    function limpiar() {
         clearInterval(detectorLaser);
+        clearTimeout(caducidad);
         laser.remove();
-    }, 1300);
+        lasersLvl2.delete(limpiar);
+    }
+    lasersLvl2.add(limpiar);
 });
+
+// Comprueba todo el trayecto relativo entre muestras, incluso si el láser
+// atraviesa el meteorito completamente entre dos cuadros.
+function colisionBarridaLvl2(a0, a1, b0, b1) {
+    let entrada = 0;
+    let salida = 1;
+    for (const [min, max] of [["left", "right"], ["top", "bottom"]]) {
+        const velocidad = (a1[min] - a0[min]) - (b1[min] - b0[min]);
+        if (velocidad === 0) {
+            if (a0[max] < b0[min] || a0[min] > b0[max]) return false;
+        } else {
+            const t1 = (b0[min] - a0[max]) / velocidad;
+            const t2 = (b0[max] - a0[min]) / velocidad;
+            entrada = Math.max(entrada, Math.min(t1, t2));
+            salida = Math.min(salida, Math.max(t1, t2));
+        }
+    }
+    return entrada <= salida;
+}
 
 ActualizarVidaslvl2();
 actualizarMarcadoresLvl2();

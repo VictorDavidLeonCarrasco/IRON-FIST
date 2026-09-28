@@ -508,9 +508,10 @@ body.intro-active {
   position: absolute;
   top: 100%;
   left: 0;
+    width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+    justify-content: center;
   gap: 15px;
   margin-top: 24px;
 }
@@ -518,12 +519,21 @@ body.intro-active {
   background: #000000;
   color: #ffffff;
   border: none;
-  padding: 10px 20px;
+    padding: 14px 24px;
   font-family: Arial, sans-serif;
   font-weight: bold;
-  font-size: 0.85rem;
+    font-size: 1rem;
   cursor: pointer;
   border-radius: 2px;
+}
+
+#Seccion_2 > .btn-preparado {
+    position: absolute;
+    top: calc(150px + 360px + 24px);
+    left: 50%;
+    z-index: 11;
+    transform: translateX(-50%);
+    white-space: nowrap;
 }
 
 .btn-preparado:hover {
@@ -583,8 +593,9 @@ width: 100%;
 }
     
     /*ESTILOS DENTRO DEL CONTENEDOR DEL JUEGO*/
-    .Contenedor {width: 900px; height: 500px; 
-    border: 5px dashed purple; 
+    .Contenedor {width: min(94vw, 1400px); height: min(68vh, 820px); 
+    border: 2px solid rgba(112, 199, 220, 0.82);
+    box-shadow: 0 0 0 1px rgba(3, 12, 24, 0.9), 0 0 22px rgba(38, 170, 205, 0.18);
     background: url(IMG/Fondo.jpg) no-repeat 50% 50%; 
     background-size: cover; position: relative; top: 4%; overflow: hidden;  }
 
@@ -611,9 +622,9 @@ width: 100%;
         flex: 0 0 auto;
         margin: 0;
         box-sizing: border-box;
-        border-right: 5px dashed purple;
-        border-left: 5px dashed purple;
-        border-top: 5px dashed purple;
+        border-right: 2px solid rgba(112, 199, 220, 0.82);
+        border-left: 2px solid rgba(112, 199, 220, 0.82);
+        border-top: 2px solid rgba(112, 199, 220, 0.82);
         border-bottom: none;
         top: 0;
         left: 0;
@@ -636,9 +647,9 @@ width: 100%;
         top: 0;
         left: 0;
         box-sizing: border-box;
-        border-right: 5px dashed purple;
-        border-left: 5px dashed purple;
-        border-bottom: 5px dashed purple;
+        border-right: 2px solid rgba(112, 199, 220, 0.82);
+        border-left: 2px solid rgba(112, 199, 220, 0.82);
+        border-bottom: 2px solid rgba(112, 199, 220, 0.82);
         border-top: none;
     }
 
@@ -696,8 +707,8 @@ width: 100%;
     /*CABEZARA DENTRO DEL JUEGO*/
     .Cabezera {
         height: 90px;
-        width: 900px;
-        border: 5px dashed purple;
+        width: min(94vw, 1400px);
+        border: 2px solid rgba(112, 199, 220, 0.82);
         background: rgba(255, 255, 255, 0.363);
         border-bottom: none;
         display: grid;
@@ -985,12 +996,12 @@ width: 100%;
     /*Barra del nivel 1: mismo reparto en vista normal y pantalla completa.*/
     #NIVEL_01 .Cabezera,
     #NIVEL_01:fullscreen .Cabezera {
-        width: 910px;
+        width: min(94vw, 1400px);
         height: auto;
         min-height: 74px;
         padding: 10px 12px;
         top: 0;
-        border: 5px dashed #008cff;
+        border: 2px solid rgba(112, 199, 220, 0.82);
         border-bottom: none;
         background: rgba(128, 128, 128, 0.78);
         display: flex;
@@ -1006,7 +1017,7 @@ width: 100%;
     #NIVEL_01:fullscreen > .Contenedor:not(.Cabezera) {
         top: 0;
         margin: 0;
-        border: 5px dashed #008cff;
+        border: 2px solid rgba(112, 199, 220, 0.82);
     }
 
     #NIVEL_01 .Tiempo,
@@ -1140,7 +1151,8 @@ margin-left: 12%; }
     
     /*ESTILOS DENTRO DEL CONTENEDOR DEL JUEGO*/
     .Contenedorlvl2 {width: 900px; height: 500px; 
-    border: 5px dashed rgb(46, 86, 218); 
+    border: 2px solid rgba(112, 199, 220, 0.82);
+    box-shadow: 0 0 0 1px rgba(3, 12, 24, 0.9), 0 0 22px rgba(38, 170, 205, 0.18);
     background: url(IMG/Fondo.jpg) no-repeat 50% 50%;
     background-size: cover; position: relative; top: 4%; overflow: hidden;}
     
@@ -1280,7 +1292,7 @@ margin-left: 12%; }
     
     /*CABEZARA DENTRO DEL JUEGO*/
     .Cabezeralvl2 {height: 70px; 
-    border: 5px dashed rgb(0, 119, 255); 
+    border: 2px solid rgba(112, 199, 220, 0.82);
     background: rgba(255, 255, 255, 0.363); 
     border-bottom: none; display: flex; 
     align-items: center; position: relative; }
@@ -1327,7 +1339,8 @@ margin-left: 12%; }
     .Contenedorlvl3 {
         width: 900px;
         height: 500px; 
-        border: 5px dashed red; 
+        border: 2px solid rgba(112, 199, 220, 0.82);
+        box-shadow: 0 0 0 1px rgba(3, 12, 24, 0.9), 0 0 22px rgba(38, 170, 205, 0.18);
         background: url(IMG/Fondo.jpg) no-repeat 50% 50% ;
         background-size: cover;
         position: relative;
@@ -1480,7 +1493,7 @@ margin-left: 12%; }
     
     /*CABEZARA DENTRO DEL JUEGO*/
     .Cabezeralvl3 {height: 70px; 
-        border: 5px dashed red; 
+        border: 2px solid rgba(112, 199, 220, 0.82);
         background: rgba(255, 255, 255, 0.363); 
         border-bottom: none; display: flex; 
         position: relative; }
@@ -2288,3 +2301,134 @@ html, body {
 }
 #NIVEL_01:fullscreen .Texo { font-size: clamp(18px, 3.5vh, 34px); }
 #NIVEL_01:fullscreen .Pollo { font-size: clamp(14px, 2.5vh, 24px); }
+
+#NIVEL_01 .Cabezera,
+#NIVEL_02 .Cabezeralvl2,
+#NIVEL3 .Cabezeralvl3 {
+    background: linear-gradient(110deg, rgba(5, 16, 30, 0.97), rgba(12, 35, 52, 0.95));
+    color: #edf7fa;
+}
+
+#NIVEL_01 .Tiempo,
+#NIVEL_01 .Puntaje,
+#NIVEL_01 .VidasNivel1,
+#NIVEL_02 .Tiempolvl2,
+#NIVEL_02 .Puntajelvl2,
+#NIVEL_02 .VidasLvl2,
+#NIVEL3 .Tiempolvl3,
+#NIVEL3 .Puntajelvl3,
+#NIVEL3 .VidasLvl3 {
+    min-height: 48px;
+    padding: 6px 10px;
+    border: 1px solid rgba(112, 199, 220, 0.24);
+    border-radius: 8px;
+    background: rgba(8, 22, 37, 0.82);
+    color: #edf7fa;
+    box-sizing: border-box;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+#NIVEL_02 .Puntajelvl2 {
+    margin-top: 0;
+}
+
+#NIVEL_01 .Tiempo h3,
+#NIVEL_01 .Puntaje h3,
+#NIVEL_01 .VidasNivel1 h3,
+#NIVEL_02 .Tiempolvl2 h3,
+#NIVEL_02 .Puntajelvl2 h3,
+#NIVEL_02 .VidasLvl2 h3,
+#NIVEL3 .Tiempolvl3 h3,
+#NIVEL3 .Puntajelvl3 h3,
+#NIVEL3 .VidasLvl3 h3 {
+    margin: 0 0 4px;
+    color: #9bb8c5;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+#Tiempo,
+#Puntaje,
+#Tiempolvl2,
+#Puntajelvl2,
+#Tiempolvl3,
+#Puntajelvl3 {
+    color: #f5fbfd;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+#NIVEL_01 .ControlVolumenNivel1,
+#NIVEL_02 .ControlVolumenLvl2,
+#NIVEL3 .ControlVolumenLvl3 {
+    min-height: 48px;
+    margin: 0;
+    padding: 6px 10px;
+    gap: 10px;
+    border: 1px solid rgba(112, 199, 220, 0.24);
+    border-radius: 8px;
+    background: rgba(8, 22, 37, 0.82);
+    color: #9bb8c5;
+    box-sizing: border-box;
+}
+
+.IconoVolumenNivel1,
+.IconoVolumenLvl2,
+.IconoVolumenLvl3 {
+    display: inline-flex;
+    width: 18px;
+    align-items: center;
+    justify-content: center;
+    color: #76d5e7;
+    font-size: 15px;
+}
+
+#PorcentajeVolumenNivel1 {
+    display: inline;
+    min-width: 32px;
+    color: #edf7fa;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#NIVEL_01 .VidaNivel1,
+#NIVEL_02 .IconosVidasLvl2 span,
+#NIVEL3 .IconosVidasLvl3 span {
+    color: #ff6378;
+    font-size: 21px;
+    text-shadow: 0 0 8px rgba(255, 75, 103, 0.42);
+}
+
+#NIVEL_01 .VidaNivel1.perdida,
+#NIVEL_02 .IconosVidasLvl2 span.VidaPerdidaLvl2,
+#NIVEL3 .IconosVidasLvl3 .VidaPerdidaLvl3 {
+    color: rgba(196, 216, 225, 0.32);
+    filter: none;
+    text-shadow: none;
+}
+
+#VolumenNivel1,
+#VolumenLvl2,
+#VolumenLvl3 {
+    height: 4px;
+    border-radius: 999px;
+    accent-color: #76d5e7;
+    cursor: pointer;
+}
+
+#NIVEL_01 .Pause,
+#NIVEL_02 .Pauselvl2,
+#NIVEL3 .Pauselvl3 {
+    border: 1px solid rgba(112, 199, 220, 0.38);
+    border-radius: 6px;
+    background: #147e9b;
+}
+
+#NIVEL_01 .Pause:hover,
+#NIVEL_02 .Pauselvl2:hover,
+#NIVEL3 .Pauselvl3:hover {
+    background: #1596b5;
+}

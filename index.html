@@ -118,7 +118,6 @@
   <div id="Imagen" class="contenedor-imagen">
     <video src="fondo3.mp4" class="imagen-historia" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nofullscreen nodownload noremoteplayback" aria-label="Meteoritos cayendo"></video>
     <div class="contenedor-botones-historia">
-      <button class="btn-preparado" type="button" onclick="Mover_3()">¿Estás preparado?</button>
       <button class="Contenedor_narracion" id="Contenedor_narracion" type="button" aria-label="Reproducir narración" title="Reproducir narración" aria-pressed="false">
         <i class="fas fa-headphones" aria-hidden="true"></i>
       </button>
@@ -127,6 +126,7 @@
   <div id="Mensaje" class="contenedor-video-historia">
     <video src="video3.mp4" class="imagen-historia" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nofullscreen nodownload noremoteplayback" aria-label="Nuestra salvación"></video>
   </div>
+    <button class="btn-preparado" type="button" onclick="Mover_3()">¿Estás preparado?</button>
 </section>
 
 <!--SECCION - 5 ------------------------------------------------------------------------------------------------------->
@@ -151,7 +151,7 @@
                 </div>
             </div>
             <div class="ControlVolumenNivel1" aria-label="Control de volumen del nivel 1">
-                <span class="IconoVolumenNivel1">🔊</span>
+                <span class="IconoVolumenNivel1" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
                 <input type="range" id="VolumenNivel1" aria-label="Volumen del nivel 1" min="0" max="100" value="70" step="1">
                 <span id="PorcentajeVolumenNivel1">70%</span>
             </div>
@@ -244,7 +244,8 @@
     </div>
 </div>
             <div class="ControlVolumenLvl2">
-    🔊 <input type="range" id="VolumenLvl2" min="0" max="1" value="0.45" step="0.05">
+    <span class="IconoVolumenLvl2" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
+    <input type="range" id="VolumenLvl2" min="0" max="1" value="0.45" step="0.05">
 
     <button class="PantallaCompletaLvl2" id="PantallaCompletaLvl2" title="Pantalla completa" onclick="const juego = document.getElementById('NIVEL_02'); if (!document.fullscreenElement) { juego.requestFullscreen(); } else { document.exitFullscreen(); }">⛶</button>
 </div>
@@ -350,7 +351,7 @@
                         </div>
                     </div>
                     <div class="ControlVolumenLvl3">
-                        <span aria-hidden="true">🔊</span>
+                        <span class="IconoVolumenLvl3" aria-hidden="true"><i class="fas fa-volume-up"></i></span>
                         <input type="range" id="VolumenLvl3" aria-label="Volumen del nivel 3" min="0" max="1" value="0.7" step="0.05">
                     </div>
                     <button class="PantallaCompletaLvl3" id="PantallaCompletaLvl3" type="button" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>

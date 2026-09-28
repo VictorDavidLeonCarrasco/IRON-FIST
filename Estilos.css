@@ -1422,18 +1422,34 @@ margin-left: 12%; }
     
     /*Boton de la pantalla start*/
     .Playlvl3 {
-        background: red;
+        background: #0b91b5;
         color: white;
-        width: 18%;
-        height: 9%;
-        display: flex; 
+        width: min(250px, 30%);
+        min-height: 58px;
+        border: 2px solid #67d9ff;
+        border-radius: 8px;
+        display: flex;
         align-items: center;
-        left: 0;
         justify-content: center;
         cursor: pointer;
         position: relative;
-        transition: 2s;
+        left: 0;
+        padding: 0 20px;
         font-family: 'Press Start 2P', cursive;
+        font-size: 16px;
+        font-weight: 700;
+        box-shadow: 0 0 18px rgba(54,207,255,.45);
+        transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .Playlvl3:hover {
+        background: #12a9d0;
+        transform: translateY(-2px);
+        box-shadow: 0 0 28px rgba(54,207,255,.7);
+    }
+
+    .Playlvl3:active {
+        transform: translateY(0) scale(.98);
     }
     
     #Dificultadlvl3{display: flex;
@@ -2550,4 +2566,90 @@ html, body {
 .Seccion_Juego .Contenedor_LVL {
     width: min(94vw, 1400px);
     margin: 22px auto;
+}
+
+
+/* =========================================================
+   CORRECCIONES EXCLUSIVAS DEL NIVEL 3
+   No modifica los estilos de los niveles 1, 2 ni de la intro.
+   ========================================================= */
+#NIVEL3 .Startlvl3 {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#NIVEL3 .Textolvl3 {
+    max-width: 90%;
+    margin: 0 auto 18px;
+    top: -4%;
+    line-height: 1.35;
+}
+
+#NIVEL3 #Dificultadlvl3 {
+    top: 58%;
+    align-items: center;
+    gap: 18px;
+    pointer-events: none;
+}
+
+#NIVEL3 #Dificultadlvl3 img {
+    width: clamp(70px, 10vw, 130px);
+    height: auto;
+    object-fit: contain;
+}
+
+#NIVEL3 #Dificultadlvl3 h1 {
+    margin: 0;
+    color: #eefbff;
+    text-shadow: 0 0 12px rgba(54,207,255,.65);
+    font-size: clamp(13px, 1.7vw, 27px) !important;
+}
+
+#NIVEL3 .Playlvl3 {
+    z-index: 2;
+    margin-top: 12px;
+}
+
+/* Pantalla completa: conserva la cabecera arriba y adapta el tablero al espacio restante. */
+#NIVEL3:fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #000 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+}
+
+#NIVEL3:fullscreen .Cabezeralvl3 {
+    width: 100% !important;
+    flex: 0 0 74px !important;
+    height: 74px !important;
+    min-height: 74px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+#NIVEL3:fullscreen > .Contenedorlvl3:not(.Cabezeralvl3) {
+    width: 100% !important;
+    height: calc(100vh - 74px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 1 1 auto !important;
+    margin: 0 !important;
+    top: 0 !important;
+    box-sizing: border-box !important;
+}
+
+#NIVEL3:fullscreen .Startlvl3 {
+    height: 100% !important;
+}
+
+@media (max-width: 900px) {
+    #NIVEL3 .Playlvl3 { width: 220px; }
+    #NIVEL3 .Textolvl3 { font-size: clamp(20px, 4vw, 36px); line-height: 1.3; }
+    #NIVEL3 #Dificultadlvl3 { gap: 8px; }
 }

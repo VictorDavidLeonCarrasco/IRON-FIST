@@ -149,11 +149,11 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteoritolvl3").style.left = Distancia1lvl3 + "%"
         document.getElementById("Meteoritolvl3").style.top = Altura1lvl3 + "px"
-        document.getElementById("Meteoritolvl3").style.transition = "1.9s"
+        document.getElementById("Meteoritolvl3").style.transition = "3.2s"
     }
 
-    setTimeout(Meteorito_Direccionlvl3, 2200)
-    Intervalo_Dirlvl3 = setInterval(Meteorito_Direccionlvl3, 2950)
+    setTimeout(Meteorito_Direccionlvl3, 2500)
+    Intervalo_Dirlvl3 = setInterval(Meteorito_Direccionlvl3, 4800)
 
     //ESTA FUNCION DIRIGE AL METEORITO 2 A LA TIERRA         
     function Meteorito_Direccion2lvl3() {
@@ -163,11 +163,11 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteorito2lvl3").style.left = Distancia2lvl3 + "%"
         document.getElementById("Meteorito2lvl3").style.top = Altura2lvl3 + "px"
-        document.getElementById("Meteorito2lvl3").style.transition = "1.9s"
+        document.getElementById("Meteorito2lvl3").style.transition = "3.2s"
     }
 
-    setTimeout(Meteorito_Direccion2lvl3, 2660)
-    Intervalo_Dir2lvl3 = setInterval(Meteorito_Direccion2lvl3, 2750)
+    setTimeout(Meteorito_Direccion2lvl3, 3300)
+    Intervalo_Dir2lvl3 = setInterval(Meteorito_Direccion2lvl3, 5200)
 
     //ESTA FUNCION DIRIGE AL METEORITO 3 A LA TIERRA
     function Meteorito_Direccion3lvl3() {
@@ -177,11 +177,11 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteorito3lvl3").style.left = Distancia3lvl3 + "%"
         document.getElementById("Meteorito3lvl3").style.top = Altura3lvl3 + "px"
-        document.getElementById("Meteorito3lvl3").style.transition = "1.9s"
+        document.getElementById("Meteorito3lvl3").style.transition = "3.2s"
     }
 
-    setTimeout(Meteorito_Direccion3lvl3, 2900)
-    Intervalo_Dir3lvl3 = setInterval(Meteorito_Direccion3lvl3, 2550)
+    setTimeout(Meteorito_Direccion3lvl3, 3300)
+    Intervalo_Dir3lvl3 = setInterval(Meteorito_Direccion3lvl3, 5600)
 
     //ESTA FUNCION DIRIGE AL METEORITO 4 A LA TIERRA
     function Meteorito_Direccion4lvl3() {
@@ -191,11 +191,11 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteorito4lvl3").style.left = Distancia4lvl3 + "%"
         document.getElementById("Meteorito4lvl3").style.top = Altura4lvl3 + "px"
-        document.getElementById("Meteorito4lvl3").style.transition = "1.9s"
+        document.getElementById("Meteorito4lvl3").style.transition = "3.2s"
     }
 
-    setTimeout(Meteorito_Direccion4lvl3, 3100)
-    Intervalo_Dir4lvl3 = setInterval(Meteorito_Direccion4lvl3, 2150)
+    setTimeout(Meteorito_Direccion4lvl3, 3700)
+    Intervalo_Dir4lvl3 = setInterval(Meteorito_Direccion4lvl3, 6000)
 
 
 
@@ -215,7 +215,7 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteoritolvl3").style.left = Distancialvl3 + "px"
         document.getElementById("Meteoritolvl3").style.top = Alturalvl3 + "px"
-        document.getElementById("Meteoritolvl3").style.transition = "1.7s"
+        document.getElementById("Meteoritolvl3").style.transition = "2.2s"
     }
 
 
@@ -228,7 +228,7 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteorito2lvl3").style.left = Distancialvl3 + "px"
         document.getElementById("Meteorito2lvl3").style.top = Alturalvl3 + "px"
-        document.getElementById("Meteorito2lvl3").style.transition = "1.7s"
+        document.getElementById("Meteorito2lvl3").style.transition = "2.2s"
     }
 
 
@@ -241,7 +241,7 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteorito3lvl3").style.left = Distancialvl3 + "px"
         document.getElementById("Meteorito3lvl3").style.top = Alturalvl3 + "px"
-        document.getElementById("Meteorito3lvl3").style.transition = "1.7s"
+        document.getElementById("Meteorito3lvl3").style.transition = "2.2s"
     }
 
     //ESTA ES LA FUNCION QUE EXPULSA AL METIRITO 4 DE MANERA ALEATORIA FUERA DEL MAPA
@@ -253,7 +253,7 @@ function JUEGOlvl3() {
 
         document.getElementById("Meteorito4lvl3").style.left = Distancialvl3 + "px"
         document.getElementById("Meteorito4lvl3").style.top = Alturalvl3 + "px"
-        document.getElementById("Meteorito4lvl3").style.transition = "1.7s"
+        document.getElementById("Meteorito4lvl3").style.transition = "2.2s"
     }
 
 
@@ -290,15 +290,15 @@ function JUEGOlvl3() {
 
 
 //LE DECIMOS QUE AL PRESIONAR EL BOTON JUGAR EJECUTARA LA FUNCION PLAY     
-document.getElementById("Playlvl3").addEventListener('click', PLAYlvl3)
 
 //ESTE ES EL CONTEO DE LA CUENTA REGRESIVA QUE SE DA DESPUEZ DE PRESINAR JUGAR
 Conteolvl3 = 4 
 
 //ESTA FUNCION EJECUTA UN CONJUNTO DE ACCIONES AL PRESIONAR JUGAR
 function PLAYlvl3() {
-    if (document.getElementById('Playlvl3').dataset.iniciado) return;
-    document.getElementById('Playlvl3').dataset.iniciado = 'true';
+    const botonPlay = document.getElementById('Playlvl3');
+    if (!botonPlay || botonPlay.dataset.iniciado) return;
+    botonPlay.dataset.iniciado = 'true';
     aplicarVolumenLvl3();
     document.getElementById("Fondo_Ciberpunk").currentTime = 0;
     document.getElementById("Fondo_Ciberpunk").play().catch(() => {});

@@ -501,7 +501,7 @@ document.getElementById("Pauselvl2").addEventListener(
 
         pausadoLvl2 = !pausadoLvl2;
         document.getElementById("TextoPauselvl2").innerHTML =
-            pausadoLvl2 ? "▶️" : "⏸️";
+            pausadoLvl2 ? "REANUDAR" : "PAUSAR";
         document.getElementById(
             "Pausa_Pantallalvl2"
         ).style.display = pausadoLvl2 ? "table" : "none";

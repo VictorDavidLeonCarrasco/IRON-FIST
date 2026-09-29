@@ -699,8 +699,3 @@ if (Supremo) Supremo.style.height = "160vh" //Le aumente para que no tape al con
     setTimeout(abrirJuego, 900)
 }
 
-// Recargar al volver limpia los temporizadores y el estado de todos los niveles.
-document.getElementById('VolverInicio').addEventListener('click', () => {
-    window.location.hash = 'inicio';
-    window.location.reload();
-});

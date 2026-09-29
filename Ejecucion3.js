@@ -36,6 +36,10 @@ document.getElementById('PantallaCompletaLvl3').addEventListener('click', async 
         console.warn('No se pudo cambiar la pantalla completa:', error);
     }
 });
+document.getElementById('VolverInicioNivel3').addEventListener('click', () => {
+    window.location.hash = 'inicio';
+    window.location.reload();
+});
 
 //CONTENEDOR QUE CONTIENE TOO EL JUEGO
 //DE POR SI ESTA FUNCION NO SE EJECUTA HASTA QUE SE LA LLAMA, MAS ADELANTE LA LLAMAREMOS

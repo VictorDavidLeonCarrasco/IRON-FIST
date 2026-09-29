@@ -53,7 +53,30 @@ function aplicarVolumenNivel1(valor) {
     if (etiqueta) etiqueta.textContent = `${Math.round(volumen * 100)}%`;
 }
 
+function mostrarVolverInicio(visible) {
+    document.getElementById('VolverInicio').hidden = !visible;
+}
+
+// Mantiene la navegación visible cuando cualquiera de los niveles ocupa la pantalla.
+const navegacionNiveles = document.querySelector('.Contenedor_LVL');
+const posicionNavegacionNiveles = document.createComment('Navegación de niveles');
+navegacionNiveles.before(posicionNavegacionNiveles);
+document.addEventListener('fullscreenchange', () => {
+    const nivelCompleto = document.fullscreenElement;
+    if (nivelCompleto && ['NIVEL_01', 'NIVEL_02', 'NIVEL3'].includes(nivelCompleto.id)) {
+        nivelCompleto.appendChild(navegacionNiveles);
+    } else {
+        posicionNavegacionNiveles.after(navegacionNiveles);
+    }
+});
+
+document.getElementById('VolverInicio').addEventListener('click', () => {
+    window.location.hash = 'inicio';
+    window.location.reload();
+});
+
 function mostrarFinJuegoNivel1() {
+    mostrarVolverInicio(true);
     finDelJuegoNivel1 = true;
     detenerMotorNivel1();
     document.getElementById('Fondo_Ciberpunk').pause();
@@ -64,6 +87,7 @@ function mostrarFinJuegoNivel1() {
 }
 
 function reiniciarNivel1() {
+    mostrarVolverInicio(false);
     document.getElementById('NEXT').hidden = true;
     detenerMotorNivel1();
     pausadoNivel1 = false;
@@ -581,6 +605,7 @@ function PLAY() {
 function pausarNivel1() {
     if (!jugandoNivel1) return;
     pausadoNivel1 = !pausadoNivel1;
+    mostrarVolverInicio(pausadoNivel1);
     ultimoFrameNivel1 = null;
     document.getElementById('Pause').textContent = pausadoNivel1 ? 'REANUDAR' : 'PAUSAR';
     document.getElementById('Pausa_Pantalla').style.display = pausadoNivel1 ? 'table' : 'none';

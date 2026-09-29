@@ -2352,6 +2352,18 @@ html, body {
 .Contenedor_LVL button:hover { background: #0568ca; }
 .Contenedor_LVL button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
 .Contenedor_LVL .NEXT[hidden] { display: none; }
+.Contenedor_LVL #VolverInicio { margin-right: auto; }
+.Contenedor_LVL #NEXT { margin-left: auto; }
+:is(#NIVEL_01, #NIVEL_02, #NIVEL3):fullscreen > .Contenedor_LVL {
+    position: absolute;
+    inset: auto 3% 12px;
+    width: 94%;
+    margin: 0;
+    transform: none;
+    z-index: 10000;
+    pointer-events: none;
+}
+:fullscreen > .Contenedor_LVL button { pointer-events: auto; }
 
 /* Ajuste discreto de las letras de la pantalla previa al nivel 1. */
 #NIVEL_01 .Texo {
@@ -2757,6 +2769,14 @@ html, body {
 #NIVEL3 .Pausa_Pantallalvl3,
 #NIVEL3 .Pausa_Pantallalvl3 * {
     cursor: default !important;
+}
+
+#NIVEL3 #ReiniciarTiempoLvl3 {
+    position: absolute;
+    top: calc(50% + 65px);
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer !important;
 }
 
 

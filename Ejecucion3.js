@@ -9,6 +9,39 @@ let juegoActivoLvl3 = false;
 let disparosLvl3 = [];
 let tableroNivel3 = null;
 let naveJugadorLvl3 = null;
+let intervaloDerrotaLvl3 = null;
+
+function reiniciarPorTiempoLvl3() {
+    if (!terminadoLvl3 || Tiempolvl3 !== 0) return;
+    [Restar_Tiempolvl3, Intervalo_Dirlvl3, Intervalo_Dir2lvl3,
+        Intervalo_Dir3lvl3, Intervalo_Dir4lvl3, intervaloDerrotaLvl3].forEach(clearInterval);
+    limpiarDisparosLvl3();
+    animacionesPausadasLvl3 = [];
+    document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(meteorito => {
+        meteorito.getAnimations().forEach(animacion => animacion.cancel());
+        meteorito.style.transition = 'none';
+        meteorito.style.left = '-70%';
+        meteorito.dataset.impactado = 'false';
+    });
+    Tiempolvl3 = 51;
+    Puntajelvl3 = 0;
+    vidasLvl3 = 3;
+    actualizarVidasLvl3();
+    document.getElementById('Tiempolvl3').textContent = Tiempolvl3;
+    document.getElementById('Puntajelvl3').textContent = '0 / 40';
+    document.getElementById('ReiniciarTiempoLvl3').hidden = true;
+    document.getElementById('Pausa_Pantallalvl3').style.display = 'none';
+    document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').innerHTML = 'EL JUEGO ESTA<br>EN PAUSE';
+    document.getElementById('Pauselvl3').textContent = 'PAUSAR';
+    document.getElementById('Pauselvl3').setAttribute('aria-pressed', 'false');
+    mostrarVolverInicio(false);
+    const audio = document.getElementById('Fondo_Ciberpunk');
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    JUEGOlvl3();
+}
+
+document.getElementById('ReiniciarTiempoLvl3').addEventListener('click', reiniciarPorTiempoLvl3);
 
 function actualizarVidasLvl3() {
     const indicador = document.getElementById('VidasLvl3');
@@ -219,6 +252,8 @@ function JUEGOlvl3() {
             clearInterval(Restar_Tiempolvl3);
             document.getElementById('Fondo_Ciberpunk').pause();
             document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').textContent = 'TIEMPO AGOTADO';
+            document.getElementById('ReiniciarTiempoLvl3').hidden = false;
+            mostrarVolverInicio(true);
             document.getElementById('Pausa_Pantallalvl3').style.display = 'table';
             document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(elemento => {
                 elemento.getAnimations().forEach(animacion => animacion.pause());
@@ -268,7 +303,7 @@ function JUEGOlvl3() {
         document.getElementById("Meteorito3lvl3").dataset.impactado = "false"
         document.getElementById("Meteorito3lvl3").style.left = Distancia3lvl3 + "%"
         document.getElementById("Meteorito3lvl3").style.top = Altura3lvl3 + "%"
-        document.getElementById("Meteorito3lvl3").style.transition = "3.2s"
+        document.getElementById("Meteorito3lvl3").style.transition = "1.8s"
     }
 
     setTimeout(Meteorito_Direccion3lvl3, 3300)
@@ -313,6 +348,7 @@ function JUEGOlvl3() {
                 clearInterval(Restar_Tiempolvl3);
                 document.getElementById('Fondo_Ciberpunk').pause();
                 document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').textContent = 'FIN DEL JUEGO';
+                mostrarVolverInicio(true);
                 document.getElementById('Pausa_Pantallalvl3').style.display = 'table';
                 document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(elemento => {
                     elemento.getAnimations().forEach(animacion => animacion.pause());
@@ -321,7 +357,7 @@ function JUEGOlvl3() {
             }
         }
     }
-    setInterval(perdistelvl3, 16) // Comprueba el límite aproximadamente una vez por fotograma.
+    intervaloDerrotaLvl3 = setInterval(perdistelvl3, 16) // Comprueba el límite aproximadamente una vez por fotograma.
     //QUE NO SABEMOS CUANDO EL METEORITO VA A SUPERAR EL LIMITE
 }
 
@@ -340,7 +376,7 @@ function PLAYlvl3() {
     Puntajelvl3 = 0;
     vidasLvl3 = 3;
     actualizarVidasLvl3();
-    document.getElementById('Puntajelvl3').innerHTML = '0 / 40';
+    document.getElementById('Puntajelvl3').innerHTML = '0 / 50';
     document.getElementById('Ganaste_Pantallalvl3').style.display = 'none';
     document.getElementById('Planetalvl3')?.style.setProperty('display', 'block');
     aplicarVolumenLvl3();
@@ -386,6 +422,7 @@ function DETENER_JUEGOlvl3() {
     document.getElementById('Pauselvl3').onclick = () => {
         if (terminadoLvl3) return;
         pausadoLvl3 = !pausadoLvl3;
+        mostrarVolverInicio(pausadoLvl3);
         const boton = document.getElementById('Pauselvl3');
         boton.textContent = pausadoLvl3 ? 'REANUDAR' : 'PAUSAR';
         boton.setAttribute('aria-pressed', String(pausadoLvl3));

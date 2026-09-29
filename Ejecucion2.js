@@ -293,6 +293,7 @@ function perderLvl2(motivo = "vidas") {
 
     meteoritosLvl2.forEach(retirarMeteoritoLvl2);
     derrotaLvl2.style.display = "flex";
+    mostrarVolverInicio(true);
 }
 
 function revisarImpactoPlanetaLvl2() {
@@ -409,6 +410,7 @@ function iniciarJuegoLvl2() {
 }
 
 function reiniciarLvl2() {
+    mostrarVolverInicio(false);
     document.getElementById("Fondo_Ciberpunk").currentTime = 0;
     juegoActivoLvl2 = false;
     limpiarLasersLvl2();
@@ -500,6 +502,7 @@ document.getElementById("Pauselvl2").addEventListener(
         }
 
         pausadoLvl2 = !pausadoLvl2;
+        mostrarVolverInicio(pausadoLvl2);
         document.getElementById("TextoPauselvl2").innerHTML =
             pausadoLvl2 ? "REANUDAR" : "PAUSAR";
         document.getElementById(

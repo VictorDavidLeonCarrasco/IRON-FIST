@@ -10,6 +10,66 @@ const segundosCuentaNivel1 = 3;
 let intervaloCuentaNivel1 = null;
 let Conteo = segundosCuentaNivel1;
 
+
+// Combos y estadísticas del nivel 1, con las reglas del nivel 2.
+let comboNivel1 = 0;
+let ultimoMeteoritoNivel1 = -99;
+let estadisticasNivel1 = { disparos: 0, aciertos: 0, destruidos: 0, comboMax: 0 };
+
+function registrarDestruccionNivel1() {
+    estadisticasNivel1.aciertos++;
+    estadisticasNivel1.destruidos++;
+    comboNivel1 = relojNivel1 - ultimoMeteoritoNivel1 <= 2.2 ? comboNivel1 + 1 : 1;
+    ultimoMeteoritoNivel1 = relojNivel1;
+    estadisticasNivel1.comboMax = Math.max(estadisticasNivel1.comboMax, comboNivel1);
+    const bonus = comboNivel1 % 5 === 0 ? 1 : 0;
+    const indicador = document.getElementById('ComboNivel1');
+    if (comboNivel1 >= 2) {
+        indicador.textContent = 'COMBO x' + comboNivel1 + (bonus ? ' · ¡BONUS +1!' : '');
+        indicador.classList.remove('visible');
+        void indicador.offsetWidth;
+        indicador.classList.add('visible');
+        if (typeof sfxLvl2 !== 'undefined') sfxLvl2.combo(comboNivel1);
+    }
+    return 1 + bonus;
+}
+
+function actualizarLogroNivel1() {
+    const estrellas = vidasNivel1 === 3 && Tiempo >= 15 ? 3 : vidasNivel1 >= 2 ? 2 : 1;
+    const bloqueEstrellas = document.getElementById('EstrellasNivel1');
+    bloqueEstrellas.setAttribute('aria-label', estrellas + ' de 3 estrellas');
+    bloqueEstrellas.querySelectorAll('span').forEach((estrella, i) => {
+        estrella.classList.toggle('on', i < estrellas);
+        estrella.style.setProperty('--d', (0.25 + i * 0.25) + 's');
+    });
+    const precision = estadisticasNivel1.disparos
+        ? Math.round(estadisticasNivel1.aciertos / estadisticasNivel1.disparos * 100) + '%' : '--';
+    const datos = [
+        [estadisticasNivel1.destruidos, 'DESTRUIDOS'],
+        [precision, 'PRECISIÓN'],
+        ['x' + estadisticasNivel1.comboMax, 'MEJOR COMBO'],
+        [Tiempo + 's', 'TIEMPO SOBRANTE'],
+        [vidasNivel1 + '/3', 'VIDAS']
+    ];
+    document.getElementById('EstadisticasVictoriaNivel1').innerHTML = datos
+        .map(([valor, etiqueta]) => '<div><b>' + valor + '</b><small>' + etiqueta + '</small></div>').join('');
+    let anterior = null;
+    try {
+        const guardado = JSON.parse(localStorage.getItem('ironfist_lvl1_record'));
+        if (guardado && Number.isInteger(guardado.estrellas) && guardado.estrellas >= 1 &&
+            guardado.estrellas <= 3 && Number.isFinite(guardado.tiempo) && guardado.tiempo >= 0) anterior = guardado;
+    } catch (error) { /* El logro funciona aunque el almacenamiento no esté disponible. */ }
+    const mejor = !anterior || estrellas > anterior.estrellas ||
+        (estrellas === anterior.estrellas && Tiempo > anterior.tiempo);
+    const record = mejor ? { estrellas, tiempo: Tiempo } : anterior;
+    if (mejor) {
+        try { localStorage.setItem('ironfist_lvl1_record', JSON.stringify(record)); } catch (error) {}
+    }
+    document.getElementById('RecordNivel1').textContent = mejor ? '¡NUEVO RÉCORD!' :
+        'MEJOR: ' + '★'.repeat(record.estrellas) + ' · ' + record.tiempo + 's SOBRANTES';
+    document.getElementById('ComboNivel1').classList.remove('visible');
+}
+
 function actualizarPuntajeNivel1() {
     document.getElementById('Puntaje').textContent = `${Puntaje} / ${objetivoPuntosNivel1}`;
 }
@@ -76,6 +136,8 @@ document.getElementById('VolverInicio').addEventListener('click', () => {
 });
 
 function mostrarFinJuegoNivel1() {
+    document.getElementById('BotonReiniciarNivel1').hidden = true;
+    document.getElementById('NEXT').hidden = true;
     mostrarVolverInicio(true);
     finDelJuegoNivel1 = true;
     detenerMotorNivel1();
@@ -87,13 +149,15 @@ function mostrarFinJuegoNivel1() {
 }
 
 function reiniciarNivel1() {
+    document.getElementById('BotonReiniciarNivel1').hidden = true;
     mostrarVolverInicio(false);
     document.getElementById('NEXT').hidden = true;
     detenerMotorNivel1();
     pausadoNivel1 = false;
+    tableroNivel1.classList.remove('EfectosPausadosNivel1');
     document.getElementById('Pausa_Pantalla').style.display = 'none';
     document.getElementById('GANASTE_PANTALLA').style.display = 'none';
-    clearInterval(intervaloCuentaNivel1);
+    clearTimeout(intervaloCuentaNivel1);
     intervaloCuentaNivel1 = null;
     document.getElementById('Pause').textContent = 'PAUSAR';
     vidasNivel1 = 3;
@@ -102,6 +166,10 @@ function reiniciarNivel1() {
     vidasNivel1Impactadas.Meteiorito2 = false;
     Tiempo = 70;
     Puntaje = 0;
+    comboNivel1 = 0;
+    ultimoMeteoritoNivel1 = -99;
+    estadisticasNivel1 = { disparos: 0, aciertos: 0, destruidos: 0, comboMax: 0 };
+    document.getElementById('ComboNivel1').classList.remove('visible');
     document.getElementById('Tiempo').innerHTML = Tiempo;
     actualizarPuntajeNivel1();
     actualizarVidasNivel1();
@@ -117,6 +185,8 @@ function reiniciarNivel1() {
         document.getElementById('Fondo_Ciberpunk').currentTime = 0;
     }
     document.getElementById('Start').style.display = 'flex';
+    document.getElementById('Start').classList.remove('SaliendoConteoNivel1');
+    document.getElementById('RGB').classList.remove('Final', 'PulsoConteoLvl2');
     document.getElementById('Contenedor_contador').style.display = 'table';
     document.getElementById('RGB').textContent = segundosCuentaNivel1;
     Conteo = segundosCuentaNivel1;
@@ -143,13 +213,20 @@ if (botonPantallaCompletaNivel1) {
     });
 }
 
-const botonReiniciarNivel1 = document.getElementById('BotonReiniciarNivel1');
-if (botonReiniciarNivel1) {
-    botonReiniciarNivel1.addEventListener('click', () => {
-        reiniciarNivel1();
-        document.getElementById('Start').style.display = 'flex';
+['BotonReiniciarNivel1', 'BotonReintentarDerrotaNivel1'].forEach((id) => {
+    const boton = document.getElementById(id);
+    if (boton) boton.addEventListener('click', () => {
+        const nivel2 = document.getElementById('NIVEL_02');
+        const nivel3 = document.getElementById('NIVEL3');
+        if (id === 'BotonReiniciarNivel1' && getComputedStyle(nivel3).display !== 'none') {
+            reiniciarPorTiempoLvl3();
+        } else if (id === 'BotonReiniciarNivel1' && getComputedStyle(nivel2).display !== 'none') {
+            reiniciarLvl2();
+        } else {
+            reiniciarNivel1();
+        }
     });
-}
+});
 
 aplicarVolumenNivel1(volumenNivel1Default * 100);
 actualizarVidasNivel1();
@@ -332,8 +409,16 @@ let cursorNivel1 = { x: 0, y: 0, dentro: false };
 let disparosNivel1 = [];
 let explosionesNivel1 = [];
 const meteoritosNivel1 = ['Meteiorito', 'Meteiorito2'].map((id, i) => ({
-    elemento: document.getElementById(id), x: -70, y: 0, espera: 1 + i * 0.8, activo: false
+    elemento: document.getElementById(id), x: -70, y: 0, espera: 1 + i * 0.8, activo: false,
+    rot: Math.random() * 360, giro: (Math.random() * 2 - 1) * 120
 }));
+meteoritosNivel1.forEach(meteoro => {
+    const estela = document.createElement('span');
+    estela.className = 'EstelaMeteoritoNivel1';
+    estela.setAttribute('aria-hidden', 'true');
+    tableroNivel1.appendChild(estela);
+    meteoro.estela = estela;
+});
 const imagenDisparoNivel1 = new Image();
 imagenDisparoNivel1.src = 'IMG/disparo.png';
 const mascarasNivel1 = new WeakMap();
@@ -367,10 +452,18 @@ function impactoNivel1(disparo, meteoro) {
     const ancho = Number(meteoro.elemento.offsetWidth) || 0;
     const alto = Number(meteoro.elemento.offsetHeight) || 0;
     if (!ancho || !alto) return false;
-    const izquierda = Math.max(disparo.x, meteoro.x, 0);
-    const derecha = Math.min(disparo.x + 42, meteoro.x + ancho);
-    const arriba = Math.max(disparo.y, meteoro.y, 0);
-    const abajo = Math.min(disparo.y + 18, meteoro.y + alto);
+    // Convierte el impacto a los píxeles de la roca antes de su giro.
+    const angulo = (meteoro.rot || 0) * Math.PI / 180;
+    const coseno = Math.cos(angulo);
+    const seno = Math.sin(angulo);
+    const centroX = meteoro.x + ancho / 2;
+    const centroY = meteoro.y + alto / 2;
+    const mitadAncho = (Math.abs(coseno) * ancho + Math.abs(seno) * alto) / 2;
+    const mitadAlto = (Math.abs(seno) * ancho + Math.abs(coseno) * alto) / 2;
+    const izquierda = Math.max(disparo.x, centroX - mitadAncho, 0);
+    const derecha = Math.min(disparo.x + 42, centroX + mitadAncho);
+    const arriba = Math.max(disparo.y, centroY - mitadAlto, 0);
+    const abajo = Math.min(disparo.y + 18, centroY + mitadAlto);
     if (izquierda >= derecha || arriba >= abajo) return false;
     const bala = mascaraNivel1(imagenDisparoNivel1, 42, 18);
     const roca = mascaraNivel1(meteoro.elemento, ancho, alto);
@@ -385,9 +478,11 @@ function impactoNivel1(disparo, meteoro) {
     for (let y = arriba; y < abajo; y++) {
         for (let x = izquierda; x < derecha; x++) {
             const bx = Math.floor(x - disparo.x);
-            const my = Math.floor(x - meteoro.x);
+            const dx = x - centroX;
+            const dy = y - centroY;
+            const my = Math.floor(coseno * dx + seno * dy + ancho / 2);
             const by = Math.floor(y - disparo.y);
-            const myY = Math.floor(y - meteoro.y);
+            const myY = Math.floor(-seno * dx + coseno * dy + alto / 2);
             if (bx < 0 || bx >= 42 || by < 0 || by >= 18 || my < 0 || my >= ancho || myY < 0 || myY >= alto) continue;
             const b = (by * 42 + bx) * 4 + 3;
             const m = (myY * ancho + my) * 4 + 3;
@@ -435,6 +530,7 @@ tableroNivel1.addEventListener('click', event => {
     elemento.style.top = disparo.y + 'px';
     tableroNivel1.appendChild(elemento);
     disparosNivel1.push(disparo);
+    estadisticasNivel1.disparos++;
 });
 
 function detenerMotorNivel1() {
@@ -446,22 +542,76 @@ function detenerMotorNivel1() {
     explosionesNivel1.forEach(e => e.elemento.remove());
     disparosNivel1 = [];
     explosionesNivel1 = [];
+    meteoritosNivel1.forEach(m => { m.estela.style.visibility = 'hidden'; });
     actualizarCursorNivel1();
 }
 
-function destruirMeteoritoNivel1(meteoro) {
+
+// Efectos del nivel 2, actualizados por el motor del nivel 1 para respetar la pausa.
+function crearEfectoMeteoritoNivel1(elemento, x, y, duracion, explosion = false) {
+    elemento.style.left = x + 'px';
+    elemento.style.top = y + 'px';
+    tableroNivel1.appendChild(elemento);
+    explosionesNivel1.push({ elemento, tiempo: duracion, duracion, explosion, cuadro: 1 });
+}
+function efectosDestruccionNivel1(x, y, tam) {
     const explosion = document.createElement('img');
-    explosion.src = 'IMG/explosion.png';
-    explosion.className = 'ExplosionNivel1';
+    explosion.className = 'ExplosionMeteoritoLvl2';
     explosion.alt = '';
-    explosion.style.left = meteoro.x + meteoro.elemento.offsetWidth / 2 + 'px';
-    explosion.style.top = meteoro.y + meteoro.elemento.offsetHeight / 2 + 'px';
-    tableroNivel1.appendChild(explosion);
-    explosionesNivel1.push({ elemento: explosion, tiempo: 0.4 });
+    explosion.src = 'IMG/explosion_lvl2/Explosion_001.png';
+    explosion.style.width = tam * 1.7 + 'px';
+    crearEfectoMeteoritoNivel1(explosion, x, y, 0.7, true);
+    for (let i = 0; i < 10; i++) {
+        const particula = document.createElement('span');
+        particula.className = 'ParticulaLvl2';
+        const angulo = Math.random() * Math.PI * 2;
+        const distancia = (0.4 + Math.random() * 0.6) * tam * 1.1;
+        particula.style.setProperty('--dx', Math.cos(angulo) * distancia + 'px');
+        particula.style.setProperty('--dy', Math.sin(angulo) * distancia + 'px');
+        particula.style.setProperty('--c', '#ffb347');
+        crearEfectoMeteoritoNivel1(particula, x, y, 0.65);
+    }
+    textoPuntosNivel1(x, y - tam * 0.4, '+1');
+}
+function textoPuntosNivel1(x, y, mensaje, bonus = false) {
+    const texto = document.createElement('div');
+    texto.className = 'TextoFlotanteLvl2' + (bonus ? ' bonus' : '');
+    texto.textContent = mensaje;
+    crearEfectoMeteoritoNivel1(texto, x, y, 1);
+}
+function actualizarEfectosMeteoritosNivel1(dt) {
+    explosionesNivel1 = explosionesNivel1.filter(efecto => {
+        efecto.tiempo -= dt;
+        if (efecto.tiempo <= 0) { efecto.elemento.remove(); return false; }
+        if (efecto.explosion) {
+            const cuadro = Math.min(10, 1 + Math.floor((efecto.duracion - efecto.tiempo) / 0.07));
+            if (cuadro !== efecto.cuadro) {
+                efecto.cuadro = cuadro;
+                efecto.elemento.src = 'IMG/explosion_lvl2/Explosion_' + String(cuadro).padStart(3, '0') + '.png';
+            }
+        }
+        return true;
+    });
+    meteoritosNivel1.forEach(meteoro => {
+        const tam = meteoro.elemento.offsetWidth;
+        meteoro.estela.style.left = meteoro.x + tam / 2 + 'px';
+        meteoro.estela.style.top = meteoro.y + meteoro.elemento.offsetHeight / 2 + 'px';
+        meteoro.estela.style.width = tam * 1.9 + 'px';
+        meteoro.estela.style.height = tam * 0.55 + 'px';
+        meteoro.estela.style.visibility = jugandoNivel1 && meteoro.activo ? 'visible' : 'hidden';
+    });
+}
+
+function destruirMeteoritoNivel1(meteoro) {
+    const x = meteoro.x + meteoro.elemento.offsetWidth / 2;
+    const y = meteoro.y + meteoro.elemento.offsetHeight / 2;
+    const tam = meteoro.elemento.offsetWidth;
+    efectosDestruccionNivel1(x, y, tam);
+    meteoro.estela.style.visibility = 'hidden';
     meteoro.activo = false;
     meteoro.espera = 0.65;
     meteoro.elemento.style.visibility = 'hidden';
-    Puntaje++;
+    Puntaje = Math.min(objetivoPuntosNivel1, Puntaje + registrarDestruccionNivel1());
     actualizarPuntajeNivel1();
     sonidoNivel1('Puntos_sound');
     if (Puntaje >= objetivoPuntosNivel1) {
@@ -471,9 +621,14 @@ function destruirMeteoritoNivel1(meteoro) {
         actualizarCursorNivel1();
         document.getElementById('Fondo_Ciberpunk').pause();
         sonidoNivel1('Triunfo');
+        actualizarLogroNivel1();
         document.getElementById('GANASTE_PANTALLA').style.display = 'flex';
+        mostrarVolverInicio(true);
+        document.getElementById('BotonReiniciarNivel1').hidden = false;
         document.getElementById('NEXT').hidden = false;
         document.getElementById('NEXT').onclick = () => {
+            document.getElementById('BotonReiniciarNivel1').hidden = true;
+            mostrarVolverInicio(false);
             document.getElementById('NEXT').hidden = true;
             detenerMotorNivel1();
             document.getElementById('NIVEL_01').style.display = 'none';
@@ -494,6 +649,7 @@ function pasoNivel1(dt) {
             meteoro.elemento.style.visibility = 'visible';
         }
         meteoro.x += (limite + meteoro.elemento.offsetWidth) / 4 * dt;
+        meteoro.rot = (meteoro.rot + meteoro.giro * dt) % 360;
     }
     for (const disparo of disparosNivel1) {
         disparo.x -= 720 * dt;
@@ -520,6 +676,8 @@ function pasoNivel1(dt) {
             meteoro.espera = 0.8;
             meteoro.elemento.style.visibility = 'hidden';
             vidasNivel1--;
+            comboNivel1 = 0;
+            document.getElementById('ComboNivel1').classList.remove('visible');
             actualizarVidasNivel1();
             sonidoNivel1('Perdiste_sound');
             if (vidasNivel1 <= 0) { mostrarFinJuegoNivel1(); return; }
@@ -534,6 +692,7 @@ function animarNivel1(ahora) {
         if (!pausadoNivel1) {
             if (jugandoNivel1) {
                 relojNivel1 += dt;
+                if (relojNivel1 - ultimoMeteoritoNivel1 > 2.2) document.getElementById('ComboNivel1').classList.remove('visible');
                 Tiempo = Math.max(0, 70 - Math.floor(relojNivel1));
                 document.getElementById('Tiempo').textContent = Tiempo;
                 if (Tiempo === 0) { sonidoNivel1('Perdiste_sound'); mostrarFinJuegoNivel1(); return; }
@@ -544,16 +703,11 @@ function animarNivel1(ahora) {
                     if (!m || !m.elemento) return;
                     m.elemento.style.left = m.x + 'px';
                     m.elemento.style.top = m.y + 'px';
+                    m.elemento.style.transform = 'rotate(' + m.rot + 'deg)';
                 });
                 disparosNivel1.forEach(d => { if (d && d.elemento) d.elemento.style.left = d.x + 'px'; });
             }
-            explosionesNivel1 = explosionesNivel1.filter(e => {
-                if (!e || !e.elemento) return false;
-                e.tiempo -= dt;
-                e.elemento.style.opacity = Math.min(1, e.tiempo / 0.15);
-                if (e.tiempo <= 0) { e.elemento.remove(); return false; }
-                return true;
-            });
+            actualizarEfectosMeteoritosNivel1(dt);
         }
         if (jugandoNivel1 || explosionesNivel1.length) frameNivel1 = requestAnimationFrame(animarNivel1);
         else detenerMotorNivel1();
@@ -587,24 +741,41 @@ function PLAY() {
     if (intervaloCuentaNivel1 !== null || jugandoNivel1) return;
     reiniciarNivel1();
     sonidoNivel1('Fondo_Ciberpunk');
-    document.getElementById('Contenedor_Mensaje_Star').style.left = '-100%';
-    document.getElementById('Contenedor_contador').style.display = 'table';
-    intervaloCuentaNivel1 = setInterval(() => {
-        Conteo--;
-        document.getElementById('RGB').textContent = Conteo;
-        if (Conteo <= 0) {
-            clearInterval(intervaloCuentaNivel1);
-            intervaloCuentaNivel1 = null;
-            document.getElementById('Contenedor_contador').style.display = 'none';
-            document.getElementById('Start').style.display = 'none';
-            JUEGO();
+    if (typeof audioLvl2 === 'function') audioLvl2();
+    const inicio = document.getElementById('Start');
+    const contenedor = document.getElementById('Contenedor_contador');
+    const numero = document.getElementById('RGB');
+    inicio.classList.add('SaliendoConteoNivel1');
+    contenedor.style.display = 'flex';
+    const secuencia = ['3', '2', '1', '¡YA!'];
+    let paso = 0;
+    function mostrar() {
+        const final = paso === secuencia.length - 1;
+        numero.textContent = secuencia[paso];
+        numero.classList.toggle('Final', final);
+        numero.classList.remove('PulsoConteoLvl2');
+        void numero.offsetWidth;
+        numero.classList.add('PulsoConteoLvl2');
+        if (typeof sfxLvl2 !== 'undefined') sfxLvl2.conteo(final);
+        paso++;
+        if (paso < secuencia.length) {
+            intervaloCuentaNivel1 = setTimeout(mostrar, 900);
+        } else {
+            intervaloCuentaNivel1 = setTimeout(() => {
+                intervaloCuentaNivel1 = null;
+                contenedor.style.display = 'none';
+                inicio.style.display = 'none';
+                JUEGO();
+            }, 750);
         }
-    }, 1000);
+    }
+    intervaloCuentaNivel1 = setTimeout(mostrar, 450);
 }
 
 function pausarNivel1() {
     if (!jugandoNivel1) return;
     pausadoNivel1 = !pausadoNivel1;
+    tableroNivel1.classList.toggle('EfectosPausadosNivel1', pausadoNivel1);
     mostrarVolverInicio(pausadoNivel1);
     ultimoFrameNivel1 = null;
     document.getElementById('Pause').textContent = pausadoNivel1 ? 'REANUDAR' : 'PAUSAR';

@@ -1151,6 +1151,8 @@ function detenerBucleLvl2() {
    FINAL DE LA PARTIDA
    --------------------------------------------------------------------- */
 function Habilitar_Siguienten_LVL() {
+    document.getElementById("BotonReiniciarNivel1").hidden = true;
+    volverInicioVisibleLvl2(false);
     document.getElementById("NEXT").hidden = true;
     document.getElementById("NIVEL_01").style.display = "none";
     document.getElementById("NIVEL_02").style.display = "none";
@@ -1246,6 +1248,8 @@ function ganarLvl2() {
         : "MEJOR: " + "★".repeat(rec.estrellas) + " · " + rec.tiempo + "s SOBRANTES";
 
     victoriaLvl2.style.display = "flex";
+    volverInicioVisibleLvl2(true);
+    document.getElementById("BotonReiniciarNivel1").hidden = false;
     document.getElementById("NEXT").hidden = false;
     document.getElementById("NEXT").onclick = Habilitar_Siguienten_LVL;
 }
@@ -1294,6 +1298,7 @@ function limpiarDecoracionLvl2() {
 }
 
 function prepararPartidaLvl2() {
+    document.getElementById("BotonReiniciarNivel1").hidden = true;
     volverInicioVisibleLvl2(false);
     detenerBucleLvl2();
     clearInterval(intervaloTiempoLvl2);

@@ -207,17 +207,23 @@
             <div class="FinJuegoNivel1" id="FinJuegoNivel1" aria-live="assertive">
                 <div class="TarjetaFinJuegoNivel1">
                     <h2>Fin del juego</h2>
-                    <button type="button" class="BotonReiniciarNivel1" id="BotonReiniciarNivel1">REINICIAR</button>
+                    <button type="button" class="BotonReiniciarNivel1" id="BotonReintentarDerrotaNivel1">VOLVER A JUGAR</button>
                 </div>
             </div>
     
             <!--CONTENEDOR DE AL GANAR EL JUEGO-->
 
+            <div class="ComboLvl2" id="ComboNivel1" aria-live="polite"></div>
             <div class="GANASTE_PANTALLA" id="GANASTE_PANTALLA" role="status" aria-live="polite">
-                <img class="TrofeoNivel1" src="trofeo1.png" alt="Trofeo espacial del nivel 1">
-                <p class="ProgresoTrofeoNivel1">TROFEO ESPACIAL: 1 / 3</p>
-                <span class="EstrellaTrofeoNivel1" aria-hidden="true">&#9733;</span>
-                <h1>¡NIVEL 1 SUPERADO!</h1>
+                <div class="TarjetaTrofeoLvl2 TarjetaLogroNivel1">
+                    <div class="TrofeoLvl2"><img src="trofeo1.png" alt="Trofeo espacial del nivel 1"></div>
+                    <p class="ProgresoTrofeoLvl2">TROFEO ESPACIAL: 1 / 3</p>
+                    <div class="EstrellasLvl2" id="EstrellasNivel1" role="img" aria-label="Estrellas obtenidas"><span aria-hidden="true">★</span><span aria-hidden="true">★</span><span aria-hidden="true">★</span></div>
+                    <div class="EstadisticasLvl2" id="EstadisticasVictoriaNivel1"></div>
+                    <div class="RecordLvl2" id="RecordNivel1"></div>
+                    <h1>¡NIVEL 1 SUPERADO!</h1>
+                    <div class="LogroLvl2"><span aria-hidden="true">✦</span><p>LOGRO DESBLOQUEADO:<br>DEFENSOR DE LA TIERRA</p></div>
+                </div>
             </div>
             </div>
 
@@ -406,14 +412,6 @@
                     </div>
         
                     <!--Pantalla de créditos-->
-                    <div id="Pantalla_creditoslvl3"></div>
-                    <div id="Creditoslvl3">
-                        <h3>Desarrollado por:</h3><br>
-                        <p>Fredy Palomino</p>
-                        <p>David Chambilla</p>
-                        <p>Renzo Blas</p>
-                        <p>Brandon Montiveros</p>
-                    </div>
                     <div id="Proximolvl3">
                         <h4>Próximamente:</h4>
                         <h4>Iron Fist 2</h4>
@@ -428,7 +426,7 @@
                         <div class="BrilloTrofeoNivel3">✦</div>
                         <h2>LOGRO DESBLOQUEADO:</h2>
                         <h3>MAESTRO DE LA GALAXIA</h3>
-                        <button id="VolverInicioNivel3" type="button">VOLVER AL INICIO</button>
+                        <button id="VolverInicioNivel3" type="button" hidden>VOLVER AL INICIO</button>
                     </div>
 
                     <!-- PANTALLA AL PRESIONAR PAUSE -->
@@ -438,6 +436,31 @@
                         <button id="ReiniciarTiempoLvl3" class="BotonReiniciarNivel1" type="button" hidden>REINICIAR</button>
                     </div>
                 </div>
+                
+                    <dialog id="DialogoCreditosLvl3" class="DialogoCreditosLvl3" aria-labelledby="TituloCreditosLvl3">
+                        <div class="CreditosUniverso" aria-hidden="true"><img class="CreditosTierra" src="IMG/planeta_tierra.png" alt=""></div>
+                        <div class="CreditosVentana">
+                            <div class="CreditosSecuencia" id="SecuenciaCreditosLvl3">
+                                <div class="CreditosBloque"><h1 id="TituloCreditosLvl3">IRON FIST</h1><p class="CreditosSubtitulo">LA ÚLTIMA DEFENSA DE LA HUMANIDAD</p></div>
+                                <div class="CreditosBloque"><p>Cuando el cielo amenazó con caer,<br>cinco mentes se unieron<br>para dar vida a una última esperanza.</p></div>
+                                <div class="CreditosBloque"><h2>UNA CREACIÓN DE</h2><p class="CreditosEstudio">GRUPO 4 GAMES</p></div>
+                                <div class="CreditosBloque"><h2>EQUIPO DE DESARROLLO</h2><div class="CreditosEquipo">
+                                    <p>Victor David León Carrasco</p>
+                                    <p>Jose Carlos Manchego Rojas</p>
+                                    <p>Ilcer Medina Olivera</p>
+                                    <p>Aldo Milian Bustamante</p>
+                                    <p>Pamela Maquera Avendano</p>
+                                </div></div>
+                                <div class="CreditosBloque"><p>Cada idea encendió una estrella.<br>Cada desafío nos llevó más lejos.<br>Juntos, dimos vida a IRON FIST.</p></div>
+                                <div class="CreditosBloque"><h2>GRACIAS POR JUGAR</h2><p>Nosotros creamos la misión.<br>Tú la convertiste en leyenda.</p></div>
+                                <div class="CreditosBloque"><p>La Tierra sigue en pie.</p></div>
+                                <div class="CreditosBloque"><p>Pero el universo<br>aún guarda nuevas amenazas…</p></div>
+                                <div class="CreditosBloque"><h2>LA MISIÓN CONTINÚA</h2></div>
+                            </div>
+                        </div>
+                        <div class="CreditosFinal" id="FinalCreditosLvl3" hidden><h2>GRUPO 4 GAMES</h2><p>LA MISIÓN CONTINÚA</p></div>
+                        <button id="VolverMenuCreditosLvl3" class="VolverMenuCreditosLvl3" type="button">VOLVER AL MENÚ</button>
+                    </dialog>
                 <script src="Ejecucion3.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -446,6 +469,8 @@
 
 <div class="Contenedor_LVL">
     <button class="NEXT" id="VolverInicio" type="button" hidden>VOLVER AL INICIO <span aria-hidden="true">➜</span></button>
+    <button class="NEXT" id="BotonReiniciarNivel1" type="button" hidden>VOLVER A JUGAR</button>
+        <button class="NEXT" id="VerCreditosLvl3" type="button" hidden>VER CRÉDITOS</button>
     <button class="NEXT" id="NEXT" type="button" hidden>SIGUIENTE NIVEL <span aria-hidden="true">➜</span></button>
 </div>
 

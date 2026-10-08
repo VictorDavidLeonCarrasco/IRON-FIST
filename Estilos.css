@@ -1553,6 +1553,7 @@ margin-left: 12%; }
 /* ---------------------------------------------------------------------
    CUENTA REGRESIVA
    --------------------------------------------------------------------- */
+#NIVEL_01 #Contenedor_contador,
 #NIVEL_02 #Contenedor_contadorlvl2 {
     position: absolute;
     inset: 0;
@@ -1564,19 +1565,23 @@ margin-left: 12%; }
     pointer-events: none;
 }
 
+#NIVEL_01 #RGB,
 #NIVEL_02 #RGBlvl2 {
     display: block;
+    font-family: sans-serif;
     font-size: clamp(60px, 18vh, 170px);
     color: #fff;
     text-shadow: 0 0 24px #36cfff, 0 0 60px #1687ff;
 }
 
+#NIVEL_01 #RGB.Final,
 #NIVEL_02 #RGBlvl2.Final {
     font-size: clamp(40px, 12vh, 120px);
     color: #ffd54a;
     text-shadow: 0 0 24px #ff9d00, 0 0 60px #ff6a00;
 }
 
+#NIVEL_01 #RGB.PulsoConteoLvl2,
 #NIVEL_02 #RGBlvl2.PulsoConteoLvl2 {
     animation: conteoLvl2 0.9s ease-out both;
 }
@@ -2115,7 +2120,9 @@ margin-left: 12%; }
 /* ---------------------------------------------------------------------
    BOTÓN JUGAR (pantalla de inicio) - autosuficiente
    --------------------------------------------------------------------- */
-#NIVEL_02 #Playlvl2.Playlvl2 {
+#NIVEL_02 #Playlvl2.Playlvl2,
+#NIVEL_01 #Play.Play,
+#NIVEL3 #Playlvl3.Playlvl3 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2143,21 +2150,27 @@ margin-left: 12%; }
     animation: PulsoJugarLvl2 1.8s ease-in-out infinite;
 }
 
-#NIVEL_02 #Playlvl2.Playlvl2::before {
+#NIVEL_02 #Playlvl2.Playlvl2::before,
+#NIVEL_01 #Play.Play::before,
+#NIVEL3 #Playlvl3.Playlvl3::before {
     content: "\25B6";
     margin-right: 12px;
     font-size: 0.8em;
     text-indent: 0;
 }
 
-#NIVEL_02 #Playlvl2.Playlvl2:hover {
+#NIVEL_02 #Playlvl2.Playlvl2:hover,
+#NIVEL_01 #Play.Play:hover,
+#NIVEL3 #Playlvl3.Playlvl3:hover {
     background: linear-gradient(135deg, #ffb347 0%, #ff6a00 100%);
     box-shadow: 0 0 26px rgba(255, 140, 0, 0.8), 0 8px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     transform: translateY(-2px) scale(1.05);
     animation: none;
 }
 
-#NIVEL_02 #Playlvl2.Playlvl2:active {
+#NIVEL_02 #Playlvl2.Playlvl2:active,
+#NIVEL_01 #Play.Play:active,
+#NIVEL3 #Playlvl3.Playlvl3:active {
     transform: translateY(1px) scale(0.97);
 }
 
@@ -3049,6 +3062,7 @@ html, body {
     pointer-events: none;
 }
 
+#NIVEL_01:fullscreen #RGB,
 #NIVEL_02:fullscreen #RGBlvl2 {
     font-size: clamp(130px, 18vw, 280px);
 }
@@ -3846,3 +3860,439 @@ html, body {
 #NIVEL3 .Limitelvl3 {
     z-index: 850;
 }
+
+/* Volver a jugar centrado en la navegación al terminar el nivel 1. */
+.Seccion_Juego .Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+}
+.Contenedor_LVL #BotonReiniciarNivel1 {
+    grid-column: 2;
+    justify-self: center;
+}
+.Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) #VolverInicio {
+    grid-column: 1;
+    justify-self: start;
+}
+.Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) #NEXT {
+    grid-column: 3;
+    justify-self: end;
+}
+#NIVEL_01:fullscreen > .Contenedor_LVL {
+    z-index: 150001;
+}
+@media (max-width: 600px) {
+    .Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) { gap: 8px; }
+    .Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) .NEXT {
+        padding: 10px 6px;
+        font-size: 11px;
+        gap: 4px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* Bordes redondeados de los botones de navegación y reinicio. */
+.Contenedor_LVL #VolverInicio,
+.Contenedor_LVL #BotonReiniciarNivel1,
+.Contenedor_LVL #NEXT,
+#BotonReintentarDerrotaNivel1,
+#VolverInicioNivel3,
+#NIVEL_02 .BotonReintentarLvl2,
+#NIVEL_02 .BotonSiguienteLvl2 {
+    border-radius: 10px;
+}
+
+/* El nivel 1 comparte el aspecto y los efectos del botón Jugar del nivel 2. */
+#NIVEL_01 #Play.Play {
+    height: auto;
+    font-family: Orbitron, sans-serif;
+}
+#NIVEL_01 #Play.Play:hover {
+    filter: none;
+}
+
+/* Tipografía y transición del botón Jugar del nivel 3. */
+#NIVEL3 #Playlvl3.Playlvl3 {
+    height: auto;
+    font-family: Orbitron, sans-serif;
+    transition: left 1.2s ease, transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+/* Controles de los niveles 1 y 3 con el diseño de referencia del nivel 2. */
+#NIVEL_01 .Pause,
+#NIVEL3 .Pauselvl3 {
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(10px, 0.7vw, 13px);
+    font-weight: normal;
+    text-align: center;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-indent: 0.14em;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+#NIVEL_01 .PantallaCompletaNivel1,
+#NIVEL3 .PantallaCompletaLvl3 {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+#NIVEL_01 .PantallaCompletaNivel1:hover,
+#NIVEL3 .PantallaCompletaLvl3:hover {
+    background: transparent;
+    color: #36cfff;
+    transform: scale(1.12);
+}
+
+#NIVEL_01 #BotonReintentarDerrotaNivel1,
+.Contenedor_LVL #BotonReiniciarNivel1,
+#NIVEL3 #ReiniciarTiempoLvl3 {
+    padding: 15px 22px;
+    border: 3px solid #29d7ff;
+    border-radius: 10px;
+    background: #087ee8;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+    font-weight: normal;
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(41, 215, 255, 0.75);
+}
+
+.Contenedor_LVL #BotonReiniciarNivel1:hover {
+    background: #087ee8;
+}
+
+.Contenedor_LVL #NEXT,
+.Contenedor_LVL #VolverInicio,
+#NIVEL3 #VolverInicioNivel3 {
+    border: 2px solid #36cfff;
+    border-radius: 10px;
+    background: #087ee8;
+    color: white;
+    padding: 15px 22px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
+    font-weight: normal;
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(54, 207, 255, 0.7);
+}
+
+.Contenedor_LVL #NEXT:hover,
+.Contenedor_LVL #VolverInicio:hover,
+#NIVEL3 #VolverInicioNivel3:hover {
+    background: #36cfff;
+    color: #03122e;
+    transform: scale(1.05);
+}
+
+/* Salida del menú durante la cuenta regresiva del nivel 1. */
+#NIVEL_01 #Start.SaliendoConteoNivel1 #Contenedor_Mensaje_Star {
+    opacity: 0;
+    transform: translateX(-70px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none;
+}
+
+/* Reservar la navegación evita desplazar el tablero al pausar. */
+.Seccion_Juego .Contenedor_LVL {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    flex-shrink: 0;
+}
+.Seccion_Juego .Contenedor_LVL #VolverInicio {
+    grid-column: 1;
+    justify-self: start;
+}
+.Seccion_Juego .Contenedor_LVL #NEXT {
+    grid-column: 3;
+    justify-self: end;
+}
+.Seccion_Juego .Contenedor_LVL .NEXT[hidden] {
+    display: inline-flex !important;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Botón de derrota en rojo vino, a juego con Fin del juego. */
+#NIVEL_01 #BotonReintentarDerrotaNivel1 {
+    background: #5c1024;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 14px rgba(255, 77, 77, 0.7);
+}
+#NIVEL_01 #BotonReintentarDerrotaNivel1:hover {
+    background: #7a1833;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.85);
+}
+
+/* Combos y tarjeta de logro del nivel 1 comparten el diseño del nivel 2. */
+#NIVEL_01 .ComboLvl2 {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    z-index: 1800;
+    transform: translateX(-50%);
+    font: 400 clamp(11px, 2vh, 16px) 'Press Start 2P', cursive;
+    color: #ffd54a;
+    text-shadow: 0 0 12px #ff9d00, 0 2px 0 rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#NIVEL_01 .ComboLvl2.visible {
+    opacity: 1;
+    animation: comboPopLvl2 0.3s ease-out;
+}
+
+#NIVEL_01 .TarjetaTrofeoLvl2 {
+    padding: clamp(10px, 2vh, 26px) clamp(14px, 2.4vw, 30px);
+}
+
+#NIVEL_01 .TrofeoLvl2 img {
+    width: auto;
+    height: clamp(56px, 15vh, 140px);
+    max-width: 60%;
+    margin-bottom: 2px;
+}
+
+#NIVEL_01 .TarjetaTrofeoLvl2 h1 {
+    margin: clamp(4px, 1vh, 12px) 0;
+    font-size: clamp(0.9rem, 1.9vw, 1.7rem);
+}
+
+#NIVEL_01 .TarjetaTrofeoLvl2 h1::before {
+    display: none; /* las estrellas ahora se calculan según tu desempeño */
+}
+
+#NIVEL_01 .ProgresoTrofeoLvl2 {
+    margin: 4px 0;
+}
+
+#NIVEL_01 .LogroLvl2 p {
+    margin: 4px 0 0;
+    font-size: clamp(0.55rem, 1vw, 0.8rem);
+    line-height: 1.5;
+    color: #ffd54a;
+}
+
+#NIVEL_01 .EstrellasLvl2 {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 6px 0;
+}
+
+#NIVEL_01 .EstrellasLvl2 span {
+    font-size: clamp(22px, 5vh, 40px);
+    line-height: 1;
+    color: #213650;
+}
+
+#NIVEL_01 .EstrellasLvl2 span.on {
+    color: #ffd54a;
+    text-shadow: 0 0 14px #ffb300;
+    animation: estrellaPopLvl2 0.5s ease-out both;
+    animation-delay: var(--d, 0s);
+}
+
+#NIVEL_01 .EstadisticasLvl2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 6px;
+    margin: 8px 0;
+}
+
+#NIVEL_01 .EstadisticasLvl2 div {
+    padding: 6px 4px;
+    border-radius: 6px;
+    background: rgba(8, 22, 37, 0.85);
+    border: 1px solid rgba(112, 199, 220, 0.3);
+}
+
+#NIVEL_01 .EstadisticasLvl2 b {
+    display: block;
+    font: 700 clamp(12px, 2.2vh, 18px) 'Orbitron', sans-serif;
+    color: #fff;
+}
+
+#NIVEL_01 .EstadisticasLvl2 small {
+    display: block;
+    margin-top: 2px;
+    font: 600 clamp(6px, 1.1vh, 9px) 'Orbitron', sans-serif;
+    letter-spacing: 0.08em;
+    color: #8fb4c6;
+}
+
+#NIVEL_01 .RecordLvl2 {
+    font: 400 clamp(7px, 1.3vh, 10px) 'Press Start 2P', cursive;
+    color: #ffd54a;
+    margin: 6px 0 2px;
+}
+#NIVEL_01 .GANASTE_PANTALLA {
+    overflow: auto;
+    justify-content: flex-start;
+    background: rgba(4, 12, 40, 0.94);
+    border: 3px solid #36cfff;
+    box-shadow: 0 0 28px rgba(54, 207, 255, 0.8);
+    cursor: default;
+}
+#NIVEL_01 .TarjetaLogroNivel1 {
+    margin: auto;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+#NIVEL_01 .TarjetaLogroNivel1 .ProgresoTrofeoLvl2 {
+    color: #8fe9ff;
+    font-size: clamp(0.65rem, 1.2vw, 1rem);
+    line-height: 1.5;
+}
+
+/* Meteoritos del nivel 1 con los efectos visuales del nivel 2. */
+#NIVEL_01 .ParticulaLvl2 {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    background: var(--c, #ffb347);
+    box-shadow: 0 0 6px var(--c, #ff8a00);
+    z-index: 1690;
+    pointer-events: none;
+    animation: particulaLvl2 0.6s ease-out forwards;
+}
+
+#NIVEL_01 .ExplosionMeteoritoLvl2 {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    height: auto;
+    pointer-events: none;
+    z-index: 1700;
+}
+
+#NIVEL_01 .TextoFlotanteLvl2 {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    pointer-events: none;
+    white-space: nowrap;
+    font: 400 14px 'Press Start 2P', cursive;
+    color: #fff;
+    text-shadow: 0 0 8px #36cfff, 0 2px 0 rgba(0, 0, 0, 0.7);
+    animation: flotarLvl2 0.95s ease-out forwards;
+}
+
+#NIVEL_01 .TextoFlotanteLvl2.bonus {
+    color: #ffd54a;
+    font-size: 12px;
+    text-shadow: 0 0 10px #ff9d00, 0 2px 0 rgba(0, 0, 0, 0.7);
+}
+
+#NIVEL_01 .TextoFlotanteLvl2.item {
+    color: #6fe9ff;
+    font-size: 11px;
+}
+#NIVEL_01 .Meteiorito {
+    filter: drop-shadow(0 0 8px rgba(255, 140, 40, 0.55));
+}
+#NIVEL_01 .EstelaMeteoritoNivel1 {
+    position: absolute;
+    transform: translate(-100%, -50%);
+    border-radius: 50%;
+    background: linear-gradient(to right, transparent, rgba(255, 110, 30, 0.5) 65%, rgba(255, 235, 170, 0.9));
+    filter: blur(2.5px);
+    pointer-events: none;
+    visibility: hidden;
+    z-index: 999;
+}
+#NIVEL_01 .EfectosPausadosNivel1 .ParticulaLvl2,
+#NIVEL_01 .EfectosPausadosNivel1 .TextoFlotanteLvl2 {
+    animation-play-state: paused;
+}
+
+/* Créditos del nivel 3 en la tercera columna de navegación. */
+.Seccion_Juego .Contenedor_LVL > button { grid-row: 1; }
+.Seccion_Juego .Contenedor_LVL #VerCreditosLvl3 {
+    grid-column: 3;
+    justify-self: end;
+    border: 2px solid #36cfff;
+    border-radius: 10px;
+    background: #087ee8;
+    color: white;
+    padding: 15px 22px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
+    box-shadow: 0 0 14px rgba(54, 207, 255, 0.7);
+}
+.Seccion_Juego .Contenedor_LVL #VerCreditosLvl3:hover {
+    background: #36cfff;
+    color: #03122e;
+    transform: scale(1.05);
+}
+
+/* Créditos finales verticales a pantalla completa, sin perspectiva. */
+body.creditos-activos { overflow: hidden; }
+.DialogoCreditosLvl3 {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    overflow: hidden;
+    background: #020611;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+}
+.DialogoCreditosLvl3::backdrop { background: #020611; }
+.CreditosUniverso { position: absolute; inset: 0; background: #020611 url('IMG/Fondo_Espacio2.jpg') center / cover; }
+.CreditosUniverso::after { content: ''; position: absolute; inset: 0; background: rgba(0, 4, 16, 0.55); }
+.CreditosTierra { position: absolute; width: min(65vw, 680px); right: -12%; bottom: -20%; opacity: 0.55; filter: drop-shadow(0 0 35px #2187c9) brightness(1.2); }
+.CreditosVentana { position: absolute; inset: 0; overflow: hidden; }
+.CreditosVentana::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, #020611 0%, transparent 20%, transparent 75%, #020611 100%); }
+.CreditosSecuencia { width: min(900px, 90%); margin: 0 auto; padding: 0; will-change: transform; transform: translateY(100vh); }
+.CreditosBloque { padding: clamp(32px, 5vh, 60px) 0; }
+.DialogoCreditosLvl3 .CreditosSecuencia p { font-size: clamp(16px, 2.1vw, 25px); line-height: 1.9; margin: 20px 0; text-wrap: balance; }
+.DialogoCreditosLvl3 h1 { font-size: clamp(38px, 7vw, 80px); margin: 0 0 20px; letter-spacing: 0.12em; text-shadow: 0 0 25px rgba(74, 176, 255, 0.75); }
+.DialogoCreditosLvl3 h2 { color: #8cdbff; font-size: clamp(18px, 2.5vw, 30px); letter-spacing: 0.12em; line-height: 1.6; margin: 0 0 28px; text-shadow: 0 0 18px rgba(57, 161, 255, 0.6); }
+.DialogoCreditosLvl3 .CreditosSubtitulo { color: #bce8ff; }
+.DialogoCreditosLvl3 .CreditosEstudio { font-weight: 800; letter-spacing: 0.1em; }
+.DialogoCreditosLvl3 .CreditosEquipo p { font-size: clamp(18px, 2.5vw, 30px); font-weight: 600; padding: 18px 0; margin: 26px 0; line-height: 1.7; }
+.CreditosFinal { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; }
+.DialogoCreditosLvl3 .CreditosFinal h2 { font-size: clamp(28px, 5vw, 60px); color: white; }
+.CreditosFinal p { font-size: clamp(16px, 2.5vw, 26px); color: #8cdbff; line-height: 1.7; }
+.VolverMenuCreditosLvl3 { position: absolute; z-index: 2; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); padding: 13px 20px; border: 1px solid rgba(140, 219, 255, 0.5); border-radius: 10px; background: rgba(2, 6, 17, 0.85); color: white; font: 600 clamp(11px, 1.2vw, 14px) 'Orbitron', sans-serif; letter-spacing: 0.12em; white-space: nowrap; cursor: pointer; }
+.VolverMenuCreditosLvl3:hover { border-color: #8cdbff; background: #11263b; }
+.VolverMenuCreditosLvl3:focus-visible { outline: 2px solid #8cdbff; outline-offset: 4px; }
+@media (max-width: 600px) { .CreditosSecuencia { width: 88%; } .CreditosTierra { width: 95vw; right: -30%; bottom: -10%; } }
+
+/* Jefe final: roca gigante, grietas y corona eléctrica. */
+#NIVEL3 .JefeMeteoritoLvl3 { position: absolute; transform: translate(-50%, -50%); z-index: 1400; pointer-events: none; --heridas: 0; filter: drop-shadow(0 0 18px #ff4728); }
+.JefeRocaLvl3 { width: 100%; height: 100%; object-fit: contain; filter: brightness(0.85) saturate(1.4); }
+.JefeGrietasLvl3, .JefeRayosLvl3 { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke-linejoin: round; pointer-events: none; }
+.JefeGrietasLvl3 { stroke: #ffd36a; stroke-width: calc(0.7px + var(--heridas) * 1.5px); opacity: calc(0.4 + var(--heridas) * 0.6); filter: drop-shadow(0 0 5px #ff4b00); }
+.JefeRayosLvl3 { stroke: #b4f5ff; stroke-width: 1.2; transform: scale(1.15); filter: drop-shadow(0 0 6px #36cfff); animation: electricidadJefeLvl3 0.22s steps(2) infinite; opacity: calc(0.45 + var(--heridas) * 0.55); }
+.JefeVidaLvl3 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 800 clamp(20px, 3vw, 40px) 'Orbitron', sans-serif; color: white; text-shadow: 0 2px 5px #000, 0 0 10px #000; }
+.JefeImpactadoLvl3 .JefeRocaLvl3 { filter: brightness(2.4) drop-shadow(0 0 18px white); }
+.JefeDestruidoLvl3 .JefeRocaLvl3, .JefeDestruidoLvl3 svg { visibility: hidden; }
+.JefeExplosionLvl3 { position: absolute; transform: translate(-50%, -50%); height: auto; z-index: 1350; pointer-events: none; filter: drop-shadow(0 0 30px #ff7924); }
+.JefePausadoLvl3 .JefeRayosLvl3 { animation-play-state: paused; }
+@keyframes electricidadJefeLvl3 { 0% { stroke-dasharray: 5 2; } 100% { stroke-dasharray: 2 5; filter: drop-shadow(0 0 12px #65dcff); } }

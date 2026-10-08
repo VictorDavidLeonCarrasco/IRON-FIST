@@ -76,6 +76,8 @@ document.getElementById('VolverInicio').addEventListener('click', () => {
 });
 
 function mostrarFinJuegoNivel1() {
+    document.getElementById('BotonReiniciarNivel1').hidden = true;
+    document.getElementById('NEXT').hidden = true;
     mostrarVolverInicio(true);
     finDelJuegoNivel1 = true;
     detenerMotorNivel1();
@@ -87,6 +89,7 @@ function mostrarFinJuegoNivel1() {
 }
 
 function reiniciarNivel1() {
+    document.getElementById('BotonReiniciarNivel1').hidden = true;
     mostrarVolverInicio(false);
     document.getElementById('NEXT').hidden = true;
     detenerMotorNivel1();
@@ -143,13 +146,10 @@ if (botonPantallaCompletaNivel1) {
     });
 }
 
-const botonReiniciarNivel1 = document.getElementById('BotonReiniciarNivel1');
-if (botonReiniciarNivel1) {
-    botonReiniciarNivel1.addEventListener('click', () => {
-        reiniciarNivel1();
-        document.getElementById('Start').style.display = 'flex';
-    });
-}
+['BotonReiniciarNivel1', 'BotonReintentarDerrotaNivel1'].forEach((id) => {
+    const boton = document.getElementById(id);
+    if (boton) boton.addEventListener('click', reiniciarNivel1);
+});
 
 aplicarVolumenNivel1(volumenNivel1Default * 100);
 actualizarVidasNivel1();
@@ -472,8 +472,12 @@ function destruirMeteoritoNivel1(meteoro) {
         document.getElementById('Fondo_Ciberpunk').pause();
         sonidoNivel1('Triunfo');
         document.getElementById('GANASTE_PANTALLA').style.display = 'flex';
+        mostrarVolverInicio(true);
+        document.getElementById('BotonReiniciarNivel1').hidden = false;
         document.getElementById('NEXT').hidden = false;
         document.getElementById('NEXT').onclick = () => {
+            document.getElementById('BotonReiniciarNivel1').hidden = true;
+            mostrarVolverInicio(false);
             document.getElementById('NEXT').hidden = true;
             detenerMotorNivel1();
             document.getElementById('NIVEL_01').style.display = 'none';

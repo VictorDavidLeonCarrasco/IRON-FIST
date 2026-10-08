@@ -3673,3 +3673,44 @@ html, body {
 #NIVEL3 .Limitelvl3 {
     z-index: 850;
 }
+
+/* Volver a jugar centrado en la navegación al terminar el nivel 1. */
+.Seccion_Juego .Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+}
+.Contenedor_LVL #BotonReiniciarNivel1 {
+    grid-column: 2;
+    justify-self: center;
+}
+.Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) #VolverInicio {
+    grid-column: 1;
+    justify-self: start;
+}
+.Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) #NEXT {
+    grid-column: 3;
+    justify-self: end;
+}
+#NIVEL_01:fullscreen > .Contenedor_LVL {
+    z-index: 150001;
+}
+@media (max-width: 600px) {
+    .Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) { gap: 8px; }
+    .Contenedor_LVL:has(#BotonReiniciarNivel1:not([hidden])) .NEXT {
+        padding: 10px 6px;
+        font-size: 11px;
+        gap: 4px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* Bordes redondeados de los botones de navegación y reinicio. */
+.Contenedor_LVL #VolverInicio,
+.Contenedor_LVL #BotonReiniciarNivel1,
+.Contenedor_LVL #NEXT,
+#BotonReintentarDerrotaNivel1,
+#VolverInicioNivel3 {
+    border-radius: 10px;
+}

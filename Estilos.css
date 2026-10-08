@@ -4048,3 +4048,53 @@ html, body {
 #NIVEL_01 .EfectosPausadosNivel1 .TextoFlotanteLvl2 {
     animation-play-state: paused;
 }
+
+/* Créditos del nivel 3 en la tercera columna de navegación. */
+.Seccion_Juego .Contenedor_LVL > button { grid-row: 1; }
+.Seccion_Juego .Contenedor_LVL #VerCreditosLvl3 {
+    grid-column: 3;
+    justify-self: end;
+    border: 2px solid #36cfff;
+    border-radius: 10px;
+    background: #087ee8;
+    color: white;
+    padding: 15px 22px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
+    box-shadow: 0 0 14px rgba(54, 207, 255, 0.7);
+}
+.Seccion_Juego .Contenedor_LVL #VerCreditosLvl3:hover {
+    background: #36cfff;
+    color: #03122e;
+    transform: scale(1.05);
+}
+.DialogoCreditosLvl3 {
+    width: min(520px, 86vw);
+    max-height: 85vh;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: clamp(20px, 4vw, 36px);
+    border: 2px solid #36cfff;
+    border-radius: 10px;
+    background: #030d23;
+    color: white;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 28px rgba(54, 207, 255, 0.6);
+}
+.DialogoCreditosLvl3::backdrop { background: rgba(0, 0, 12, 0.8); }
+.DialogoCreditosLvl3 h2 { color: #8fe9ff; font-size: clamp(18px, 3vw, 28px); }
+.DialogoCreditosLvl3 .CreditosNombreJuego { color: #ffd54a; font-weight: 800; }
+.DialogoCreditosLvl3 p { line-height: 1.6; }
+.CerrarCreditosLvl3 {
+    margin-top: 12px;
+    padding: 14px 22px;
+    border: 2px solid #36cfff;
+    border-radius: 10px;
+    background: #087ee8;
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+}
+.CerrarCreditosLvl3:hover { background: #36cfff; color: #03122e; }

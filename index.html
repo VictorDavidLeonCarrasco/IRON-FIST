@@ -434,7 +434,7 @@
                         <div class="BrilloTrofeoNivel3">✦</div>
                         <h2>LOGRO DESBLOQUEADO:</h2>
                         <h3>MAESTRO DE LA GALAXIA</h3>
-                        <button id="VolverInicioNivel3" type="button">VOLVER AL INICIO</button>
+                        <button id="VolverInicioNivel3" type="button" hidden>VOLVER AL INICIO</button>
                     </div>
 
                     <!-- PANTALLA AL PRESIONAR PAUSE -->
@@ -444,6 +444,17 @@
                         <button id="ReiniciarTiempoLvl3" class="BotonReiniciarNivel1" type="button" hidden>REINICIAR</button>
                     </div>
                 </div>
+                
+                    <dialog id="DialogoCreditosLvl3" class="DialogoCreditosLvl3" aria-labelledby="TituloCreditosLvl3">
+                        <h2 id="TituloCreditosLvl3">CRÉDITOS</h2>
+                        <p class="CreditosNombreJuego">IRON FIST</p>
+                        <h3>Desarrollado por:</h3>
+                        <p>Fredy Palomino</p>
+                        <p>David Chambilla</p>
+                        <p>Renzo Blas</p>
+                        <p>Brandon Montiveros</p>
+                        <form method="dialog"><button type="submit" class="CerrarCreditosLvl3">CERRAR</button></form>
+                    </dialog>
                 <script src="Ejecucion3.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -453,6 +464,7 @@
 <div class="Contenedor_LVL">
     <button class="NEXT" id="VolverInicio" type="button" hidden>VOLVER AL INICIO <span aria-hidden="true">➜</span></button>
     <button class="NEXT" id="BotonReiniciarNivel1" type="button" hidden>VOLVER A JUGAR</button>
+        <button class="NEXT" id="VerCreditosLvl3" type="button" hidden>VER CRÉDITOS</button>
     <button class="NEXT" id="NEXT" type="button" hidden>SIGUIENTE NIVEL <span aria-hidden="true">➜</span></button>
 </div>
 

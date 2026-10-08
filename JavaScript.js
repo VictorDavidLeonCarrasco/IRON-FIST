@@ -217,7 +217,10 @@ if (botonPantallaCompletaNivel1) {
     const boton = document.getElementById(id);
     if (boton) boton.addEventListener('click', () => {
         const nivel2 = document.getElementById('NIVEL_02');
-        if (id === 'BotonReiniciarNivel1' && getComputedStyle(nivel2).display !== 'none') {
+        const nivel3 = document.getElementById('NIVEL3');
+        if (id === 'BotonReiniciarNivel1' && getComputedStyle(nivel3).display !== 'none') {
+            reiniciarPorTiempoLvl3();
+        } else if (id === 'BotonReiniciarNivel1' && getComputedStyle(nivel2).display !== 'none') {
             reiniciarLvl2();
         } else {
             reiniciarNivel1();

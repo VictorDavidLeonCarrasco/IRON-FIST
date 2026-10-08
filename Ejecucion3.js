@@ -1,48 +1,19 @@
-
-Tiempolvl3 = 51 //VARIBLE DE INICIO TIEMPO
-Puntajelvl3 = 0 //VARIABLE DE INICIO PUNTOS
+// Motor del nivel 3: movimiento, colisiones y aparición comparten el mismo reloj.
+let Tiempolvl3 = 51;
+let Puntajelvl3 = 0;
 let vidasLvl3 = 3;
 let pausadoLvl3 = false;
 let terminadoLvl3 = false;
-let animacionesPausadasLvl3 = [];
 let juegoActivoLvl3 = false;
+let iniciandoLvl3 = false;
 let disparosLvl3 = [];
-let tableroNivel3 = null;
-let naveJugadorLvl3 = null;
-let intervaloDerrotaLvl3 = null;
-
-function reiniciarPorTiempoLvl3() {
-    if (!terminadoLvl3 || Tiempolvl3 !== 0) return;
-    [Restar_Tiempolvl3, Intervalo_Dirlvl3, Intervalo_Dir2lvl3,
-        Intervalo_Dir3lvl3, Intervalo_Dir4lvl3, intervaloDerrotaLvl3].forEach(clearInterval);
-    limpiarDisparosLvl3();
-    animacionesPausadasLvl3 = [];
-    document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(meteorito => {
-        meteorito.getAnimations().forEach(animacion => animacion.cancel());
-        meteorito.style.transition = 'none';
-        meteorito.style.left = '-70%';
-        meteorito.dataset.impactado = 'false';
-    });
-    Tiempolvl3 = 51;
-    Puntajelvl3 = 0;
-    vidasLvl3 = 3;
-    actualizarVidasLvl3();
-    document.getElementById('Tiempolvl3').textContent = Tiempolvl3;
-    document.getElementById('Puntajelvl3').textContent = '0 / 40';
-    document.getElementById('ReiniciarTiempoLvl3').hidden = true;
-    document.getElementById('Pausa_Pantallalvl3').style.display = 'none';
-    document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').innerHTML = 'EL JUEGO ESTA<br>EN PAUSE';
-    document.getElementById('Pauselvl3').textContent = 'PAUSAR';
-    document.getElementById('Pauselvl3').setAttribute('aria-pressed', 'false');
-    mostrarVolverInicio(false);
-    const audio = document.getElementById('Fondo_Ciberpunk');
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
-    JUEGOlvl3();
-}
-
-document.getElementById('ReiniciarTiempoLvl3').addEventListener('click', reiniciarPorTiempoLvl3);
-
+let frameLvl3 = null;
+let ultimoFrameLvl3 = null;
+let transcurridoLvl3 = 0;
+let conteoTimerLvl3 = null;
+const tableroNivel3 = document.querySelector('#NIVEL3 .Contenedorlvl3:not(.Cabezeralvl3)');
+const naveJugadorLvl3 = document.getElementById('NaveJugadorLvl3');
+const meteoritosMotorLvl3 = [...document.querySelectorAll('#NIVEL3 .Meteoritolvl3')].map(elemento => ({elemento, x: 0, y: 0, espera: 0, activo: false}));
 function actualizarVidasLvl3() {
     const indicador = document.getElementById('VidasLvl3');
     indicador.setAttribute('aria-label', `${vidasLvl3} vidas restantes`);
@@ -74,375 +45,238 @@ document.getElementById('VolverInicioNivel3').addEventListener('click', () => {
     window.location.reload();
 });
 
-//CONTENEDOR QUE CONTIENE TOO EL JUEGO
-//DE POR SI ESTA FUNCION NO SE EJECUTA HASTA QUE SE LA LLAMA, MAS ADELANTE LA LLAMAREMOS
-//PARA QUE EL JUEGO INICIE UNA VEZ SE PRESIONE JUGAR
-// NAVE DEL JUGADOR Y DISPARO DEL NIVEL 3.
-// La nave sigue el puntero, queda orientada hacia la izquierda y dispara
-// horizontalmente hacia los meteoritos que avanzan hacia la Tierra.
-tableroNivel3 = document.querySelector('#NIVEL3 .Contenedorlvl3:not(.Cabezeralvl3)');
-naveJugadorLvl3 = document.getElementById('NaveJugadorLvl3');
-
-function actualizarNaveJugadorLvl3(evento) {
-    if (!tableroNivel3 || !naveJugadorLvl3) return;
-    if (!juegoActivoLvl3 || pausadoLvl3 || terminadoLvl3) {
-        naveJugadorLvl3.style.opacity = '0';
-        return;
-    }
-
-    const area = tableroNivel3.getBoundingClientRect();
-    const mitadNave = naveJugadorLvl3.offsetWidth / 2;
-    const xMin = area.width * 0.72;
-    const xMax = area.width * 0.90;
-    const yMin = mitadNave;
-    const yMax = area.height - mitadNave;
-
-    const x = Math.max(xMin, Math.min(xMax, evento.clientX - area.left));
-    const y = Math.max(yMin, Math.min(yMax, evento.clientY - area.top));
-
-    naveJugadorLvl3.style.left = `${x}px`;
-    naveJugadorLvl3.style.top = `${y}px`;
-    naveJugadorLvl3.style.opacity = '1';
-}
-
-if (tableroNivel3) {
-    tableroNivel3.addEventListener('mousemove', actualizarNaveJugadorLvl3);
-    tableroNivel3.addEventListener('mouseleave', () => {
-        if (naveJugadorLvl3) naveJugadorLvl3.style.opacity = '0';
-    });
-}
 
 function limpiarDisparosLvl3() {
-    disparosLvl3.forEach(disparo => {
-        if (disparo.elemento?.isConnected) disparo.elemento.remove();
-        if (disparo.detector) clearInterval(disparo.detector);
-    });
+    disparosLvl3.forEach(d => d.elemento.remove());
     disparosLvl3 = [];
 }
-
-function finalizarNivel3PorPuntos() {
-    if (terminadoLvl3) return;
-    terminadoLvl3 = true;
-    juegoActivoLvl3 = false;
-
-    clearInterval(Intervalo_Dirlvl3);
-    clearInterval(Intervalo_Dir2lvl3);
-    clearInterval(Intervalo_Dir3lvl3);
-    clearInterval(Intervalo_Dir4lvl3);
-    clearInterval(Restar_Tiempolvl3);
+function detenerMotorLvl3() {
+    cancelAnimationFrame(frameLvl3);
+    frameLvl3 = null;
+    ultimoFrameLvl3 = null;
     limpiarDisparosLvl3();
-
-    document.getElementById('Fondo_Ciberpunk').pause();
-    document.getElementById('Triunfo').play().catch(() => {});
-    if (naveJugadorLvl3) naveJugadorLvl3.style.opacity = '0';
-
-    document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(elemento => {
-        elemento.style.transition = '0s';
-        elemento.style.left = '-150vw';
-    });
-
-    document.getElementById('Planetalvl3')?.style.setProperty('display', 'none');
-    document.getElementById('Pantalla_Ovnislvl3').style.display = 'none';
-    document.getElementById('Pantalla_Nodrizalvl3').style.display = 'none';
-    document.getElementById('Pantalla_Ovnis2lvl3').style.display = 'none';
-    document.getElementById('Pantalla_creditoslvl3').style.display = 'none';
-    document.getElementById('Creditoslvl3').style.display = 'none';
-    document.getElementById('Proximolvl3').style.display = 'none';
-    document.getElementById('Startlvl3').style.display = 'none';
-
-    document.getElementById('Ganaste_Pantallalvl3').style.display = 'flex';
-    document.getElementById('Puntajelvl3').innerHTML = '40 / 40';
 }
-
-function impactoLaserNivel3(meteorito) {
-    if (!meteorito || meteorito.dataset.impactado === 'true') return;
-    meteorito.dataset.impactado = 'true';
-
-    Puntajelvl3++;
-    document.getElementById('Puntajelvl3').innerHTML = `${Puntajelvl3} / 40`;
-
-    const sonidoId = ['Puntos_sound', 'Punto2', 'Punto3', 'Punto4'][Math.floor(Math.random() * 4)];
-    document.getElementById(sonidoId)?.play().catch(() => {});
-
-    meteorito.style.transition = 'none';
-    meteorito.style.left = '-15%';
-    meteorito.style.top = `${Math.round(Math.random() * 70)}%`;
-    if (Puntajelvl3 >= 40) finalizarNivel3PorPuntos();
+function actualizarNaveJugadorLvl3(evento) {
+    if (!juegoActivoLvl3 || pausadoLvl3 || terminadoLvl3) return;
+    const rect = tableroNivel3.getBoundingClientRect();
+    const margen = Math.max(naveJugadorLvl3.offsetWidth, naveJugadorLvl3.offsetHeight) / 2;
+    const x = (evento.clientX - rect.left) * tableroNivel3.offsetWidth / rect.width - tableroNivel3.clientLeft;
+    const y = (evento.clientY - rect.top) * tableroNivel3.offsetHeight / rect.height - tableroNivel3.clientTop;
+    naveJugadorLvl3.style.left = Math.max(margen, Math.min(tableroNivel3.clientWidth - margen, x)) + 'px';
+    naveJugadorLvl3.style.top = Math.max(margen, Math.min(tableroNivel3.clientHeight - margen, y)) + 'px';
+    naveJugadorLvl3.style.opacity = '1';
 }
-
+tableroNivel3.addEventListener('pointermove', actualizarNaveJugadorLvl3);
+function rectangulosSeTocanLvl3(a, b) {
+    return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+}
 function dispararLaserLvl3() {
-    if (!juegoActivoLvl3 || pausadoLvl3 || terminadoLvl3 || !naveJugadorLvl3 || !tableroNivel3) return;
-
+    if (!juegoActivoLvl3 || pausadoLvl3 || terminadoLvl3) return;
     const laser = document.createElement('img');
     laser.src = 'laser_jugador.png';
     laser.className = 'LaserJugadorLvl3';
     laser.alt = '';
-
-    const x = naveJugadorLvl3.offsetLeft - naveJugadorLvl3.offsetWidth / 2 - 8;
-    const y = naveJugadorLvl3.offsetTop;
-    laser.style.left = `${x}px`;
-    laser.style.top = `${y}px`;
+    laser.draggable = false;
+    const nave = naveJugadorLvl3.getBoundingClientRect();
+    const tablero = tableroNivel3.getBoundingClientRect();
+    const escalaX = tableroNivel3.offsetWidth / tablero.width;
+    const escalaY = tableroNivel3.offsetHeight / tablero.height;
+    const disparo = {elemento: laser, x: (nave.left - tablero.left) * escalaX - tableroNivel3.clientLeft,
+        y: ((nave.top + nave.bottom) / 2 - tablero.top) * escalaY - tableroNivel3.clientTop};
+    laser.style.left = disparo.x + 'px';
+    laser.style.top = disparo.y + 'px';
     tableroNivel3.appendChild(laser);
-
-    const disparo = { elemento: laser, detector: null };
     disparosLvl3.push(disparo);
-
-    let posicionX = x;
-    disparo.detector = setInterval(() => {
-        if (!juegoActivoLvl3 || pausadoLvl3 || terminadoLvl3 || !laser.isConnected) {
-            clearInterval(disparo.detector);
-            if (laser.isConnected) laser.remove();
-            disparosLvl3 = disparosLvl3.filter(item => item !== disparo);
-            return;
+}
+tableroNivel3.addEventListener('click', evento => {
+    if (evento.button !== 0 || evento.target.closest('.Startlvl3, .Ganaste_Pantallalvl3, .Pausa_Pantallalvl3')) return;
+    actualizarNaveJugadorLvl3(evento);
+    dispararLaserLvl3();
+});
+function retirarMeteoritoLvl3(m, espera = 0.25) {
+    m.activo = false;
+    m.espera = espera;
+    m.elemento.style.visibility = 'hidden';
+}
+function finalizarNivel3PorPuntos() {
+    terminadoLvl3 = true;
+    juegoActivoLvl3 = false;
+    detenerMotorLvl3();
+    meteoritosMotorLvl3.forEach(m => retirarMeteoritoLvl3(m));
+    naveJugadorLvl3.style.opacity = '0';
+    document.getElementById('Fondo_Ciberpunk').pause();
+    document.getElementById('Triunfo').play().catch(() => {});
+    document.getElementById('Planetalvl3')?.style.setProperty('display', 'none');
+    document.getElementById('Ganaste_Pantallalvl3').style.display = 'flex';
+    mostrarVolverInicio(true);
+    document.getElementById('VerCreditosLvl3').hidden = false;
+    document.getElementById('BotonReiniciarNivel1').hidden = false;
+    document.getElementById('NEXT').hidden = true;
+}
+function perderNivel3(mensaje) {
+    terminadoLvl3 = true;
+    juegoActivoLvl3 = false;
+    detenerMotorLvl3();
+    naveJugadorLvl3.style.opacity = '0';
+    document.getElementById('Fondo_Ciberpunk').pause();
+    document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').textContent = mensaje;
+    document.getElementById('Pausa_Pantallalvl3').style.display = 'table';
+    mostrarVolverInicio(true);
+    document.getElementById('VerCreditosLvl3').hidden = false;
+    document.getElementById('BotonReiniciarNivel1').hidden = false;
+}
+function pasoMotorLvl3(dt) {
+    const W = tableroNivel3.clientWidth;
+    const H = tableroNivel3.clientHeight;
+    const limite = document.querySelector('#NIVEL3 .Limitelvl3').offsetLeft;
+    for (const m of meteoritosMotorLvl3) {
+        if (!m.activo) {
+            m.espera -= dt;
+            if (m.espera > 0) continue;
+            m.x = -m.elemento.offsetWidth;
+            m.y = Math.random() * Math.max(0, H - m.elemento.offsetHeight);
+            m.activo = true;
+            m.elemento.style.visibility = 'visible';
         }
-
-        posicionX -= 18;
-        laser.style.left = `${posicionX}px`;
-
-        const laserRect = laser.getBoundingClientRect();
-        const objetivo = [...document.querySelectorAll('#NIVEL3 .Meteoritolvl3')].find(meteorito => {
-            if (meteorito.dataset.impactado === 'true') return false;
-            const rect = meteorito.getBoundingClientRect();
-            return rect.right < laserRect.left + 35 &&
-                   rect.left < laserRect.right &&
-                   rect.bottom > laserRect.top &&
-                   rect.top < laserRect.bottom;
-        });
-
+        m.x += W / 4.5 * dt;
+        m.elemento.style.left = m.x + 'px';
+        m.elemento.style.top = m.y + 'px';
+    }
+    for (const d of disparosLvl3) {
+        d.x -= 900 * dt;
+        d.elemento.style.left = d.x + 'px';
+        const rect = d.elemento.getBoundingClientRect();
+        const objetivo = meteoritosMotorLvl3.filter(m => m.activo).sort((a,b) => b.x - a.x)
+            .find(m => rectangulosSeTocanLvl3(rect, m.elemento.getBoundingClientRect()));
         if (objetivo) {
-            clearInterval(disparo.detector);
-            if (laser.isConnected) laser.remove();
-            disparosLvl3 = disparosLvl3.filter(item => item !== disparo);
-            impactoLaserNivel3(objetivo);
-            return;
+            d.eliminado = true;
+            retirarMeteoritoLvl3(objetivo);
+            Puntajelvl3++;
+            document.getElementById('Puntajelvl3').textContent = Puntajelvl3 + ' / 40';
+            document.getElementById('Puntos_sound').play().catch(() => {});
+            if (Puntajelvl3 >= 40) { finalizarNivel3PorPuntos(); return; }
         }
-
-        if (posicionX < -80) {
-            clearInterval(disparo.detector);
-            if (laser.isConnected) laser.remove();
-            disparosLvl3 = disparosLvl3.filter(item => item !== disparo);
-        }
-    }, 16);
-}
-
-if (tableroNivel3) {
-    tableroNivel3.addEventListener('click', evento => {
-        if (evento.target.closest('.Startlvl3, .Ganaste_Pantallalvl3, .Pausa_Pantallalvl3')) return;
-        dispararLaserLvl3();
+    }
+    disparosLvl3 = disparosLvl3.filter(d => {
+        if (d.eliminado || d.x < -100) { d.elemento.remove(); return false; }
+        return true;
     });
+    for (const m of meteoritosMotorLvl3) {
+        if (!m.activo || m.x + m.elemento.offsetWidth < limite) continue;
+        retirarMeteoritoLvl3(m);
+        vidasLvl3--;
+        actualizarVidasLvl3();
+        document.getElementById('Perdiste_sound').play().catch(() => {});
+        if (vidasLvl3 === 0) { perderNivel3('FIN DEL JUEGO'); return; }
+    }
 }
-
+function bucleMotorLvl3(ahora) {
+    frameLvl3 = null;
+    if (!juegoActivoLvl3) return;
+    const dt = ultimoFrameLvl3 === null ? 0 : Math.min(0.05, (ahora - ultimoFrameLvl3) / 1000);
+    ultimoFrameLvl3 = ahora;
+    if (!pausadoLvl3) {
+        transcurridoLvl3 += dt;
+        Tiempolvl3 = Math.max(0, 51 - Math.floor(transcurridoLvl3));
+        document.getElementById('Tiempolvl3').textContent = Tiempolvl3;
+        if (!Tiempolvl3) { perderNivel3('TIEMPO AGOTADO'); return; }
+        // Subpasos cortos para que un disparo no atraviese un meteorito entre cuadros.
+        const pasos = Math.max(1, Math.ceil(dt * (900 + tableroNivel3.clientWidth / 4.5) / 4));
+        for (let i = 0; i < pasos && juegoActivoLvl3; i++) pasoMotorLvl3(dt / pasos);
+    }
+    if (juegoActivoLvl3) frameLvl3 = requestAnimationFrame(bucleMotorLvl3);
+}
 function JUEGOlvl3() {
+    detenerMotorLvl3();
     juegoActivoLvl3 = true;
     terminadoLvl3 = false;
     pausadoLvl3 = false;
-    limpiarDisparosLvl3();
-    if (naveJugadorLvl3) naveJugadorLvl3.style.opacity = '0';
-
-    //FUNCION QUE REDUCE EL TIEMPO Y RESETEAL EL RESULTADO UNA VEZ LLEGUE A 0
-    function Tiempo_Disminurlvl3() { 
-        if (pausadoLvl3 || terminadoLvl3) return;
-        Tiempolvl3--;
-        document.getElementById("Tiempolvl3").innerHTML = Tiempolvl3
-        if (Tiempolvl3 == 0) {
-            terminadoLvl3 = true;
-            juegoActivoLvl3 = false;
-            limpiarDisparosLvl3();
-            if (naveJugadorLvl3) naveJugadorLvl3.style.opacity = '0';
-            clearInterval(Restar_Tiempolvl3);
-            document.getElementById('Fondo_Ciberpunk').pause();
-            document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').textContent = 'TIEMPO AGOTADO';
-            document.getElementById('ReiniciarTiempoLvl3').hidden = false;
-            mostrarVolverInicio(true);
-            document.getElementById('Pausa_Pantallalvl3').style.display = 'table';
-            document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(elemento => {
-                elemento.getAnimations().forEach(animacion => animacion.pause());
-            });
-        }
-    }
-    Restar_Tiempolvl3 = setInterval(Tiempo_Disminurlvl3, 1000)
-
-    // Los puntos ahora se obtienen al destruir meteoritos con el láser.
-
-    //ESTA FUNCION DIRIGE AL PRIMER METEORITO 1 A LA TIERRA 
-    function Meteorito_Direccionlvl3() {
-        if (pausadoLvl3 || terminadoLvl3) return;
-        Distancia1lvl3 = 68
-        Altura1lvl3 = Math.round(Math.random() * 70)
-
-        document.getElementById("Meteoritolvl3").dataset.impactado = "false"
-        document.getElementById("Meteoritolvl3").style.left = Distancia1lvl3 + "%"
-        document.getElementById("Meteoritolvl3").style.top = Altura1lvl3 + "%"
-        document.getElementById("Meteoritolvl3").style.transition = "3.2s"
-    }
-
-    setTimeout(Meteorito_Direccionlvl3, 2500)
-    Intervalo_Dirlvl3 = setInterval(Meteorito_Direccionlvl3, 4800)
-
-    //ESTA FUNCION DIRIGE AL METEORITO 2 A LA TIERRA         
-    function Meteorito_Direccion2lvl3() {
-        if (pausadoLvl3 || terminadoLvl3) return;
-        Distancia2lvl3 = 68
-        Altura2lvl3 = Math.round(Math.random() * 70)
-
-        document.getElementById("Meteorito2lvl3").dataset.impactado = "false"
-        document.getElementById("Meteorito2lvl3").style.left = Distancia2lvl3 + "%"
-        document.getElementById("Meteorito2lvl3").style.top = Altura2lvl3 + "%"
-        document.getElementById("Meteorito2lvl3").style.transition = "3.2s"
-    }
-
-    setTimeout(Meteorito_Direccion2lvl3, 3300)
-    Intervalo_Dir2lvl3 = setInterval(Meteorito_Direccion2lvl3, 5200)
-
-    //ESTA FUNCION DIRIGE AL METEORITO 3 A LA TIERRA
-    function Meteorito_Direccion3lvl3() {
-        if (pausadoLvl3 || terminadoLvl3) return;
-        Distancia3lvl3 = 68
-        Altura3lvl3 = Math.round(Math.random() * 70)
-
-        document.getElementById("Meteorito3lvl3").dataset.impactado = "false"
-        document.getElementById("Meteorito3lvl3").style.left = Distancia3lvl3 + "%"
-        document.getElementById("Meteorito3lvl3").style.top = Altura3lvl3 + "%"
-        document.getElementById("Meteorito3lvl3").style.transition = "1.8s"
-    }
-
-    setTimeout(Meteorito_Direccion3lvl3, 3300)
-    Intervalo_Dir3lvl3 = setInterval(Meteorito_Direccion3lvl3, 5600)
-
-    //ESTA FUNCION DIRIGE AL METEORITO 4 A LA TIERRA
-    function Meteorito_Direccion4lvl3() {
-        if (pausadoLvl3 || terminadoLvl3) return;
-        Distancia4lvl3 = 68
-        Altura4lvl3 = Math.round(Math.random() * 70)
-
-        document.getElementById("Meteorito4lvl3").dataset.impactado = "false"
-        document.getElementById("Meteorito4lvl3").style.left = Distancia4lvl3 + "%"
-        document.getElementById("Meteorito4lvl3").style.top = Altura4lvl3 + "%"
-        document.getElementById("Meteorito4lvl3").style.transition = "3.2s"
-    }
-
-    setTimeout(Meteorito_Direccion4lvl3, 3700)
-    Intervalo_Dir4lvl3 = setInterval(Meteorito_Direccion4lvl3, 6000)
-
-
-
-    // Los meteoritos ya no se destruyen al pasar el cursor: se destruyen con el láser.
-
-    //ESTA FUNCION SE ENCARGA DE ALERTARTE UNA VEZ EL METEORITO CRUZE LA LINEA CON UN PERDISTE
-    //TAMBIEN RESETEA LOS VALORES Y LLEVA A LOS METEORITOS FUERA DEL MAPA DE MANERA INSTANTANEA
-    function perdistelvl3() {
-        if (pausadoLvl3 || terminadoLvl3) return;
-        const limite = document.querySelector('#NIVEL3 .Limitelvl3').offsetLeft;
-        for (const meteorito of document.querySelectorAll('#NIVEL3 .Meteoritolvl3')) {
-            if (meteorito.offsetLeft + meteorito.offsetWidth < limite) continue;
-            meteorito.style.transition = 'none';
-            meteorito.style.left = '-70%';
-            vidasLvl3--;
-            actualizarVidasLvl3();
-            document.getElementById('Perdiste_sound').play().catch(() => {});
-            if (vidasLvl3 === 0) {
-                terminadoLvl3 = true;
-                juegoActivoLvl3 = false;
-                limpiarDisparosLvl3();
-                if (naveJugadorLvl3) naveJugadorLvl3.style.opacity = '0';
-                clearInterval(Restar_Tiempolvl3);
-                document.getElementById('Fondo_Ciberpunk').pause();
-                document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').textContent = 'FIN DEL JUEGO';
-                mostrarVolverInicio(true);
-                document.getElementById('Pausa_Pantallalvl3').style.display = 'table';
-                document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(elemento => {
-                    elemento.getAnimations().forEach(animacion => animacion.pause());
-                });
-                break;
-            }
-        }
-    }
-    intervaloDerrotaLvl3 = setInterval(perdistelvl3, 16) // Comprueba el límite aproximadamente una vez por fotograma.
-    //QUE NO SABEMOS CUANDO EL METEORITO VA A SUPERAR EL LIMITE
-}
-
-
-
-//LE DECIMOS QUE AL PRESIONAR EL BOTON JUGAR EJECUTARA LA FUNCION PLAY     
-
-//ESTE ES EL CONTEO DE LA CUENTA REGRESIVA QUE SE DA DESPUEZ DE PRESINAR JUGAR
-Conteolvl3 = 4 
-
-//ESTA FUNCION EJECUTA UN CONJUNTO DE ACCIONES AL PRESIONAR JUGAR
-function PLAYlvl3() {
-    const botonPlay = document.getElementById('Playlvl3');
-    if (!botonPlay || botonPlay.dataset.iniciado) return;
-    botonPlay.dataset.iniciado = 'true';
+    transcurridoLvl3 = 0;
+    Tiempolvl3 = 51;
     Puntajelvl3 = 0;
     vidasLvl3 = 3;
     actualizarVidasLvl3();
-    document.getElementById('Puntajelvl3').innerHTML = '0 / 50';
+    document.getElementById('Tiempolvl3').textContent = '51';
+    document.getElementById('Puntajelvl3').textContent = '0 / 40';
+    document.getElementById('DialogoCreditosLvl3').close();
+    for (const id of ['BotonReiniciarNivel1', 'NEXT', 'ReiniciarTiempoLvl3', 'VerCreditosLvl3']) document.getElementById(id).hidden = true;
+    mostrarVolverInicio(false);
     document.getElementById('Ganaste_Pantallalvl3').style.display = 'none';
+    document.getElementById('Pausa_Pantallalvl3').style.display = 'none';
     document.getElementById('Planetalvl3')?.style.setProperty('display', 'block');
+    for (const id of ['Pantalla_Ovnislvl3','Pantalla_Nodrizalvl3','Pantalla_Ovnis2lvl3','Pantalla_creditoslvl3','Creditoslvl3','Proximolvl3']) document.getElementById(id).style.display = 'none';
+    meteoritosMotorLvl3.forEach((m,i) => {
+        retirarMeteoritoLvl3(m, 0.2 + i * 0.7);
+        m.elemento.style.transition = 'none';
+    });
+    naveJugadorLvl3.style.left = tableroNivel3.clientWidth * 0.85 + 'px';
+    naveJugadorLvl3.style.top = tableroNivel3.clientHeight / 2 + 'px';
+    naveJugadorLvl3.style.opacity = '1';
+    const pausa = document.getElementById('Pauselvl3');
+    pausa.textContent = 'PAUSAR';
+    pausa.setAttribute('aria-pressed', 'false');
+    DETENER_JUEGOlvl3();
+    frameLvl3 = requestAnimationFrame(bucleMotorLvl3);
+}
+function reiniciarPorTiempoLvl3() {
+    if (!terminadoLvl3) return;
+    const audio = document.getElementById('Fondo_Ciberpunk');
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    JUEGOlvl3();
+}
+document.getElementById('ReiniciarTiempoLvl3').addEventListener('click', reiniciarPorTiempoLvl3);
+function PLAYlvl3() {
+    if (iniciandoLvl3 || juegoActivoLvl3) return;
+    iniciandoLvl3 = true;
     aplicarVolumenLvl3();
-    document.getElementById("Fondo_Ciberpunk").currentTime = 0;
-    document.getElementById("Fondo_Ciberpunk").play().catch(() => {});
-    // Retira TODA la pantalla de preparación del Nivel 3.
-    const startLvl3 = document.getElementById("Startlvl3");
-    startLvl3.classList.add("StartSaliendo");
-    document.getElementById("Textolvl3").style.left = "-150vw";
-    document.getElementById("Playlvl3").style.left = "-150vw";
-    document.getElementById("Dificultadlvl3").style.left = "-150vw";
-    document.getElementById("Startlvl3").style.pointerEvents = "none";
-    function ARRACARlvl3(){    
-        JUEGOlvl3()}
-    //INVOCA AL JUEGO UNA VEZ PASEN 4 SEGUNDO - OSEA UNA VEZ TERMINE EL CONTADOR
-    tiempo_de_arranquelvl3 =  setTimeout(ARRACARlvl3, 4100)
-    //ESTA FUNCION EJECUTA LA CUENTA REGRESIVA Y RETIRA LA PANTALLA START 
-    function ESPERARlvl3() {
-        function Cuenta_rglvl3() {
-            Conteolvl3--;
-            document.getElementById("RGBlvl3").innerHTML = Conteolvl3
-            if (Conteolvl3 == -1) {
-                clearInterval(cuentaLvl3);
-                document.getElementById("Contenedor_contadorlvl3").style.display = "none"
-
-                function Borrarlvl3() {
-                    document.getElementById("Startlvl3").style.display = "none"
-
-                    DETENER_JUEGOlvl3()
-                } //HABILITA LA FUNCION DE PAUSE Y REANUDAR UNA VEZ CARGUE EL JUEGO
-                setTimeout(Borrarlvl3, 500)
-            }
+    const audio = document.getElementById('Fondo_Ciberpunk');
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+    const inicio = document.getElementById('Startlvl3');
+    inicio.classList.add('StartSaliendo');
+    const contador = document.getElementById('RGBlvl3');
+    let numero = 3;
+    contador.textContent = numero;
+    document.getElementById('Contenedor_contadorlvl3').style.display = 'flex';
+    function contar() {
+        numero--;
+        if (numero > 0) {
+            contador.textContent = numero;
+            conteoTimerLvl3 = setTimeout(contar, 1000);
+        } else {
+            conteoTimerLvl3 = null;
+            inicio.style.display = 'none';
+            iniciandoLvl3 = false;
+            JUEGOlvl3();
         }
-        const cuentaLvl3 = setInterval(Cuenta_rglvl3, 1000)
     }
-
-    setTimeout(ESPERARlvl3, 350)
-} //SE EJECUTARA EN UN LAPSO DE 350, DESPUES DE PRESIONAR EL BOTON
-
-
-//ESTA FUNCION CONTIENE EL REANUDE Y PAUSE DEL BOTON
+    conteoTimerLvl3 = setTimeout(contar, 1000);
+}
 function DETENER_JUEGOlvl3() {
     document.getElementById('Pauselvl3').onclick = () => {
-        if (terminadoLvl3) return;
+        if (!juegoActivoLvl3 || terminadoLvl3) return;
         pausadoLvl3 = !pausadoLvl3;
+        ultimoFrameLvl3 = null;
         mostrarVolverInicio(pausadoLvl3);
+        document.getElementById('VerCreditosLvl3').hidden = !pausadoLvl3;
         const boton = document.getElementById('Pauselvl3');
         boton.textContent = pausadoLvl3 ? 'REANUDAR' : 'PAUSAR';
         boton.setAttribute('aria-pressed', String(pausadoLvl3));
+        document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').innerHTML = 'EL JUEGO ESTA<br>EN PAUSA';
         document.getElementById('Pausa_Pantallalvl3').style.display = pausadoLvl3 ? 'table' : 'none';
         const audio = document.getElementById('Fondo_Ciberpunk');
-        if (pausadoLvl3) {
-            limpiarDisparosLvl3();
-            if (naveJugadorLvl3) naveJugadorLvl3.style.opacity = '0';
-            audio.pause();
-            animacionesPausadasLvl3 = [];
-            document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(elemento => {
-                elemento.getAnimations().forEach(animacion => {
-                    animacionesPausadasLvl3.push(animacion);
-                    animacion.pause();
-                });
-            });
-        } else {
-            audio.play().catch(() => {});
-            animacionesPausadasLvl3.forEach(animacion => animacion.play());
-            animacionesPausadasLvl3 = [];
-        }
+        if (pausadoLvl3) audio.pause(); else audio.play().catch(() => {});
     };
 }
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && juegoActivoLvl3 && !pausadoLvl3) document.getElementById('Pauselvl3').click();
+});
+
+// La navegación se encuentra después de este script en el HTML.
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('VerCreditosLvl3').addEventListener('click', () => {
+        const dialogo = document.getElementById('DialogoCreditosLvl3');
+        if (!dialogo.open) dialogo.showModal();
+    });
+});

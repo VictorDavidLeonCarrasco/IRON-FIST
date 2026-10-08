@@ -3738,3 +3738,80 @@ html, body {
     font-family: Orbitron, sans-serif;
     transition: left 1.2s ease, transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
+
+/* Controles de los niveles 1 y 3 con el diseño de referencia del nivel 2. */
+#NIVEL_01 .Pause,
+#NIVEL3 .Pauselvl3 {
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(10px, 0.7vw, 13px);
+    font-weight: normal;
+    text-align: center;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-indent: 0.14em;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+#NIVEL_01 .PantallaCompletaNivel1,
+#NIVEL3 .PantallaCompletaLvl3 {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+#NIVEL_01 .PantallaCompletaNivel1:hover,
+#NIVEL3 .PantallaCompletaLvl3:hover {
+    background: transparent;
+    color: #36cfff;
+    transform: scale(1.12);
+}
+
+#NIVEL_01 #BotonReintentarDerrotaNivel1,
+.Contenedor_LVL #BotonReiniciarNivel1,
+#NIVEL3 #ReiniciarTiempoLvl3 {
+    padding: 15px 22px;
+    border: 3px solid #29d7ff;
+    border-radius: 0;
+    background: #087ee8;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+    font-weight: normal;
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(41, 215, 255, 0.75);
+}
+
+.Contenedor_LVL #BotonReiniciarNivel1:hover {
+    background: #087ee8;
+}
+
+.Contenedor_LVL #NEXT,
+.Contenedor_LVL #VolverInicio,
+#NIVEL3 #VolverInicioNivel3 {
+    border: 2px solid #36cfff;
+    border-radius: 0;
+    background: #087ee8;
+    color: white;
+    padding: 15px 22px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
+    font-weight: normal;
+    cursor: pointer;
+    box-shadow: 0 0 14px rgba(54, 207, 255, 0.7);
+}
+
+.Contenedor_LVL #NEXT:hover,
+.Contenedor_LVL #VolverInicio:hover,
+#NIVEL3 #VolverInicioNivel3:hover {
+    background: #36cfff;
+    color: #03122e;
+    transform: scale(1.05);
+}

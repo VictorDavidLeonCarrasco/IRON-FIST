@@ -2115,7 +2115,9 @@ margin-left: 12%; }
 /* ---------------------------------------------------------------------
    BOTÓN JUGAR (pantalla de inicio) - autosuficiente
    --------------------------------------------------------------------- */
-#NIVEL_02 #Playlvl2.Playlvl2 {
+#NIVEL_02 #Playlvl2.Playlvl2,
+#NIVEL_01 #Play.Play,
+#NIVEL3 #Playlvl3.Playlvl3 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2143,21 +2145,27 @@ margin-left: 12%; }
     animation: PulsoJugarLvl2 1.8s ease-in-out infinite;
 }
 
-#NIVEL_02 #Playlvl2.Playlvl2::before {
+#NIVEL_02 #Playlvl2.Playlvl2::before,
+#NIVEL_01 #Play.Play::before,
+#NIVEL3 #Playlvl3.Playlvl3::before {
     content: "\25B6";
     margin-right: 12px;
     font-size: 0.8em;
     text-indent: 0;
 }
 
-#NIVEL_02 #Playlvl2.Playlvl2:hover {
+#NIVEL_02 #Playlvl2.Playlvl2:hover,
+#NIVEL_01 #Play.Play:hover,
+#NIVEL3 #Playlvl3.Playlvl3:hover {
     background: linear-gradient(135deg, #ffb347 0%, #ff6a00 100%);
     box-shadow: 0 0 26px rgba(255, 140, 0, 0.8), 0 8px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     transform: translateY(-2px) scale(1.05);
     animation: none;
 }
 
-#NIVEL_02 #Playlvl2.Playlvl2:active {
+#NIVEL_02 #Playlvl2.Playlvl2:active,
+#NIVEL_01 #Play.Play:active,
+#NIVEL3 #Playlvl3.Playlvl3:active {
     transform: translateY(1px) scale(0.97);
 }
 
@@ -3713,4 +3721,20 @@ html, body {
 #BotonReintentarDerrotaNivel1,
 #VolverInicioNivel3 {
     border-radius: 10px;
+}
+
+/* El nivel 1 comparte el aspecto y los efectos del botón Jugar del nivel 2. */
+#NIVEL_01 #Play.Play {
+    height: auto;
+    font-family: Orbitron, sans-serif;
+}
+#NIVEL_01 #Play.Play:hover {
+    filter: none;
+}
+
+/* Tipografía y transición del botón Jugar del nivel 3. */
+#NIVEL3 #Playlvl3.Playlvl3 {
+    height: auto;
+    font-family: Orbitron, sans-serif;
+    transition: left 1.2s ease, transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }

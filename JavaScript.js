@@ -96,7 +96,7 @@ function reiniciarNivel1() {
     pausadoNivel1 = false;
     document.getElementById('Pausa_Pantalla').style.display = 'none';
     document.getElementById('GANASTE_PANTALLA').style.display = 'none';
-    clearInterval(intervaloCuentaNivel1);
+    clearTimeout(intervaloCuentaNivel1);
     intervaloCuentaNivel1 = null;
     document.getElementById('Pause').textContent = 'PAUSAR';
     vidasNivel1 = 3;
@@ -120,6 +120,8 @@ function reiniciarNivel1() {
         document.getElementById('Fondo_Ciberpunk').currentTime = 0;
     }
     document.getElementById('Start').style.display = 'flex';
+    document.getElementById('Start').classList.remove('SaliendoConteoNivel1');
+    document.getElementById('RGB').classList.remove('Final', 'PulsoConteoLvl2');
     document.getElementById('Contenedor_contador').style.display = 'table';
     document.getElementById('RGB').textContent = segundosCuentaNivel1;
     Conteo = segundosCuentaNivel1;
@@ -591,19 +593,35 @@ function PLAY() {
     if (intervaloCuentaNivel1 !== null || jugandoNivel1) return;
     reiniciarNivel1();
     sonidoNivel1('Fondo_Ciberpunk');
-    document.getElementById('Contenedor_Mensaje_Star').style.left = '-100%';
-    document.getElementById('Contenedor_contador').style.display = 'table';
-    intervaloCuentaNivel1 = setInterval(() => {
-        Conteo--;
-        document.getElementById('RGB').textContent = Conteo;
-        if (Conteo <= 0) {
-            clearInterval(intervaloCuentaNivel1);
-            intervaloCuentaNivel1 = null;
-            document.getElementById('Contenedor_contador').style.display = 'none';
-            document.getElementById('Start').style.display = 'none';
-            JUEGO();
+    if (typeof audioLvl2 === 'function') audioLvl2();
+    const inicio = document.getElementById('Start');
+    const contenedor = document.getElementById('Contenedor_contador');
+    const numero = document.getElementById('RGB');
+    inicio.classList.add('SaliendoConteoNivel1');
+    contenedor.style.display = 'flex';
+    const secuencia = ['3', '2', '1', '¡YA!'];
+    let paso = 0;
+    function mostrar() {
+        const final = paso === secuencia.length - 1;
+        numero.textContent = secuencia[paso];
+        numero.classList.toggle('Final', final);
+        numero.classList.remove('PulsoConteoLvl2');
+        void numero.offsetWidth;
+        numero.classList.add('PulsoConteoLvl2');
+        if (typeof sfxLvl2 !== 'undefined') sfxLvl2.conteo(final);
+        paso++;
+        if (paso < secuencia.length) {
+            intervaloCuentaNivel1 = setTimeout(mostrar, 900);
+        } else {
+            intervaloCuentaNivel1 = setTimeout(() => {
+                intervaloCuentaNivel1 = null;
+                contenedor.style.display = 'none';
+                inicio.style.display = 'none';
+                JUEGO();
+            }, 750);
         }
-    }, 1000);
+    }
+    intervaloCuentaNivel1 = setTimeout(mostrar, 450);
 }
 
 function pausarNivel1() {

@@ -1553,6 +1553,7 @@ margin-left: 12%; }
 /* ---------------------------------------------------------------------
    CUENTA REGRESIVA
    --------------------------------------------------------------------- */
+#NIVEL_01 #Contenedor_contador,
 #NIVEL_02 #Contenedor_contadorlvl2 {
     position: absolute;
     inset: 0;
@@ -1564,19 +1565,23 @@ margin-left: 12%; }
     pointer-events: none;
 }
 
+#NIVEL_01 #RGB,
 #NIVEL_02 #RGBlvl2 {
     display: block;
+    font-family: sans-serif;
     font-size: clamp(60px, 18vh, 170px);
     color: #fff;
     text-shadow: 0 0 24px #36cfff, 0 0 60px #1687ff;
 }
 
+#NIVEL_01 #RGB.Final,
 #NIVEL_02 #RGBlvl2.Final {
     font-size: clamp(40px, 12vh, 120px);
     color: #ffd54a;
     text-shadow: 0 0 24px #ff9d00, 0 0 60px #ff6a00;
 }
 
+#NIVEL_01 #RGB.PulsoConteoLvl2,
 #NIVEL_02 #RGBlvl2.PulsoConteoLvl2 {
     animation: conteoLvl2 0.9s ease-out both;
 }
@@ -2884,6 +2889,7 @@ html, body {
     pointer-events: none;
 }
 
+#NIVEL_01:fullscreen #RGB,
 #NIVEL_02:fullscreen #RGBlvl2 {
     font-size: clamp(130px, 18vw, 280px);
 }
@@ -3719,7 +3725,9 @@ html, body {
 .Contenedor_LVL #BotonReiniciarNivel1,
 .Contenedor_LVL #NEXT,
 #BotonReintentarDerrotaNivel1,
-#VolverInicioNivel3 {
+#VolverInicioNivel3,
+#NIVEL_02 .BotonReintentarLvl2,
+#NIVEL_02 .BotonSiguienteLvl2 {
     border-radius: 10px;
 }
 
@@ -3779,7 +3787,7 @@ html, body {
 #NIVEL3 #ReiniciarTiempoLvl3 {
     padding: 15px 22px;
     border: 3px solid #29d7ff;
-    border-radius: 0;
+    border-radius: 10px;
     background: #087ee8;
     color: white;
     font-family: 'Press Start 2P', cursive;
@@ -3797,7 +3805,7 @@ html, body {
 .Contenedor_LVL #VolverInicio,
 #NIVEL3 #VolverInicioNivel3 {
     border: 2px solid #36cfff;
-    border-radius: 0;
+    border-radius: 10px;
     background: #087ee8;
     color: white;
     padding: 15px 22px;
@@ -3814,4 +3822,44 @@ html, body {
     background: #36cfff;
     color: #03122e;
     transform: scale(1.05);
+}
+
+/* Salida del menú durante la cuenta regresiva del nivel 1. */
+#NIVEL_01 #Start.SaliendoConteoNivel1 #Contenedor_Mensaje_Star {
+    opacity: 0;
+    transform: translateX(-70px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none;
+}
+
+/* Reservar la navegación evita desplazar el tablero al pausar. */
+.Seccion_Juego .Contenedor_LVL {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    flex-shrink: 0;
+}
+.Seccion_Juego .Contenedor_LVL #VolverInicio {
+    grid-column: 1;
+    justify-self: start;
+}
+.Seccion_Juego .Contenedor_LVL #NEXT {
+    grid-column: 3;
+    justify-self: end;
+}
+.Seccion_Juego .Contenedor_LVL .NEXT[hidden] {
+    display: inline-flex !important;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Botón de derrota en rojo vino, a juego con Fin del juego. */
+#NIVEL_01 #BotonReintentarDerrotaNivel1 {
+    background: #5c1024;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 14px rgba(255, 77, 77, 0.7);
+}
+#NIVEL_01 #BotonReintentarDerrotaNivel1:hover {
+    background: #7a1833;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.85);
 }

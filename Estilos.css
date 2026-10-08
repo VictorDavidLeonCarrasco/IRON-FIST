@@ -3863,3 +3863,126 @@ html, body {
     background: #7a1833;
     box-shadow: 0 0 20px rgba(255, 77, 77, 0.85);
 }
+
+/* Combos y tarjeta de logro del nivel 1 comparten el diseño del nivel 2. */
+#NIVEL_01 .ComboLvl2 {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    z-index: 1800;
+    transform: translateX(-50%);
+    font: 400 clamp(11px, 2vh, 16px) 'Press Start 2P', cursive;
+    color: #ffd54a;
+    text-shadow: 0 0 12px #ff9d00, 0 2px 0 rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#NIVEL_01 .ComboLvl2.visible {
+    opacity: 1;
+    animation: comboPopLvl2 0.3s ease-out;
+}
+
+#NIVEL_01 .TarjetaTrofeoLvl2 {
+    padding: clamp(10px, 2vh, 26px) clamp(14px, 2.4vw, 30px);
+}
+
+#NIVEL_01 .TrofeoLvl2 img {
+    width: auto;
+    height: clamp(56px, 15vh, 140px);
+    max-width: 60%;
+    margin-bottom: 2px;
+}
+
+#NIVEL_01 .TarjetaTrofeoLvl2 h1 {
+    margin: clamp(4px, 1vh, 12px) 0;
+    font-size: clamp(0.9rem, 1.9vw, 1.7rem);
+}
+
+#NIVEL_01 .TarjetaTrofeoLvl2 h1::before {
+    display: none; /* las estrellas ahora se calculan según tu desempeño */
+}
+
+#NIVEL_01 .ProgresoTrofeoLvl2 {
+    margin: 4px 0;
+}
+
+#NIVEL_01 .LogroLvl2 p {
+    margin: 4px 0 0;
+    font-size: clamp(0.55rem, 1vw, 0.8rem);
+    line-height: 1.5;
+    color: #ffd54a;
+}
+
+#NIVEL_01 .EstrellasLvl2 {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 6px 0;
+}
+
+#NIVEL_01 .EstrellasLvl2 span {
+    font-size: clamp(22px, 5vh, 40px);
+    line-height: 1;
+    color: #213650;
+}
+
+#NIVEL_01 .EstrellasLvl2 span.on {
+    color: #ffd54a;
+    text-shadow: 0 0 14px #ffb300;
+    animation: estrellaPopLvl2 0.5s ease-out both;
+    animation-delay: var(--d, 0s);
+}
+
+#NIVEL_01 .EstadisticasLvl2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 6px;
+    margin: 8px 0;
+}
+
+#NIVEL_01 .EstadisticasLvl2 div {
+    padding: 6px 4px;
+    border-radius: 6px;
+    background: rgba(8, 22, 37, 0.85);
+    border: 1px solid rgba(112, 199, 220, 0.3);
+}
+
+#NIVEL_01 .EstadisticasLvl2 b {
+    display: block;
+    font: 700 clamp(12px, 2.2vh, 18px) 'Orbitron', sans-serif;
+    color: #fff;
+}
+
+#NIVEL_01 .EstadisticasLvl2 small {
+    display: block;
+    margin-top: 2px;
+    font: 600 clamp(6px, 1.1vh, 9px) 'Orbitron', sans-serif;
+    letter-spacing: 0.08em;
+    color: #8fb4c6;
+}
+
+#NIVEL_01 .RecordLvl2 {
+    font: 400 clamp(7px, 1.3vh, 10px) 'Press Start 2P', cursive;
+    color: #ffd54a;
+    margin: 6px 0 2px;
+}
+#NIVEL_01 .GANASTE_PANTALLA {
+    overflow: auto;
+    justify-content: flex-start;
+    background: rgba(4, 12, 40, 0.94);
+    border: 3px solid #36cfff;
+    box-shadow: 0 0 28px rgba(54, 207, 255, 0.8);
+    cursor: default;
+}
+#NIVEL_01 .TarjetaLogroNivel1 {
+    margin: auto;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+#NIVEL_01 .TarjetaLogroNivel1 .ProgresoTrofeoLvl2 {
+    color: #8fe9ff;
+    font-size: clamp(0.65rem, 1.2vw, 1rem);
+    line-height: 1.5;
+}

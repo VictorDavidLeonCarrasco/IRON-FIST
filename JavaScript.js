@@ -10,6 +10,66 @@ const segundosCuentaNivel1 = 3;
 let intervaloCuentaNivel1 = null;
 let Conteo = segundosCuentaNivel1;
 
+
+// Combos y estadísticas del nivel 1, con las reglas del nivel 2.
+let comboNivel1 = 0;
+let ultimoMeteoritoNivel1 = -99;
+let estadisticasNivel1 = { disparos: 0, aciertos: 0, destruidos: 0, comboMax: 0 };
+
+function registrarDestruccionNivel1() {
+    estadisticasNivel1.aciertos++;
+    estadisticasNivel1.destruidos++;
+    comboNivel1 = relojNivel1 - ultimoMeteoritoNivel1 <= 2.2 ? comboNivel1 + 1 : 1;
+    ultimoMeteoritoNivel1 = relojNivel1;
+    estadisticasNivel1.comboMax = Math.max(estadisticasNivel1.comboMax, comboNivel1);
+    const bonus = comboNivel1 % 5 === 0 ? 1 : 0;
+    const indicador = document.getElementById('ComboNivel1');
+    if (comboNivel1 >= 2) {
+        indicador.textContent = 'COMBO x' + comboNivel1 + (bonus ? ' · ¡BONUS +1!' : '');
+        indicador.classList.remove('visible');
+        void indicador.offsetWidth;
+        indicador.classList.add('visible');
+        if (typeof sfxLvl2 !== 'undefined') sfxLvl2.combo(comboNivel1);
+    }
+    return 1 + bonus;
+}
+
+function actualizarLogroNivel1() {
+    const estrellas = vidasNivel1 === 3 && Tiempo >= 15 ? 3 : vidasNivel1 >= 2 ? 2 : 1;
+    const bloqueEstrellas = document.getElementById('EstrellasNivel1');
+    bloqueEstrellas.setAttribute('aria-label', estrellas + ' de 3 estrellas');
+    bloqueEstrellas.querySelectorAll('span').forEach((estrella, i) => {
+        estrella.classList.toggle('on', i < estrellas);
+        estrella.style.setProperty('--d', (0.25 + i * 0.25) + 's');
+    });
+    const precision = estadisticasNivel1.disparos
+        ? Math.round(estadisticasNivel1.aciertos / estadisticasNivel1.disparos * 100) + '%' : '--';
+    const datos = [
+        [estadisticasNivel1.destruidos, 'DESTRUIDOS'],
+        [precision, 'PRECISIÓN'],
+        ['x' + estadisticasNivel1.comboMax, 'MEJOR COMBO'],
+        [Tiempo + 's', 'TIEMPO SOBRANTE'],
+        [vidasNivel1 + '/3', 'VIDAS']
+    ];
+    document.getElementById('EstadisticasVictoriaNivel1').innerHTML = datos
+        .map(([valor, etiqueta]) => '<div><b>' + valor + '</b><small>' + etiqueta + '</small></div>').join('');
+    let anterior = null;
+    try {
+        const guardado = JSON.parse(localStorage.getItem('ironfist_lvl1_record'));
+        if (guardado && Number.isInteger(guardado.estrellas) && guardado.estrellas >= 1 &&
+            guardado.estrellas <= 3 && Number.isFinite(guardado.tiempo) && guardado.tiempo >= 0) anterior = guardado;
+    } catch (error) { /* El logro funciona aunque el almacenamiento no esté disponible. */ }
+    const mejor = !anterior || estrellas > anterior.estrellas ||
+        (estrellas === anterior.estrellas && Tiempo > anterior.tiempo);
+    const record = mejor ? { estrellas, tiempo: Tiempo } : anterior;
+    if (mejor) {
+        try { localStorage.setItem('ironfist_lvl1_record', JSON.stringify(record)); } catch (error) {}
+    }
+    document.getElementById('RecordNivel1').textContent = mejor ? '¡NUEVO RÉCORD!' :
+        'MEJOR: ' + '★'.repeat(record.estrellas) + ' · ' + record.tiempo + 's SOBRANTES';
+    document.getElementById('ComboNivel1').classList.remove('visible');
+}
+
 function actualizarPuntajeNivel1() {
     document.getElementById('Puntaje').textContent = `${Puntaje} / ${objetivoPuntosNivel1}`;
 }
@@ -105,6 +165,10 @@ function reiniciarNivel1() {
     vidasNivel1Impactadas.Meteiorito2 = false;
     Tiempo = 70;
     Puntaje = 0;
+    comboNivel1 = 0;
+    ultimoMeteoritoNivel1 = -99;
+    estadisticasNivel1 = { disparos: 0, aciertos: 0, destruidos: 0, comboMax: 0 };
+    document.getElementById('ComboNivel1').classList.remove('visible');
     document.getElementById('Tiempo').innerHTML = Tiempo;
     actualizarPuntajeNivel1();
     actualizarVidasNivel1();
@@ -437,6 +501,7 @@ tableroNivel1.addEventListener('click', event => {
     elemento.style.top = disparo.y + 'px';
     tableroNivel1.appendChild(elemento);
     disparosNivel1.push(disparo);
+    estadisticasNivel1.disparos++;
 });
 
 function detenerMotorNivel1() {
@@ -463,7 +528,7 @@ function destruirMeteoritoNivel1(meteoro) {
     meteoro.activo = false;
     meteoro.espera = 0.65;
     meteoro.elemento.style.visibility = 'hidden';
-    Puntaje++;
+    Puntaje = Math.min(objetivoPuntosNivel1, Puntaje + registrarDestruccionNivel1());
     actualizarPuntajeNivel1();
     sonidoNivel1('Puntos_sound');
     if (Puntaje >= objetivoPuntosNivel1) {
@@ -473,6 +538,7 @@ function destruirMeteoritoNivel1(meteoro) {
         actualizarCursorNivel1();
         document.getElementById('Fondo_Ciberpunk').pause();
         sonidoNivel1('Triunfo');
+        actualizarLogroNivel1();
         document.getElementById('GANASTE_PANTALLA').style.display = 'flex';
         mostrarVolverInicio(true);
         document.getElementById('BotonReiniciarNivel1').hidden = false;
@@ -526,6 +592,8 @@ function pasoNivel1(dt) {
             meteoro.espera = 0.8;
             meteoro.elemento.style.visibility = 'hidden';
             vidasNivel1--;
+            comboNivel1 = 0;
+            document.getElementById('ComboNivel1').classList.remove('visible');
             actualizarVidasNivel1();
             sonidoNivel1('Perdiste_sound');
             if (vidasNivel1 <= 0) { mostrarFinJuegoNivel1(); return; }
@@ -540,6 +608,7 @@ function animarNivel1(ahora) {
         if (!pausadoNivel1) {
             if (jugandoNivel1) {
                 relojNivel1 += dt;
+                if (relojNivel1 - ultimoMeteoritoNivel1 > 2.2) document.getElementById('ComboNivel1').classList.remove('visible');
                 Tiempo = Math.max(0, 70 - Math.floor(relojNivel1));
                 document.getElementById('Tiempo').textContent = Tiempo;
                 if (Tiempo === 0) { sonidoNivel1('Perdiste_sound'); mostrarFinJuegoNivel1(); return; }

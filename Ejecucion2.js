@@ -78,16 +78,9 @@ const NAVES_LVL2 = {
         paleta: { claro: "#ffe3c2", medio: "#ff8a3d", oscuro: "#8f2f10", acento: "#ffd23a", cabina: "#ffb86b", fuego: "#ff7a1a" },
         cadencia: 0.62, dano: 2, atraviesa: 2, velocidad: 900, lw: 54, lh: 9, angulos: [0],
         stats: { poder: 5, cadencia: 1, cobertura: 3 }
-    },
-    espectro: {
-        img: "IMG/Nave_5_ok.png", rot: 0,
-        nombre: "ESPECTRO", etiqueta: "ABANICO TRIPLE", color: "#d36bff",
-        paleta: { claro: "#f1dcff", medio: "#a24bff", oscuro: "#43177e", acento: "#ff5cf0", cabina: "#e19bff", fuego: "#c070ff" },
-        cadencia: 0.42, dano: 1, atraviesa: 0, velocidad: 1000, lw: 30, lh: 4, angulos: [-10, 0, 10],
-        stats: { poder: 2, cadencia: 2, cobertura: 5 }
     }
 };
-const ORDEN_NAVES_LVL2 = ["interceptor", "relampago", "titan", "espectro"];
+const ORDEN_NAVES_LVL2 = ["interceptor", "relampago", "titan"];
 const cacheSvgNavesLvl2 = {};
 
 /* ---------------------------------------------------------------------
@@ -458,7 +451,6 @@ const sfxLvl2 = {
     laser: function (id) {
         if (id === "relampago") tonoLvl2(1500, 0.07, "sawtooth", 0.06, 600);
         else if (id === "titan") tonoLvl2(320, 0.24, "square", 0.1, 80);
-        else if (id === "espectro") tonoLvl2(760, 0.15, "triangle", 0.1, 220);
         else tonoLvl2(950, 0.12, "sawtooth", 0.07, 300);
     },
     golpe: function () { tonoLvl2(220, 0.08, "square", 0.08, 120); },
@@ -489,6 +481,15 @@ function centroPlanetaLvl2() {
         y: planetaLvl2.offsetTop + planetaLvl2.offsetHeight / 2,
         r: (planetaLvl2.offsetWidth / 2) * 0.88
     };
+}
+
+/* El escudo rodea al PLANETA: frena los meteoritos antes de que lo toquen */
+function posicionarEscudoLvl2() {
+    const pl = centroPlanetaLvl2();
+    const radio = (pl.r / 0.88) * 1.28;
+    anilloEscudoLvl2.style.width = (radio * 2) + "px";
+    anilloEscudoLvl2.style.left = pl.x + "px";
+    anilloEscudoLvl2.style.top = pl.y + "px";
 }
 
 function distSegPuntoLvl2(x1, y1, x2, y2, px, py) {
@@ -536,6 +537,21 @@ const comboHudLvl2 = document.createElement("div");
 comboHudLvl2.className = "ComboLvl2";
 tableroLvl2.appendChild(comboHudLvl2);
 
+/* Llama del propulsor: sigue a la nave (sirve para cualquier imagen) */
+const propulsorLvl2 = document.createElement("div");
+propulsorLvl2.className = "PropulsorLvl2";
+tableroLvl2.insertBefore(propulsorLvl2, naveJugadorLvl2);
+
+function sincronizarPropulsorLvl2() {
+    propulsorLvl2.style.left = naveJugadorLvl2.style.left;
+    propulsorLvl2.style.top = naveJugadorLvl2.style.top;
+    propulsorLvl2.style.opacity = naveJugadorLvl2.style.opacity === "1" ? "1" : "0";
+    propulsorLvl2.style.setProperty("--an", (naveJugadorLvl2.offsetWidth || 60) + "px");
+    propulsorLvl2.style.setProperty("--cn", NAVES_LVL2[naveActualLvl2].color);
+    propulsorLvl2.style.transform = "rotate(" + inclinacionLvl2.toFixed(1) + "deg)";
+}
+new MutationObserver(sincronizarPropulsorLvl2).observe(naveJugadorLvl2, { attributes: true, attributeFilter: ["style", "src"] });
+
 const anilloEscudoLvl2 = document.createElement("div");
 anilloEscudoLvl2.className = "AnilloEscudoLvl2";
 tableroLvl2.appendChild(anilloEscudoLvl2);
@@ -573,7 +589,7 @@ selectorLvl2.id = "SelectorNavesLvl2";
     selectorLvl2.innerHTML =
         '<p class="TituloSelectorLvl2">ELIGE TU NAVE</p>' +
         '<div class="ListaNavesLvl2">' + tarjetas + '</div>' +
-        '<p class="AyudaSelectorLvl2">Teclas 1-4 para elegir · Clic o mantener para disparar · P para pausar</p>';
+        '<p class="AyudaSelectorLvl2">Teclas 1-3 para elegir · Clic o mantener para disparar · P para pausar</p>';
 
     const botonJugar = document.getElementById("Playlvl2");
     inicioLvl2.insertBefore(selectorLvl2, botonJugar);
@@ -867,6 +883,8 @@ function danarMeteoritoLvl2(m, dano, volley) {
 
 function actualizarMeteoritosLvl2(dt, W, H) {
     const pl = centroPlanetaLvl2();
+    const radioImpacto = escudoLvl2 ? (pl.r / 0.88) * 1.28 : pl.r;
+    if (escudoLvl2) posicionarEscudoLvl2();
     const lista = meteorosLvl2.slice();
     for (let i = 0; i < lista.length; i++) {
         const m = lista[i];
@@ -877,7 +895,7 @@ function actualizarMeteoritosLvl2(dt, W, H) {
         m.el.style.transform = "translate(" + (m.x - m.tam / 2) + "px," + (m.y - m.tam / 2) + "px)";
         m.img.style.transform = "rotate(" + m.rot + "deg)";
 
-        if (Math.hypot(m.x - pl.x, m.y - pl.y) <= pl.r + m.r * 0.8) {
+        if (Math.hypot(m.x - pl.x, m.y - pl.y) <= radioImpacto + m.r * 0.8) {
             impactarPlanetaLvl2(m);
             if (!juegoActivoLvl2) return;
         } else if (m.x > W + 250 || m.y > H + 250 || m.y < -250) {
@@ -897,7 +915,7 @@ function impactarPlanetaLvl2(m) {
         escudoLvl2 = false;
         anilloEscudoLvl2.classList.remove("visible");
         sfxLvl2.escudo();
-        textoFlotanteLvl2(x, y - 20, "¡ESCUDO!", "item");
+        textoFlotanteLvl2(x, y - 20, "¡ESCUDO ROTO!", "item");
         particulasLvl2(x, y, 12, "#6fe9ff", 80);
         return;
     }
@@ -920,7 +938,7 @@ function impactarPlanetaLvl2(m) {
 function angulosActualesLvl2() {
     const nave = tipoNaveLvl2();
     if (tJuegoLvl2 < trepleHastaLvl2) {
-        return naveActualLvl2 === "espectro" ? [-18, -9, 0, 9, 18] : [-10, 0, 10];
+        return [-10, 0, 10];
     }
     return nave.angulos;
 }
@@ -1033,8 +1051,9 @@ function activarItemLvl2(it) {
     sfxLvl2.item();
     if (it.tipo === "escudo") {
         escudoLvl2 = true;
+        posicionarEscudoLvl2();
         anilloEscudoLvl2.classList.add("visible");
-        textoFlotanteLvl2(it.x, it.y - 20, "ESCUDO", "item");
+        textoFlotanteLvl2(it.x, it.y - 20, "ESCUDO DEL PLANETA", "item");
     } else if (it.tipo === "triple") {
         trepleHastaLvl2 = tJuegoLvl2 + 8;
         textoFlotanteLvl2(it.x, it.y - 20, "DISPARO MÚLTIPLE", "item");
@@ -1477,12 +1496,12 @@ document.addEventListener("keydown", function (evento) {
     const inicioVisible = inicioLvl2.style.display !== "none" && !iniciandoLvl2 && !juegoActivoLvl2;
     if (inicioVisible) {
         const idx = ORDEN_NAVES_LVL2.indexOf(naveActualLvl2);
-        if (evento.key >= "1" && evento.key <= "4") {
+        if (evento.key >= "1" && evento.key <= "3") {
             seleccionarNaveLvl2(ORDEN_NAVES_LVL2[parseInt(evento.key, 10) - 1]);
         } else if (evento.key === "ArrowRight") {
-            seleccionarNaveLvl2(ORDEN_NAVES_LVL2[(idx + 1) % 4]);
+            seleccionarNaveLvl2(ORDEN_NAVES_LVL2[(idx + 1) % 3]);
         } else if (evento.key === "ArrowLeft") {
-            seleccionarNaveLvl2(ORDEN_NAVES_LVL2[(idx + 3) % 4]);
+            seleccionarNaveLvl2(ORDEN_NAVES_LVL2[(idx + 2) % 3]);
         } else if (evento.key === "Enter") {
             iniciarConteoLvl2();
         }
@@ -1521,8 +1540,6 @@ function moverNaveLvl2(evento) {
     naveJugadorLvl2.style.left = p.x + "px";
     naveJugadorLvl2.style.top = p.y + "px";
     naveJugadorLvl2.style.opacity = "1";
-    anilloEscudoLvl2.style.left = p.x + "px";
-    anilloEscudoLvl2.style.top = p.y + "px";
 }
 
 tableroLvl2.addEventListener("pointermove", moverNaveLvl2);

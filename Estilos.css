@@ -1187,12 +1187,6 @@ margin-left: 12%; }
 /*LVL 2 ---------------------------------------------------------------------------------------------------------*/
 
 
-/* =====================================================================
-   IRON FIST - NIVEL 2: MEJORAS VISUALES
-   Todas las reglas están limitadas al nivel 2 (#NIVEL_02 / clases Lvl2),
-   así que no afectan a los niveles 1 y 3.
-   Va enlazado DESPUÉS de Estilos.css.
-   ===================================================================== */
 
 /* ---------------------------------------------------------------------
    BASE DEL NIVEL 2 (respaldo)
@@ -1745,7 +1739,7 @@ margin-left: 12%; }
 
 #NIVEL_02 .AnilloEscudoLvl2 {
     position: absolute;
-    width: clamp(78px, 8.4vw, 124px);
+    width: 200px;
     aspect-ratio: 1;
     left: 50%;
     top: 50%;
@@ -2199,7 +2193,50 @@ margin-left: 12%; }
     font-size: inherit;
     pointer-events: none;
 }
-    
+
+/* ---------------------------------------------------------------------
+   PROPULSOR (llama detrás de la nave)
+   --------------------------------------------------------------------- */
+#NIVEL_02 .PropulsorLvl2 {
+    position: absolute;
+    width: 0;
+    height: 0;
+    z-index: 1499;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: 0 0;
+}
+
+#NIVEL_02 .PropulsorLvl2::before,
+#NIVEL_02 .PropulsorLvl2::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--an, 60px) * 0.40);
+    top: calc(var(--an, 60px) * -0.10);
+    height: calc(var(--an, 60px) * 0.20);
+    border-radius: 50% 100% 100% 50% / 50%;
+    transform-origin: 0 50%;
+}
+
+#NIVEL_02 .PropulsorLvl2::before {
+    width: calc(var(--an, 60px) * 0.62);
+    background: linear-gradient(to right, var(--cn, #35d6ff), transparent);
+    filter: blur(2px);
+    animation: llamaLvl2 0.14s ease-in-out infinite alternate;
+}
+
+#NIVEL_02 .PropulsorLvl2::after {
+    width: calc(var(--an, 60px) * 0.34);
+    top: calc(var(--an, 60px) * -0.05);
+    height: calc(var(--an, 60px) * 0.10);
+    background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
+    animation: llamaLvl2 0.11s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes llamaLvl2 {
+    from { transform: scaleX(0.75); opacity: 0.75; }
+    to   { transform: scaleX(1.2);  opacity: 1; }
+}
     
     /*TERCER NIVEL ----------------------------------------------------------------------------------------*/
 

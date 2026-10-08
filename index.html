@@ -412,14 +412,6 @@
                     </div>
         
                     <!--Pantalla de créditos-->
-                    <div id="Pantalla_creditoslvl3"></div>
-                    <div id="Creditoslvl3">
-                        <h3>Desarrollado por:</h3><br>
-                        <p>Fredy Palomino</p>
-                        <p>David Chambilla</p>
-                        <p>Renzo Blas</p>
-                        <p>Brandon Montiveros</p>
-                    </div>
                     <div id="Proximolvl3">
                         <h4>Próximamente:</h4>
                         <h4>Iron Fist 2</h4>
@@ -446,14 +438,28 @@
                 </div>
                 
                     <dialog id="DialogoCreditosLvl3" class="DialogoCreditosLvl3" aria-labelledby="TituloCreditosLvl3">
-                        <h2 id="TituloCreditosLvl3">CRÉDITOS</h2>
-                        <p class="CreditosNombreJuego">IRON FIST</p>
-                        <h3>Desarrollado por:</h3>
-                        <p>Fredy Palomino</p>
-                        <p>David Chambilla</p>
-                        <p>Renzo Blas</p>
-                        <p>Brandon Montiveros</p>
-                        <form method="dialog"><button type="submit" class="CerrarCreditosLvl3">CERRAR</button></form>
+                        <div class="CreditosUniverso" aria-hidden="true"><img class="CreditosTierra" src="IMG/planeta_tierra.png" alt=""></div>
+                        <div class="CreditosVentana">
+                            <div class="CreditosSecuencia" id="SecuenciaCreditosLvl3">
+                                <div class="CreditosBloque"><h1 id="TituloCreditosLvl3">IRON FIST</h1><p class="CreditosSubtitulo">LA ÚLTIMA DEFENSA DE LA HUMANIDAD</p></div>
+                                <div class="CreditosBloque"><p>Cuando el cielo amenazó con caer,<br>cinco mentes se unieron<br>para dar vida a una última esperanza.</p></div>
+                                <div class="CreditosBloque"><h2>UNA CREACIÓN DE</h2><p class="CreditosEstudio">GRUPO 4 GAMES</p></div>
+                                <div class="CreditosBloque"><h2>EQUIPO DE DESARROLLO</h2><div class="CreditosEquipo">
+                                    <p>Victor David León Carrasco</p>
+                                    <p>Jose Carlos Manchego Rojas</p>
+                                    <p>Ilcer Medina Olivera</p>
+                                    <p>Aldo Milian Bustamante</p>
+                                    <p>Pamela Maquera Avendano</p>
+                                </div></div>
+                                <div class="CreditosBloque"><p>Cada idea encendió una estrella.<br>Cada desafío nos llevó más lejos.<br>Juntos, dimos vida a IRON FIST.</p></div>
+                                <div class="CreditosBloque"><h2>GRACIAS POR JUGAR</h2><p>Nosotros creamos la misión.<br>Tú la convertiste en leyenda.</p></div>
+                                <div class="CreditosBloque"><p>La Tierra sigue en pie.</p></div>
+                                <div class="CreditosBloque"><p>Pero el universo<br>aún guarda nuevas amenazas…</p></div>
+                                <div class="CreditosBloque"><h2>LA MISIÓN CONTINÚA</h2></div>
+                            </div>
+                        </div>
+                        <div class="CreditosFinal" id="FinalCreditosLvl3" hidden><h2>GRUPO 4 GAMES</h2><p>LA MISIÓN CONTINÚA</p></div>
+                        <button id="VolverMenuCreditosLvl3" class="VolverMenuCreditosLvl3" type="button">VOLVER AL MENÚ</button>
                     </dialog>
                 <script src="Ejecucion3.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

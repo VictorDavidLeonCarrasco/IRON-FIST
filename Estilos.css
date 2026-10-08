@@ -4068,33 +4068,45 @@ html, body {
     color: #03122e;
     transform: scale(1.05);
 }
+
+/* Créditos finales verticales a pantalla completa, sin perspectiva. */
+body.creditos-activos { overflow: hidden; }
 .DialogoCreditosLvl3 {
-    width: min(520px, 86vw);
-    max-height: 85vh;
-    overflow: auto;
-    box-sizing: border-box;
-    padding: clamp(20px, 4vw, 36px);
-    border: 2px solid #36cfff;
-    border-radius: 10px;
-    background: #030d23;
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    overflow: hidden;
+    background: #020611;
     color: white;
+    font-family: 'Orbitron', sans-serif;
     text-align: center;
-    font-family: 'Orbitron', sans-serif;
-    box-shadow: 0 0 28px rgba(54, 207, 255, 0.6);
 }
-.DialogoCreditosLvl3::backdrop { background: rgba(0, 0, 12, 0.8); }
-.DialogoCreditosLvl3 h2 { color: #8fe9ff; font-size: clamp(18px, 3vw, 28px); }
-.DialogoCreditosLvl3 .CreditosNombreJuego { color: #ffd54a; font-weight: 800; }
-.DialogoCreditosLvl3 p { line-height: 1.6; }
-.CerrarCreditosLvl3 {
-    margin-top: 12px;
-    padding: 14px 22px;
-    border: 2px solid #36cfff;
-    border-radius: 10px;
-    background: #087ee8;
-    color: white;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    cursor: pointer;
-}
-.CerrarCreditosLvl3:hover { background: #36cfff; color: #03122e; }
+.DialogoCreditosLvl3::backdrop { background: #020611; }
+.CreditosUniverso { position: absolute; inset: 0; background: #020611 url('IMG/Fondo_Espacio2.jpg') center / cover; }
+.CreditosUniverso::after { content: ''; position: absolute; inset: 0; background: rgba(0, 4, 16, 0.55); }
+.CreditosTierra { position: absolute; width: min(65vw, 680px); right: -12%; bottom: -20%; opacity: 0.55; filter: drop-shadow(0 0 35px #2187c9) brightness(1.2); }
+.CreditosVentana { position: absolute; inset: 0; overflow: hidden; }
+.CreditosVentana::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, #020611 0%, transparent 20%, transparent 75%, #020611 100%); }
+.CreditosSecuencia { width: min(900px, 90%); margin: 0 auto; padding: 0; will-change: transform; transform: translateY(100vh); }
+.CreditosBloque { padding: clamp(32px, 5vh, 60px) 0; }
+.DialogoCreditosLvl3 .CreditosSecuencia p { font-size: clamp(16px, 2.1vw, 25px); line-height: 1.9; margin: 20px 0; text-wrap: balance; }
+.DialogoCreditosLvl3 h1 { font-size: clamp(38px, 7vw, 80px); margin: 0 0 20px; letter-spacing: 0.12em; text-shadow: 0 0 25px rgba(74, 176, 255, 0.75); }
+.DialogoCreditosLvl3 h2 { color: #8cdbff; font-size: clamp(18px, 2.5vw, 30px); letter-spacing: 0.12em; line-height: 1.6; margin: 0 0 28px; text-shadow: 0 0 18px rgba(57, 161, 255, 0.6); }
+.DialogoCreditosLvl3 .CreditosSubtitulo { color: #bce8ff; }
+.DialogoCreditosLvl3 .CreditosEstudio { font-weight: 800; letter-spacing: 0.1em; }
+.DialogoCreditosLvl3 .CreditosEquipo p { font-size: clamp(18px, 2.5vw, 30px); font-weight: 600; padding: 18px 0; margin: 26px 0; line-height: 1.7; }
+.CreditosFinal { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; }
+.DialogoCreditosLvl3 .CreditosFinal h2 { font-size: clamp(28px, 5vw, 60px); color: white; }
+.CreditosFinal p { font-size: clamp(16px, 2.5vw, 26px); color: #8cdbff; line-height: 1.7; }
+.VolverMenuCreditosLvl3 { position: absolute; z-index: 2; bottom: max(24px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); padding: 13px 20px; border: 1px solid rgba(140, 219, 255, 0.5); border-radius: 10px; background: rgba(2, 6, 17, 0.85); color: white; font: 600 clamp(11px, 1.2vw, 14px) 'Orbitron', sans-serif; letter-spacing: 0.12em; white-space: nowrap; cursor: pointer; }
+.VolverMenuCreditosLvl3:hover { border-color: #8cdbff; background: #11263b; }
+.VolverMenuCreditosLvl3:focus-visible { outline: 2px solid #8cdbff; outline-offset: 4px; }
+@media (max-width: 600px) { .CreditosSecuencia { width: 88%; } .CreditosTierra { width: 95vw; right: -30%; bottom: -10%; } }

@@ -122,7 +122,7 @@ function perderNivel3(mensaje) {
     document.querySelector('#NIVEL3 .Mensaje_Pauselvl3').textContent = mensaje;
     document.getElementById('Pausa_Pantallalvl3').style.display = 'table';
     mostrarVolverInicio(true);
-    document.getElementById('VerCreditosLvl3').hidden = false;
+    document.getElementById('VerCreditosLvl3').hidden = true;
     document.getElementById('BotonReiniciarNivel1').hidden = false;
 }
 function pasoMotorLvl3(dt) {
@@ -204,7 +204,7 @@ function JUEGOlvl3() {
     document.getElementById('Ganaste_Pantallalvl3').style.display = 'none';
     document.getElementById('Pausa_Pantallalvl3').style.display = 'none';
     document.getElementById('Planetalvl3')?.style.setProperty('display', 'block');
-    for (const id of ['Pantalla_Ovnislvl3','Pantalla_Nodrizalvl3','Pantalla_Ovnis2lvl3','Pantalla_creditoslvl3','Creditoslvl3','Proximolvl3']) document.getElementById(id).style.display = 'none';
+    for (const id of ['Pantalla_Ovnislvl3','Pantalla_Nodrizalvl3','Pantalla_Ovnis2lvl3','Proximolvl3']) document.getElementById(id).style.display = 'none';
     meteoritosMotorLvl3.forEach((m,i) => {
         retirarMeteoritoLvl3(m, 0.2 + i * 0.7);
         m.elemento.style.transition = 'none';
@@ -259,7 +259,7 @@ function DETENER_JUEGOlvl3() {
         pausadoLvl3 = !pausadoLvl3;
         ultimoFrameLvl3 = null;
         mostrarVolverInicio(pausadoLvl3);
-        document.getElementById('VerCreditosLvl3').hidden = !pausadoLvl3;
+        document.getElementById('VerCreditosLvl3').hidden = true;
         const boton = document.getElementById('Pauselvl3');
         boton.textContent = pausadoLvl3 ? 'REANUDAR' : 'PAUSAR';
         boton.setAttribute('aria-pressed', String(pausadoLvl3));
@@ -273,10 +273,59 @@ document.addEventListener('visibilitychange', () => {
     if (document.hidden && juegoActivoLvl3 && !pausadoLvl3) document.getElementById('Pauselvl3').click();
 });
 
-// La navegación se encuentra después de este script en el HTML.
+// Créditos finales: disponibles únicamente después de superar el nivel 3.
+let animacionCreditosLvl3 = null;
+let volumenAnteriorCreditosLvl3 = null;
+function detenerCreditosLvl3() {
+    if (animacionCreditosLvl3) {
+        animacionCreditosLvl3.cancel();
+        animacionCreditosLvl3 = null;
+    }
+    const musica = document.getElementById('Musica_Final');
+    musica.pause();
+    musica.currentTime = 0;
+    if (volumenAnteriorCreditosLvl3 !== null) musica.volume = volumenAnteriorCreditosLvl3;
+    volumenAnteriorCreditosLvl3 = null;
+    document.body.classList.remove('creditos-activos');
+}
+function abrirCreditosLvl3() {
+    if (!terminadoLvl3 || Puntajelvl3 < 40) return;
+    const dialogo = document.getElementById('DialogoCreditosLvl3');
+    if (dialogo.open) return;
+    detenerCreditosLvl3();
+    const secuencia = document.getElementById('SecuenciaCreditosLvl3');
+    const final = document.getElementById('FinalCreditosLvl3');
+    final.hidden = true;
+    secuencia.style.visibility = 'visible';
+    dialogo.showModal();
+    document.body.classList.add('creditos-activos');
+    const ventana = dialogo.querySelector('.CreditosVentana');
+    animacionCreditosLvl3 = secuencia.animate([
+        { transform: 'translateY(' + ventana.clientHeight + 'px)' },
+        { transform: 'translateY(-' + secuencia.scrollHeight + 'px)' }
+    ], { duration: 60000, easing: 'linear', fill: 'forwards' });
+    const actual = animacionCreditosLvl3;
+    actual.finished.then(() => {
+        if (animacionCreditosLvl3 !== actual || !dialogo.open) return;
+        secuencia.style.visibility = 'hidden';
+        final.hidden = false;
+    }).catch(() => {}); // Cerrar cancela la secuencia intencionalmente.
+    ['Triunfo', 'Ganaste', 'Fondo_Ciberpunk'].forEach(id => document.getElementById(id).pause());
+    const musica = document.getElementById('Musica_Final');
+    volumenAnteriorCreditosLvl3 = musica.volume;
+    musica.volume = Math.max(0, Math.min(1, Number(document.getElementById('VolumenLvl3').value))) * 0.5;
+    musica.currentTime = 0;
+    musica.play().catch(() => {});
+}
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('VerCreditosLvl3').addEventListener('click', () => {
-        const dialogo = document.getElementById('DialogoCreditosLvl3');
-        if (!dialogo.open) dialogo.showModal();
+    const dialogo = document.getElementById('DialogoCreditosLvl3');
+    document.getElementById('VerCreditosLvl3').addEventListener('click', abrirCreditosLvl3);
+    dialogo.addEventListener('close', detenerCreditosLvl3);
+    dialogo.addEventListener('cancel', detenerCreditosLvl3);
+    document.getElementById('VolverMenuCreditosLvl3').addEventListener('click', () => {
+        dialogo.close();
+        detenerCreditosLvl3();
+        window.location.hash = 'inicio';
+        window.location.reload();
     });
 });

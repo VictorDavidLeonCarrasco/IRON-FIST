@@ -4110,3 +4110,16 @@ body.creditos-activos { overflow: hidden; }
 .VolverMenuCreditosLvl3:hover { border-color: #8cdbff; background: #11263b; }
 .VolverMenuCreditosLvl3:focus-visible { outline: 2px solid #8cdbff; outline-offset: 4px; }
 @media (max-width: 600px) { .CreditosSecuencia { width: 88%; } .CreditosTierra { width: 95vw; right: -30%; bottom: -10%; } }
+
+/* Jefe final: roca gigante, grietas y corona eléctrica. */
+#NIVEL3 .JefeMeteoritoLvl3 { position: absolute; transform: translate(-50%, -50%); z-index: 1400; pointer-events: none; --heridas: 0; filter: drop-shadow(0 0 18px #ff4728); }
+.JefeRocaLvl3 { width: 100%; height: 100%; object-fit: contain; filter: brightness(0.85) saturate(1.4); }
+.JefeGrietasLvl3, .JefeRayosLvl3 { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke-linejoin: round; pointer-events: none; }
+.JefeGrietasLvl3 { stroke: #ffd36a; stroke-width: calc(0.7px + var(--heridas) * 1.5px); opacity: calc(0.4 + var(--heridas) * 0.6); filter: drop-shadow(0 0 5px #ff4b00); }
+.JefeRayosLvl3 { stroke: #b4f5ff; stroke-width: 1.2; transform: scale(1.15); filter: drop-shadow(0 0 6px #36cfff); animation: electricidadJefeLvl3 0.22s steps(2) infinite; opacity: calc(0.45 + var(--heridas) * 0.55); }
+.JefeVidaLvl3 { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 800 clamp(20px, 3vw, 40px) 'Orbitron', sans-serif; color: white; text-shadow: 0 2px 5px #000, 0 0 10px #000; }
+.JefeImpactadoLvl3 .JefeRocaLvl3 { filter: brightness(2.4) drop-shadow(0 0 18px white); }
+.JefeDestruidoLvl3 .JefeRocaLvl3, .JefeDestruidoLvl3 svg { visibility: hidden; }
+.JefeExplosionLvl3 { position: absolute; transform: translate(-50%, -50%); height: auto; z-index: 1350; pointer-events: none; filter: drop-shadow(0 0 30px #ff7924); }
+.JefePausadoLvl3 .JefeRayosLvl3 { animation-play-state: paused; }
+@keyframes electricidadJefeLvl3 { 0% { stroke-dasharray: 5 2; } 100% { stroke-dasharray: 2 5; filter: drop-shadow(0 0 12px #65dcff); } }

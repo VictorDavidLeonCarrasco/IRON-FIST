@@ -1491,7 +1491,7 @@ document.addEventListener("fullscreenchange", function () {
 
 document.addEventListener("keydown", function (evento) {
     const nivel = document.getElementById("NIVEL_02");
-    if (!nivel || nivel.offsetParent === null) return; // el nivel 2 no está en pantalla
+    if (!nivel || nivel.getClientRects().length === 0) return; // el nivel 2 no está en pantalla (también vale en pantalla completa)
 
     const inicioVisible = inicioLvl2.style.display !== "none" && !iniciandoLvl2 && !juegoActivoLvl2;
     if (inicioVisible) {
@@ -1573,3 +1573,22 @@ seleccionarNaveLvl2(naveActualLvl2, true);
 precargarNavesLvl2();
 ActualizarVidaslvl2();
 actualizarMarcadoresLvl2();
+
+/* ---------------------------------------------------------------------
+   RESPONSIVE: la interfaz crece cuando el tablero se agranda (pantalla completa, monitores grandes)
+   --e = 1 en tamaños normales, hasta 2.4 en pantallas muy grandes
+   --------------------------------------------------------------------- */
+(function escalaResponsiveLvl2() {
+    const raiz = document.getElementById("NIVEL_02");
+    function ajustar() {
+        const w = tableroLvl2.offsetWidth;
+        const h = tableroLvl2.offsetHeight;
+        if (!w || !h) return;
+        const e = Math.max(1, Math.min(2.4, Math.min(w / 1400, h / 620)));
+        raiz.style.setProperty("--e", e.toFixed(3));
+    }
+    if (typeof ResizeObserver === "function") new ResizeObserver(ajustar).observe(tableroLvl2);
+    window.addEventListener("resize", ajustar);
+    document.addEventListener("fullscreenchange", function () { setTimeout(ajustar, 60); });
+    ajustar();
+})();

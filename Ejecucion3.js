@@ -856,7 +856,7 @@ function iniciarAvisoJefeLvl3() {
 function aparecerJefeLvl3() {
     const e = document.createElement("div");
     e.className = "JefeMeteoritoLvl3";
-    e.innerHTML = '<img class="JefeRocaLvl3" src="IMG/Metiorito.png" alt="Meteorito jefe final">' +
+    e.innerHTML = '<img class="JefeRocaLvl3" src="jefe.png" alt="Jefe final del nivel 3">' +
         '<svg class="JefeGrietasLvl3" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 12 L38 35 L30 49 L49 59 L44 90 M38 35 L60 25 L77 9 M49 59 L70 50 L85 65 M60 25 L58 43 L70 50 M10 63 L30 49"/></svg>' +
         '<svg class="JefeRayosLvl3" viewBox="0 0 100 100" aria-hidden="true"><path d="M4 40 L15 27 L7 19 L24 9 M76 8 L93 22 L83 30 L98 47 M95 65 L83 78 L90 88 L71 95 M26 95 L11 81 L19 70 L2 55"/></svg>' +
         '<span class="JefeVidaLvl3">' + VIDA_JEFE_NIVEL3 + '/' + VIDA_JEFE_NIVEL3 + '</span>';

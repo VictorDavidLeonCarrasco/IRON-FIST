@@ -322,7 +322,12 @@ const sfxLvl3 = {
     laser: function (id) {
         if (id === "relampago") tonoLvl3(1500, 0.07, "sawtooth", 0.06, 600);
         else if (id === "titan") tonoLvl3(320, 0.24, "square", 0.1, 80);
-        else if (id === "omega") { tonoLvl3(1100, 0.14, "sawtooth", 0.07, 260); tonoLvl3(550, 0.14, "square", 0.05, 140); }
+        else if (id === "omega") {
+            // Silbido agudo: el tono sube un instante y luego cae, con un armónico más suave
+            tonoLvl3(2100, 0.07, "sine", 0.10, 3300);
+            tonoLvl3(3300, 0.2, "sine", 0.09, 1500, 0.07);
+            tonoLvl3(1050, 0.26, "sine", 0.05, 750);
+        }
         else tonoLvl3(950, 0.12, "sawtooth", 0.07, 300);
     },
     golpe: function () { tonoLvl3(220, 0.08, "square", 0.08, 120); },
@@ -337,7 +342,15 @@ const sfxLvl3 = {
     combo: function (n) { tonoLvl3(560 + n * 55, 0.13, "triangle", 0.14); },
     elegir: function () { tonoLvl3(660, 0.07, "square", 0.09, 990); },
     fase: function () { tonoLvl3(200, 0.6, "sawtooth", 0.18, 60); ruidoLvl3(0.5, 0.25, 700); },
-    fuego: function () { tonoLvl3(420, 0.25, "sawtooth", 0.09, 160); }
+    fuego: function (fase) {
+        // Rugido de furia: gruñido grave, chillido que cae y ráfaga de aire
+        const furia = fase === 3;
+        ruidoLvl3(furia ? 0.8 : 0.6, furia ? 0.34 : 0.26, 520);
+        tonoLvl3(furia ? 85 : 110, 0.75, "sawtooth", 0.22, 38);
+        tonoLvl3(furia ? 92 : 118, 0.75, "square", 0.10, 40);
+        tonoLvl3(furia ? 1250 : 950, 0.5, "sawtooth", 0.07, 230, 0.04);
+        if (furia) tonoLvl3(1700, 0.35, "sawtooth", 0.05, 300, 0.2);
+    }
 };
 
 /* ---------------------------------------------------------------------
@@ -856,8 +869,7 @@ function iniciarAvisoJefeLvl3() {
 function aparecerJefeLvl3() {
     const e = document.createElement("div");
     e.className = "JefeMeteoritoLvl3";
-    e.innerHTML = '<img class="JefeRocaLvl3" src="IMG/Metiorito.png" alt="Meteorito jefe final">' +
-        '<svg class="JefeGrietasLvl3" viewBox="0 0 100 100" aria-hidden="true"><path d="M20 12 L38 35 L30 49 L49 59 L44 90 M38 35 L60 25 L77 9 M49 59 L70 50 L85 65 M60 25 L58 43 L70 50 M10 63 L30 49"/></svg>' +
+    e.innerHTML = '<img class="JefeRocaLvl3" src="IMG/Meteorito_Jefe.png" alt="Meteorito jefe final" draggable="false">' +
         '<svg class="JefeRayosLvl3" viewBox="0 0 100 100" aria-hidden="true"><path d="M4 40 L15 27 L7 19 L24 9 M76 8 L93 22 L83 30 L98 47 M95 65 L83 78 L90 88 L71 95 M26 95 L11 81 L19 70 L2 55"/></svg>' +
         '<span class="JefeVidaLvl3">' + VIDA_JEFE_NIVEL3 + '/' + VIDA_JEFE_NIVEL3 + '</span>';
     tableroNivel3.appendChild(e);
@@ -878,7 +890,7 @@ function golpearJefeLvl3(dano, x, y) {
     if (jefeLvl3.estado !== "activo") return;
     jefeLvl3.vida = Math.max(0, jefeLvl3.vida - dano);
     jefeLvl3.destello = 0.1;
-    jefeLvl3.x -= 3 * dano * escalaLvl3; // pequeño empujón hacia atrás
+    jefeLvl3.x -= 5 * dano * escalaLvl3; // pequeño empujón hacia atrás
     sfxLvl3.golpeJefe();
     particulasLvl3(x, y, 5, "#ffcf6a", 55);
     const pct = jefeLvl3.vida / VIDA_JEFE_NIVEL3;
@@ -910,7 +922,7 @@ function matarJefeLvl3() {
 }
 function dispararBolasJefeLvl3() {
     const n = jefeLvl3.fase === 3 ? 2 : 1;
-    sfxLvl3.fuego();
+    sfxLvl3.fuego(jefeLvl3.fase);
     for (let k = 0; k < n; k++) {
         const dx = posNaveLvl3.x - jefeLvl3.x, dy = posNaveLvl3.y - jefeLvl3.y;
         let ang = Math.atan2(dy, dx) + (n === 2 ? (k === 0 ? -0.18 : 0.18) : 0);
@@ -990,8 +1002,8 @@ function actualizarJefeLvl3(dt, W, H) {
     j.t += dt;
     j.destello = Math.max(0, j.destello - dt);
     if (!j.destello) j.elemento.classList.remove("JefeImpactadoLvl3");
-    const vel = W / 26 * (j.fase === 1 ? 1 : j.fase === 2 ? 1.3 : 1.6);
-    const entrada = j.x < W * 0.08 ? 2.4 : 1;           // entra más rápido
+    const vel = W / 42 * (j.fase === 1 ? 1 : j.fase === 2 ? 1.2 : 1.4);
+    const entrada = j.x < W * 0.08 ? 3 : 1;           // entra más rápido
     j.x += vel * entrada * dt;
     const amp = H * (j.fase === 1 ? 0.08 : j.fase === 2 ? 0.15 : 0.22);
     j.y = H / 2 + Math.sin(j.t * (0.8 + j.fase * 0.25)) * amp;
@@ -1002,9 +1014,14 @@ function actualizarJefeLvl3(dt, W, H) {
     j.elemento.style.width = j.tam + "px"; j.elemento.style.height = j.tam + "px";
     j.elemento.style.left = j.x + "px"; j.elemento.style.top = j.y + "px";
     if (j.x + j.tam * 0.42 >= xLimiteLvl3()) {
-        j.x = -j.tam; // vuelve a empezar tras golpear al planeta
-        golpePlanetaLvl3(xLimiteLvl3(), j.y);
-        sacudirLvl3(true);
+        // El jefe alcanzó la Tierra: el planeta es destruido y se pierden todas las vidas
+        mostrarExplosionLvl3(xLimiteLvl3() + j.tam * 0.3, j.y, j.tam * 1.8);
+        particulasLvl3(xLimiteLvl3(), j.y, 24, "#ff7a3a", j.tam);
+        efectoImpactoPlanetaLvl3();
+        vidasLvl3 = 0;
+        actualizarVidasLvl3();
+        reproducirLvl3("Perdiste_sound");
+        perderNivel3("PLANETA DESTRUIDO");
     }
 }
 

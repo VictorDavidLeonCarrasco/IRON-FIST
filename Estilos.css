@@ -4864,13 +4864,16 @@ body.creditos-activos { overflow: hidden; }
     transition: none;
     order: 5;
 }
-#NIVEL3 .Startlvl3 #Dificultadlvl3 img { display: none; }
+#NIVEL3 .Startlvl3 #Dificultadlvl3 { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: clamp(8px, 2vh, 18px); }
+#NIVEL3 .Startlvl3 #Dificultadlvl3 img { display: block; width: clamp(30px, 6vh, 64px) !important; height: auto; animation: giroPlanetaLvl3 12s linear infinite; }
+@keyframes giroPlanetaLvl3 { to { transform: rotate(360deg); } }
 #NIVEL3 .Startlvl3 #Dificultadlvl3 h1 {
-    font-family: 'Orbitron', sans-serif !important;
-    font-size: clamp(8px, 1.5vh, 13px) !important;
-    letter-spacing: .25em;
-    color: #ff7a7a;
-    text-shadow: 0 0 10px rgba(255, 60, 60, .7);
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: clamp(9px, 2vh, 18px) !important;
+    letter-spacing: 0;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, .9);
+    white-space: nowrap;
 }
 #NIVEL3 .Startlvl3 .Playlvl3 { order: 4; margin-top: 0; flex: 0 0 auto; }
 #NIVEL3 .Startlvl3 > .SelectorNavesLvl3,
@@ -5094,3 +5097,15 @@ body.creditos-activos { overflow: hidden; }
     #NIVEL3 .EstrellasCapaLvl3, #NIVEL3 .SacudidaLvl3, #NIVEL3 .SacudidaFuerteLvl3, #NIVEL3 .PeligroLvl3::after,
     #NIVEL3 .AlertaJefeLvl3::after { animation: none; }
 }
+
+/* ---- Jefe: meteorito de lava ---- */
+#NIVEL3 .JefeRocaLvl3 { filter: none; animation: giroJefeLvl3 18s linear infinite; }
+@keyframes giroJefeLvl3 { to { transform: rotate(360deg); } }
+#NIVEL3 .JefeMeteoritoLvl3 { filter: drop-shadow(0 0 22px rgba(255, 110, 20, .85)); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase2 { filter: drop-shadow(0 0 26px rgba(255, 120, 20, .95)); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase2 .JefeRocaLvl3 { filter: brightness(1.12) saturate(1.2); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase3 { filter: drop-shadow(0 0 32px rgba(255, 50, 10, 1)); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase3 .JefeRocaLvl3 { filter: brightness(1.25) saturate(1.5) hue-rotate(-12deg); }
+#NIVEL3 .JefeImpactadoLvl3 .JefeRocaLvl3 { filter: brightness(2.2) drop-shadow(0 0 18px #fff); }
+#NIVEL3 .JefePausadoLvl3 .JefeRocaLvl3 { animation-play-state: paused; }
+#NIVEL3 .JefeRayosLvl3 { opacity: calc(0.15 + var(--heridas, 0) * 0.5); }

@@ -43,8 +43,22 @@
 
 <section class="Seccion_01" id="Seccion_01"  >
 <h1 class="Nombre">IRON FIST</h1><h1 class="Texto_Principal">¿LISTO PARA DEFENDER<br> EL PLANETA?</h1>
+<div class="BotonesMenuMisiones">
 <button class="Boton" id="Juego" onclick="Mover()">INICIAR MISIÓN</button>
+<button class="Boton" id="LogroMisiones" type="button" disabled aria-describedby="EstadoLogroMisiones">LOGRO DE MISIONES</button>
+<p id="EstadoLogroMisiones">Gana los tres niveles para desbloquear.</p>
+</div>
 </section>
+<dialog id="SelectorMisiones" aria-labelledby="TituloSelectorMisiones">
+    <h2 id="TituloSelectorMisiones">LOGRO DE MISIONES</h2>
+    <p>Elige la misi&oacute;n que quieres volver a jugar.</p>
+    <div class="OpcionesMisiones">
+        <button type="button" data-mision="1">NIVEL 1</button>
+        <button type="button" data-mision="2">NIVEL 2</button>
+        <button type="button" data-mision="3">NIVEL 3</button>
+    </div>
+    <button id="CerrarSelectorMisiones" type="button">VOLVER AL MEN&Uacute;</button>
+</dialog>
 <!--SECCION - 3 ------------------------------------------------------------------------------------------------------->
 <section id="Reglas">
 
@@ -141,7 +155,7 @@
             <!--Contenedor-Cabezera-->
             <div class="Cabezera Contenedor">
             <div class="Tiempo"><h3>TIEMPO</h3><span id="Tiempo">70</span></div><!--Tiempo con su span para la el final del minuto--> 
-            <div class="Puntaje"><h3>PUNTAJE</h3><span id="Puntaje">0&nbsp;/&nbsp;27</span></div><!--Puntaje con su span que indica el puntaje-->
+            <div class="Puntaje"><h3>PUNTAJE</h3><span id="Puntaje">0&nbsp;/&nbsp;15</span></div><!--Puntaje con su span que indica el puntaje-->
             <div class="VidasNivel1" id="VidasNivel1">
                 <h3>VIDAS</h3>
                 <div class="IconosVidasNivel1" aria-label="Vidas restantes del nivel 1">
@@ -178,7 +192,7 @@
             <!--IMAGENES DEBTRO DE JUEGO-->
             <img src="IMG/Metiorito.png" width="70px" class="Meteiorito" id="Meteiorito">
             <img src="IMG/Metiorito.png" width="70px" class="Meteiorito" id="Meteiorito2">
-            <img src="IMG/planeta_tierra.png" width="400px" class="Planeta">
+            <img src="IMG/planetas_lvl2/planeta_0.png" width="400px" class="Planeta">
             <!--Limite dentro del tablero del juego-->
             <div class="Limite"></div>
     
@@ -373,7 +387,7 @@
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito2lvl3">
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito3lvl3">
                     <img src="IMG/Metiorito.png" width="70px" class="Meteoritolvl3" id="Meteorito4lvl3">
-                    <img src="IMG/planeta_tierra.png" width="230px" class="Planetalvl3" id="Planetalvl3" alt="Tierra que debemos proteger">
+                    <img src="IMG/planetas_lvl2/planeta_0.png" width="230px" class="Planetalvl3" id="Planetalvl3" alt="Tierra que debemos proteger">
                     <img src="nave_jugador.png" class="NaveJugadorLvl3" id="NaveJugadorLvl3" alt="Nave del jugador">
         
                     <!--Limite dentro del tablero del juego-->
@@ -442,9 +456,9 @@
                         <div class="CreditosUniverso" aria-hidden="true"><img class="CreditosTierra" src="IMG/planeta_tierra.png" alt=""></div>
                         <div class="CreditosVentana">
                             <div class="CreditosSecuencia" id="SecuenciaCreditosLvl3">
-                                <div class="CreditosBloque"><h1 id="TituloCreditosLvl3">IRON FIST</h1><p class="CreditosSubtitulo">LA ÚLTIMA DEFENSA DE LA HUMANIDAD</p></div>
+                                <div class="CreditosBloque"><h1 id="TituloCreditosLvl3">IRON FIST 2.1</h1><p class="CreditosSubtitulo">LA ÚLTIMA DEFENSA DE LA HUMANIDAD</p></div>
                                 <div class="CreditosBloque"><p>Cuando el cielo amenazó con caer,<br>cinco mentes se unieron<br>para dar vida a una última esperanza.</p></div>
-                                <div class="CreditosBloque"><h2>UNA CREACIÓN DE</h2><p class="CreditosEstudio">GRUPO 4 GAMES</p></div>
+                                <div class="CreditosBloque"><h2>UNA CREACIÓN DE</h2><p class="CreditosEstudio">GRUPO 4 GAMER</p></div>
                                 <div class="CreditosBloque"><h2>EQUIPO DE DESARROLLO</h2><div class="CreditosEquipo">
                                     <p>Victor David León Carrasco</p>
                                     <p>Jose Carlos Manchego Rojas</p>
@@ -456,10 +470,10 @@
                                 <div class="CreditosBloque"><h2>GRACIAS POR JUGAR</h2><p>Nosotros creamos la misión.<br>Tú la convertiste en leyenda.</p></div>
                                 <div class="CreditosBloque"><p>La Tierra sigue en pie.</p></div>
                                 <div class="CreditosBloque"><p>Pero el universo<br>aún guarda nuevas amenazas…</p></div>
-                                <div class="CreditosBloque"><h2>LA MISIÓN CONTINÚA</h2></div>
+                                <div class="CreditosBloque"><h2>LA MISIÓN CONTINÚA...</h2></div>
                             </div>
                         </div>
-                        <div class="CreditosFinal" id="FinalCreditosLvl3" hidden><h2>GRUPO 4 GAMES</h2><p>LA MISIÓN CONTINÚA</p></div>
+                        <div class="CreditosFinal" id="FinalCreditosLvl3" hidden><h2>GRUPO 4 GAMER</h2><p>LA MISIÓN CONTINÚA...</p></div>
                         <button id="VolverMenuCreditosLvl3" class="VolverMenuCreditosLvl3" type="button">VOLVER AL MENÚ</button>
                     </dialog>
                 <script src="Ejecucion3.js"></script>

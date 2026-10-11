@@ -201,6 +201,70 @@ body.intro-active {
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, filter 0.25s ease;
 }
 
+.BotonesMenuMisiones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin: -3% auto auto;
+}
+.BotonesMenuMisiones #Juego {
+    margin: 0;
+    width: min(86vw, 640px);
+    flex-shrink: 0;
+}
+#LogroMisiones {
+    position: relative;
+    margin: 0;
+    width: min(93.6vw, 468px);
+    height: 62.4px;
+    padding: 0 23.4px;
+    font-size: clamp(.975rem, 1.3vw, 1.3rem);
+    border-radius: 15.6px;
+    flex-shrink: 0;
+}
+#LogroMisiones:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    transform: none;
+}
+#EstadoLogroMisiones {
+    margin: 0;
+    width: 90%;
+    text-align: center;
+    color: #eefbff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(.7rem, 1vw, 1rem);
+}
+#EstadoLogroMisiones[hidden] { display: none; }
+#SelectorMisiones {
+    width: min(85vw, 600px);
+    margin: auto;
+    padding: 28px;
+    border: 2px solid #61c0ff;
+    border-radius: 18px;
+    background: #081624;
+    color: #eefbff;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 28px #408fff80;
+}
+#SelectorMisiones::backdrop { background: #000b; }
+.OpcionesMisiones { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+#SelectorMisiones button {
+    flex: 1;
+    padding: 16px;
+    border: 1px solid #61c0ff;
+    border-radius: 10px;
+    background: #0d2335;
+    color: #eefbff;
+    font: inherit;
+    cursor: pointer;
+}
+#SelectorMisiones button:hover { background: #184365; }
+#SelectorMisiones button:focus-visible { outline: 3px solid #ffd166; outline-offset: 3px; }
+
 .Boton::before {
     content: "";
     position: absolute;
@@ -4933,9 +4997,6 @@ body.creditos-activos { overflow: hidden; }
 #NIVEL3 #NaveJugadorLvl3.InvulnerableLvl3 { animation: parpadeoNaveLvl3 .16s steps(2, jump-none) infinite; }
 @keyframes parpadeoNaveLvl3 { 0% { opacity: 1; } 100% { opacity: .25; } }
 #NIVEL3 .Planetalvl3 { width: calc(clamp(200px, 16vw, 250px) * var(--e, 1)); height: auto; }
-#NIVEL3 .Planetalvl3 {
-    filter: saturate(calc(1 - var(--dano, 0) * .12)) brightness(calc(1 - var(--dano, 0) * .08));
-}
 #NIVEL3 .Planetalvl3.ImpactoPlanetaLvl3 {
     animation: rotation 10s linear infinite, destelloPlanetaLvl3 .45s ease-in-out;
 }

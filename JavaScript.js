@@ -82,6 +82,8 @@ function alturaAleatoriaNivel1() {
 }
 
 function actualizarVidasNivel1() {
+    const danoPlaneta = Math.max(0, Math.min(3, 3 - vidasNivel1));
+    document.querySelector('#NIVEL_01 .Planeta').src = 'IMG/planetas_lvl2/planeta_' + danoPlaneta + '.png';
     const vidas = document.querySelectorAll('.VidaNivel1');
     vidas.forEach((vida, index) => {
         const restante = index < vidasNivel1;
@@ -623,6 +625,7 @@ function destruirMeteoritoNivel1(meteoro) {
         sonidoNivel1('Triunfo');
         actualizarLogroNivel1();
         document.getElementById('GANASTE_PANTALLA').style.display = 'flex';
+        registrarVictoriaMision(1);
         mostrarVolverInicio(true);
         document.getElementById('BotonReiniciarNivel1').hidden = false;
         document.getElementById('NEXT').hidden = false;
@@ -894,4 +897,68 @@ if (Supremo) Supremo.style.height = "160vh" //Le aumente para que no tape al con
 
     setTimeout(abrirJuego, 900)
 }
+
+// Solo las victorias reales desbloquean la seleccion de misiones.
+const misionesGanadas = new Set();
+try {
+    const guardadas = JSON.parse(localStorage.getItem('ironfist_misiones_ganadas'));
+    if (Array.isArray(guardadas)) {
+        guardadas.filter(nivel => [1, 2, 3].includes(nivel)).forEach(nivel => misionesGanadas.add(nivel));
+    }
+} catch (error) {}
+
+function misionesDesbloqueadas() {
+    return [1, 2, 3].every(nivel => misionesGanadas.has(nivel));
+}
+
+function actualizarLogroMisiones() {
+    const desbloqueado = misionesDesbloqueadas();
+    const boton = document.getElementById('LogroMisiones');
+    const estado = document.getElementById('EstadoLogroMisiones');
+    if (boton) boton.disabled = !desbloqueado;
+    if (estado) {
+        estado.hidden = desbloqueado;
+        estado.textContent = desbloqueado ? ''
+            : 'Gana los tres niveles para desbloquear (' + misionesGanadas.size + '/3).';
+    }
+}
+
+function registrarVictoriaMision(nivel) {
+    if (![1, 2, 3].includes(nivel)) return;
+    misionesGanadas.add(nivel);
+    try {
+        localStorage.setItem('ironfist_misiones_ganadas', JSON.stringify([...misionesGanadas]));
+    } catch (error) {}
+    actualizarLogroMisiones();
+}
+
+const selectorMisiones = document.getElementById('SelectorMisiones');
+document.getElementById('LogroMisiones')?.addEventListener('click', () => {
+    if (misionesDesbloqueadas() && selectorMisiones) selectorMisiones.showModal();
+});
+document.getElementById('CerrarSelectorMisiones')?.addEventListener('click', () => selectorMisiones.close());
+
+selectorMisiones?.querySelectorAll('[data-mision]').forEach(boton => {
+    boton.addEventListener('click', () => {
+        if (!misionesDesbloqueadas()) return;
+        const nivel = Number(boton.dataset.mision);
+        selectorMisiones.close();
+        detenerMenuAudio();
+        document.body.classList.add('stage-2');
+        document.getElementById('Fondo').style.backgroundImage = 'url(IMG/Fondo_Espacio2.jpg)';
+        ['Seccion_01', 'Reglas', 'Seccion_2'].forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+        document.getElementById('Seccion_suprema').style.height = '160vh';
+        document.getElementById('Seccion_Juego').style.left = '0%';
+        ['NIVEL_01', 'NIVEL_02', 'NIVEL3'].forEach((id, indice) => {
+            document.getElementById(id).style.display = indice + 1 === nivel ? 'block' : 'none';
+        });
+        if (nivel === 1) reiniciarNivel1();
+        if (nivel === 2) prepararPartidaLvl2();
+        if (nivel === 3) prepararPartidaLvl3();
+        mostrarVolverInicio(true);
+    });
+});
+actualizarLogroMisiones();
 

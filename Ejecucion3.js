@@ -1546,17 +1546,14 @@ aplicarVolumenLvl3();
 
 // Créditos finales: disponibles únicamente después de superar el nivel 3.
 let animacionCreditosLvl3 = null;
-let volumenAnteriorCreditosLvl3 = null;
 function detenerCreditosLvl3() {
     if (animacionCreditosLvl3) {
         animacionCreditosLvl3.cancel();
         animacionCreditosLvl3 = null;
     }
-    const musica = document.getElementById('Musica_Final');
+    const musica = document.getElementById('MusicaCreditosLvl3');
     musica.pause();
     musica.currentTime = 0;
-    if (volumenAnteriorCreditosLvl3 !== null) musica.volume = volumenAnteriorCreditosLvl3;
-    volumenAnteriorCreditosLvl3 = null;
     document.body.classList.remove('creditos-activos');
 }
 function abrirCreditosLvl3() {
@@ -1581,10 +1578,9 @@ function abrirCreditosLvl3() {
         secuencia.style.visibility = 'hidden';
         final.hidden = false;
     }).catch(() => {}); // Cerrar cancela la secuencia intencionalmente.
-    ['Triunfo', 'Ganaste', 'Fondo_Ciberpunk'].forEach(id => document.getElementById(id).pause());
-    const musica = document.getElementById('Musica_Final');
-    volumenAnteriorCreditosLvl3 = musica.volume;
-    musica.volume = Math.max(0, Math.min(1, Number(document.getElementById('VolumenLvl3').value))) * 0.5;
+    ['Triunfo', 'Ganaste', 'Fondo_Ciberpunk', 'Musica_Final'].forEach(id => document.getElementById(id).pause());
+    const musica = document.getElementById('MusicaCreditosLvl3');
+    musica.volume = 0.3;
     musica.currentTime = 0;
     musica.play().catch(() => {});
 }
@@ -1592,7 +1588,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialogo = document.getElementById('DialogoCreditosLvl3');
     document.getElementById('VerCreditosLvl3').addEventListener('click', abrirCreditosLvl3);
     dialogo.addEventListener('close', detenerCreditosLvl3);
-    dialogo.addEventListener('cancel', detenerCreditosLvl3);
+    dialogo.addEventListener('cancel', event => event.preventDefault());
     document.getElementById('VolverMenuCreditosLvl3').addEventListener('click', () => {
         dialogo.close();
         detenerCreditosLvl3();

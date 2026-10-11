@@ -116,16 +116,17 @@
   <!-- Videos de la historia -->
   <div id="Imagen" class="contenedor-imagen">
     <video src="fondo3.mp4" class="imagen-historia" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nofullscreen nodownload noremoteplayback" aria-label="Meteoritos cayendo"></video>
-    <div class="contenedor-botones-historia">
-      <button class="Contenedor_narracion" id="Contenedor_narracion" type="button" aria-label="Reproducir narración" title="Reproducir narración" aria-pressed="false">
-        <i class="fas fa-headphones" aria-hidden="true"></i>
-      </button>
-    </div>
   </div>
   <div id="Mensaje" class="contenedor-video-historia">
     <video src="video3.mp4" class="imagen-historia" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback controlslist="nofullscreen nodownload noremoteplayback" aria-label="Nuestra salvación"></video>
   </div>
-    <button class="btn-preparado" type="button" onclick="Mover_3()">¿Estás preparado?</button>
+    <div class="contenedor-botones-historia">
+      <button class="Contenedor_narracion btn-preparado" id="Contenedor_narracion" type="button" aria-label="Reproducir narración" title="Reproducir narración" aria-pressed="false">
+        <i class="fas fa-headphones" aria-hidden="true"></i>
+      </button>
+      <button class="btn-preparado" type="button" onclick="Mover_3()">¿Estás preparado?</button>
+      <button class="btn-preparado" id="AtrasMenuHistoria" type="button" onclick="document.getElementById('VolverInicio').click()">Atrás</button>
+    </div>
 </section>
 
 <!--SECCION - 5 ------------------------------------------------------------------------------------------------------->

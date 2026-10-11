@@ -503,17 +503,18 @@ body.intro-active {
   right: -100%;
 }
 
-/* Controles debajo del video izquierdo */
+/* Controles de la historia */
 .contenedor-botones-historia {
   position: absolute;
-  top: 100%;
-  left: 0;
-    width: 100%;
+  top: calc(150px + 360px + 24px);
+  left: 32px;
+  z-index: 11;
+  width: max-content;
+  max-width: calc(100% - 64px);
   display: flex;
   align-items: center;
-    justify-content: center;
+  justify-content: flex-start;
   gap: 15px;
-  margin-top: 24px;
 }
 .btn-preparado {
     background: linear-gradient(135deg, #071725, #05080d);
@@ -530,14 +531,7 @@ body.intro-active {
     transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
 
-#Seccion_2 > .btn-preparado {
-    position: absolute;
-    top: calc(150px + 360px + 24px);
-    left: 50%;
-    z-index: 11;
-    transform: translateX(-50%);
-    white-space: nowrap;
-}
+
 
 #Seccion_2 > .transcripcion-narracion {
     position: absolute;
@@ -566,12 +560,12 @@ body.intro-active {
 .btn-preparado:hover {
     background: linear-gradient(135deg, #0b2a3a, #07111c);
     box-shadow: 0 0 24px rgba(54, 211, 255, 0.8), inset 0 0 16px rgba(54, 211, 255, 0.2);
-    transform: translate(-50%, -3px);
+    transform: translateY(-3px);
     animation-play-state: paused;
 }
 
 .btn-preparado:active {
-    transform: translate(-50%, 0);
+    transform: translateY(0);
 }
 
 @keyframes pulso-preparado {
@@ -580,26 +574,20 @@ body.intro-active {
 }
 
 .Contenedor_narracion {
-  border: none;
-  padding: 0;
   flex-shrink: 0;
-  background: #000000;
-  color: #ffffff;
-  width: 40px;
-  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  border-radius: 2px;
+  min-height: 61px;
+  box-sizing: border-box;
 }
 
 .Contenedor_narracion[aria-pressed="true"] {
-  background: #444;
+  background: linear-gradient(135deg, #0b2a3a, #07111c);
 }
 
 .Contenedor_narracion i {
-  font-size: 0.9rem;
+  font-size: 1.25rem;
   color: #fff;
 }
 /*TERCERA SECCION------------------------------------------------------------------------------------------------------*/
@@ -4864,16 +4852,13 @@ body.creditos-activos { overflow: hidden; }
     transition: none;
     order: 5;
 }
-#NIVEL3 .Startlvl3 #Dificultadlvl3 { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: clamp(8px, 2vh, 18px); }
-#NIVEL3 .Startlvl3 #Dificultadlvl3 img { display: block; width: clamp(30px, 6vh, 64px) !important; height: auto; animation: giroPlanetaLvl3 12s linear infinite; }
-@keyframes giroPlanetaLvl3 { to { transform: rotate(360deg); } }
+#NIVEL3 .Startlvl3 #Dificultadlvl3 img { display: none; }
 #NIVEL3 .Startlvl3 #Dificultadlvl3 h1 {
-    font-family: 'Press Start 2P', cursive !important;
-    font-size: clamp(9px, 2vh, 18px) !important;
-    letter-spacing: 0;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, .9);
-    white-space: nowrap;
+    font-family: 'Orbitron', sans-serif !important;
+    font-size: clamp(8px, 1.5vh, 13px) !important;
+    letter-spacing: .25em;
+    color: #ff7a7a;
+    text-shadow: 0 0 10px rgba(255, 60, 60, .7);
 }
 #NIVEL3 .Startlvl3 .Playlvl3 { order: 4; margin-top: 0; flex: 0 0 auto; }
 #NIVEL3 .Startlvl3 > .SelectorNavesLvl3,
@@ -5097,15 +5082,41 @@ body.creditos-activos { overflow: hidden; }
     #NIVEL3 .EstrellasCapaLvl3, #NIVEL3 .SacudidaLvl3, #NIVEL3 .SacudidaFuerteLvl3, #NIVEL3 .PeligroLvl3::after,
     #NIVEL3 .AlertaJefeLvl3::after { animation: none; }
 }
+/* Tamaño compacto y transparencia para los botones de la historia. */
+.contenedor-botones-historia .btn-preparado {
+  padding: 12px 22px;
+  background: linear-gradient(135deg, rgba(7, 23, 37, 0.55), rgba(5, 8, 13, 0.55));
+}
+.contenedor-botones-historia .btn-preparado:hover {
+  background: linear-gradient(135deg, rgba(11, 42, 58, 0.7), rgba(7, 17, 28, 0.7));
+}
 
-/* ---- Jefe: meteorito de lava ---- */
-#NIVEL3 .JefeRocaLvl3 { filter: none; animation: giroJefeLvl3 18s linear infinite; }
-@keyframes giroJefeLvl3 { to { transform: rotate(360deg); } }
-#NIVEL3 .JefeMeteoritoLvl3 { filter: drop-shadow(0 0 22px rgba(255, 110, 20, .85)); }
-#NIVEL3 .JefeMeteoritoLvl3.Fase2 { filter: drop-shadow(0 0 26px rgba(255, 120, 20, .95)); }
-#NIVEL3 .JefeMeteoritoLvl3.Fase2 .JefeRocaLvl3 { filter: brightness(1.12) saturate(1.2); }
-#NIVEL3 .JefeMeteoritoLvl3.Fase3 { filter: drop-shadow(0 0 32px rgba(255, 50, 10, 1)); }
-#NIVEL3 .JefeMeteoritoLvl3.Fase3 .JefeRocaLvl3 { filter: brightness(1.25) saturate(1.5) hue-rotate(-12deg); }
-#NIVEL3 .JefeImpactadoLvl3 .JefeRocaLvl3 { filter: brightness(2.2) drop-shadow(0 0 18px #fff); }
-#NIVEL3 .JefePausadoLvl3 .JefeRocaLvl3 { animation-play-state: paused; }
-#NIVEL3 .JefeRayosLvl3 { opacity: calc(0.15 + var(--heridas, 0) * 0.5); }
+.contenedor-botones-historia .Contenedor_narracion {
+  min-height: 0;
+}
+
+/* Navegación con el mismo acabado de los botones de la historia. */
+.Seccion_Juego .Contenedor_LVL :is(#VolverInicio, #BotonReiniciarNivel1, #NEXT, #VerCreditosLvl3) {
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 12px 22px;
+  border: 1px solid #55e5ff;
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(7, 23, 37, 0.55), rgba(5, 8, 13, 0.55));
+  color: #fff;
+  font: bold 1.25rem Arial, sans-serif;
+  box-shadow: 0 0 14px rgba(54, 211, 255, 0.55), inset 0 0 12px rgba(54, 211, 255, 0.12);
+  animation: pulso-preparado 2s ease-in-out infinite;
+  transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.Seccion_Juego .Contenedor_LVL :is(#VolverInicio, #BotonReiniciarNivel1, #NEXT, #VerCreditosLvl3):hover {
+  background: linear-gradient(135deg, rgba(11, 42, 58, 0.7), rgba(7, 17, 28, 0.7));
+  color: #fff;
+  box-shadow: 0 0 24px rgba(54, 211, 255, 0.8), inset 0 0 16px rgba(54, 211, 255, 0.2);
+  transform: translateY(-3px);
+  animation-play-state: paused;
+}
+.Seccion_Juego .Contenedor_LVL :is(#VolverInicio, #BotonReiniciarNivel1, #NEXT, #VerCreditosLvl3):active {
+  transform: translateY(0);
+}

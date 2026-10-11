@@ -201,6 +201,70 @@ body.intro-active {
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, filter 0.25s ease;
 }
 
+.BotonesMenuMisiones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin: -3% auto auto;
+}
+.BotonesMenuMisiones #Juego {
+    margin: 0;
+    width: min(86vw, 640px);
+    flex-shrink: 0;
+}
+#LogroMisiones {
+    position: relative;
+    margin: 0;
+    width: min(93.6vw, 468px);
+    height: 62.4px;
+    padding: 0 23.4px;
+    font-size: clamp(.975rem, 1.3vw, 1.3rem);
+    border-radius: 15.6px;
+    flex-shrink: 0;
+}
+#LogroMisiones:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    transform: none;
+}
+#EstadoLogroMisiones {
+    margin: 0;
+    width: 90%;
+    text-align: center;
+    color: #eefbff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(.7rem, 1vw, 1rem);
+}
+#EstadoLogroMisiones[hidden] { display: none; }
+#SelectorMisiones {
+    width: min(85vw, 600px);
+    margin: auto;
+    padding: 28px;
+    border: 2px solid #61c0ff;
+    border-radius: 18px;
+    background: #081624;
+    color: #eefbff;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 28px #408fff80;
+}
+#SelectorMisiones::backdrop { background: #000b; }
+.OpcionesMisiones { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; }
+#SelectorMisiones button {
+    flex: 1;
+    padding: 16px;
+    border: 1px solid #61c0ff;
+    border-radius: 10px;
+    background: #0d2335;
+    color: #eefbff;
+    font: inherit;
+    cursor: pointer;
+}
+#SelectorMisiones button:hover { background: #184365; }
+#SelectorMisiones button:focus-visible { outline: 3px solid #ffd166; outline-offset: 3px; }
+
 .Boton::before {
     content: "";
     position: absolute;
@@ -225,9 +289,7 @@ body.intro-active {
 
 
 
-/* =========================================================
-   NUEVA INTERFAZ DE REGLAS
-   ========================================================= */
+
 
 #Reglas {
     position: relative;
@@ -442,6 +504,138 @@ body.intro-active {
     }
 }
 
+@media (max-width: 900px) {
+    * {
+        box-sizing: border-box;
+    }
+
+    .Contenedor_Supremo {
+        width: 100%;
+        height: auto;
+        overflow-x: hidden;
+    }
+
+    .Seccion_01 {
+        padding: 24px 18px;
+    }
+
+    .Texto_Principal {
+        top: 0;
+        letter-spacing: 0.08em;
+        padding: 0 10px;
+    }
+
+    .Nombre {
+        font-size: clamp(3rem, 15vw, 7rem);
+    }
+
+    .Boton {
+        width: min(80vw, 420px);
+        height: 58px;
+        font-size: clamp(0.8rem, 3vw, 1.1rem);
+        letter-spacing: 0.08em;
+    }
+
+    .Contenedor_Reglas {
+        width: min(92vw, 640px);
+    }
+
+    .Regla_Card {
+        gap: 14px;
+        padding: 18px 16px;
+    }
+}
+
+@media (max-width: 680px) {
+    #Seccion_2 {
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 28px;
+    }
+
+    #Titulo_historia.titulo-historia {
+        top: 28px !important;
+        left: 50% !important;
+        width: calc(100% - 32px);
+        white-space: normal;
+        text-align: center;
+        transform: translateX(-50%);
+        font-size: clamp(1rem, 5vw, 1.8rem);
+        line-height: 1.5;
+    }
+
+    #Imagen.contenedor-imagen,
+    #Mensaje.contenedor-video-historia {
+        position: relative !important;
+        left: 50% !important;
+        top: 120px !important;
+        transform: translateX(-50%);
+        width: calc(100% - 28px);
+        height: 220px;
+        margin-bottom: 18px;
+    }
+
+    .contenedor-botones-historia {
+        position: relative !important;
+        left: 50% !important;
+        top: 130px !important;
+        transform: translateX(-50%);
+        width: calc(100% - 28px);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .btn-preparado {
+        width: 100%;
+        min-height: 52px;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+    }
+
+    .Seccion_Juego {
+        left: 0;
+        top: 0;
+        height: auto;
+        min-height: 100vh;
+        padding: 18px 0 30px;
+    }
+
+    .Cabezera {
+        width: min(95vw, 500px);
+        grid-template-columns: repeat(2, minmax(110px, 1fr));
+        gap: 10px;
+        padding: 12px;
+        height: auto;
+    }
+
+    .Tiempo,
+    .Puntaje,
+    .VidasNivel1,
+    .ControlVolumenNivel1,
+    .Pause {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .ControlVolumenNivel1 {
+        justify-content: center;
+    }
+
+    .Contenedor {
+        width: min(95vw, 500px);
+        height: 440px;
+    }
+
+    .Planeta {
+        width: 220px;
+        left: 70%;
+    }
+
+    .Limite {
+        left: 68%;
+    }
+}
 
 
 /*SEGUNDA SECCION------------------------------------------------------------------------------------------------------*/
@@ -4332,6 +4526,7 @@ body.creditos-activos { overflow: hidden; }
 .JefeExplosionLvl3 { position: absolute; transform: translate(-50%, -50%); height: auto; z-index: 1350; pointer-events: none; filter: drop-shadow(0 0 30px #ff7924); }
 .JefePausadoLvl3 .JefeRayosLvl3 { animation-play-state: paused; }
 @keyframes electricidadJefeLvl3 { 0% { stroke-dasharray: 5 2; } 100% { stroke-dasharray: 2 5; filter: drop-shadow(0 0 12px #65dcff); } }
+
 /* Nivel 3 · mejoras profesionales (IRON FIST). Cargar DESPUÉS de Estilos.css */
 #NIVEL3 .SelectorNavesLvl3 {
     width: 100%;
@@ -4900,13 +5095,16 @@ body.creditos-activos { overflow: hidden; }
     transition: none;
     order: 5;
 }
-#NIVEL3 .Startlvl3 #Dificultadlvl3 img { display: none; }
+#NIVEL3 .Startlvl3 #Dificultadlvl3 { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: clamp(8px, 2vh, 18px); }
+#NIVEL3 .Startlvl3 #Dificultadlvl3 img { display: block; width: clamp(30px, 6vh, 64px) !important; height: auto; animation: giroPlanetaLvl3 12s linear infinite; }
+@keyframes giroPlanetaLvl3 { to { transform: rotate(360deg); } }
 #NIVEL3 .Startlvl3 #Dificultadlvl3 h1 {
-    font-family: 'Orbitron', sans-serif !important;
-    font-size: clamp(8px, 1.5vh, 13px) !important;
-    letter-spacing: .25em;
-    color: #ff7a7a;
-    text-shadow: 0 0 10px rgba(255, 60, 60, .7);
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: clamp(9px, 2vh, 18px) !important;
+    letter-spacing: 0;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, .9);
+    white-space: nowrap;
 }
 #NIVEL3 .Startlvl3 .Playlvl3 { order: 4; margin-top: 0; flex: 0 0 auto; }
 #NIVEL3 .Startlvl3 > .SelectorNavesLvl3,
@@ -5147,41 +5345,106 @@ body.creditos-activos { overflow: hidden; }
     #NIVEL3 .EstrellasCapaLvl3, #NIVEL3 .SacudidaLvl3, #NIVEL3 .SacudidaFuerteLvl3, #NIVEL3 .PeligroLvl3::after,
     #NIVEL3 .AlertaJefeLvl3::after { animation: none; }
 }
-/* Tamaño compacto y transparencia para los botones de la historia. */
-.contenedor-botones-historia .btn-preparado {
-  padding: 12px 22px;
-  background: linear-gradient(135deg, rgba(7, 23, 37, 0.55), rgba(5, 8, 13, 0.55));
-}
-.contenedor-botones-historia .btn-preparado:hover {
-  background: linear-gradient(135deg, rgba(11, 42, 58, 0.7), rgba(7, 17, 28, 0.7));
+
+/* ---- Jefe: meteorito de lava ---- */
+#NIVEL3 .JefeRocaLvl3 { filter: none; animation: giroJefeLvl3 18s linear infinite; }
+@keyframes giroJefeLvl3 { to { transform: rotate(360deg); } }
+#NIVEL3 .JefeMeteoritoLvl3 { filter: drop-shadow(0 0 22px rgba(255, 110, 20, .85)); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase2 { filter: drop-shadow(0 0 26px rgba(255, 120, 20, .95)); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase2 .JefeRocaLvl3 { filter: brightness(1.12) saturate(1.2); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase3 { filter: drop-shadow(0 0 32px rgba(255, 50, 10, 1)); }
+#NIVEL3 .JefeMeteoritoLvl3.Fase3 .JefeRocaLvl3 { filter: brightness(1.25) saturate(1.5) hue-rotate(-12deg); }
+#NIVEL3 .JefeImpactadoLvl3 .JefeRocaLvl3 { filter: brightness(2.2) drop-shadow(0 0 18px #fff); }
+#NIVEL3 .JefePausadoLvl3 .JefeRocaLvl3 { animation-play-state: paused; }
+#NIVEL3 .JefeRayosLvl3 { opacity: calc(0.15 + var(--heridas, 0) * 0.5); }
+
+/* =====================================================================
+   NIVEL 3 · MEJORAS DE DIFICULTAD
+   ===================================================================== */
+
+/* ---- Círculos giratorios junto a "Dificultad: EXTREMA" (más específico para ganarle a reglas viejas) ---- */
+#NIVEL3 #Startlvl3 #Dificultadlvl3,
+#NIVEL3 .Startlvl3 #Dificultadlvl3 { display: flex !important; flex-direction: row; align-items: center; justify-content: center; gap: clamp(8px, 2vh, 18px); }
+#NIVEL3 #Startlvl3 #Dificultadlvl3 img,
+#NIVEL3 .Startlvl3 #Dificultadlvl3 img {
+    display: block !important;
+    width: clamp(30px, 6vh, 64px) !important;
+    height: auto !important;
+    animation: giroPlanetaLvl3 12s linear infinite;
 }
 
-.contenedor-botones-historia .Contenedor_narracion {
-  min-height: 0;
+/* ---- Meteorito BLINDADO: aspecto metálico + barritas de blindaje ---- */
+#NIVEL3 .MeteoritoLvl3.blindado img {
+    filter: grayscale(.75) contrast(1.25) brightness(1.1) drop-shadow(0 0 10px rgba(120, 205, 255, .95));
+}
+#NIVEL3 .MeteoritoLvl3.blindado::after {
+    content: ""; position: absolute; inset: 6%; border-radius: 50%;
+    border: 3px solid rgba(140, 215, 255, .75);
+    box-shadow: 0 0 14px rgba(120, 205, 255, .7), inset 0 0 12px rgba(120, 205, 255, .35);
+    pointer-events: none;
+}
+#NIVEL3 .MeteoritoLvl3.blindado.DanadoLvl3 img {
+    filter: grayscale(.4) contrast(1.3) brightness(1.15) drop-shadow(0 0 12px rgba(255, 120, 60, .95));
+}
+#NIVEL3 .MeteoritoLvl3.blindado.GolpeLvl3 img { filter: brightness(2.4) drop-shadow(0 0 14px #fff); }
+#NIVEL3 .BlindajeLvl3 {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 3px; z-index: 3;
+}
+#NIVEL3 .BlindajeLvl3 i {
+    display: block; width: 14px; height: 5px; border-radius: 2px;
+    background: #7fdcff; box-shadow: 0 0 6px #7fdcff;
+}
+#NIVEL3 .BlindajeLvl3 i.off { background: rgba(255, 255, 255, .15); box-shadow: none; }
+
+/* ---- Meteorito DIVISIBLE y sus FRAGMENTOS: tono morado ---- */
+#NIVEL3 .MeteoritoLvl3.divisible img {
+    filter: hue-rotate(245deg) saturate(1.6) brightness(1.1) drop-shadow(0 0 12px rgba(190, 90, 255, .95));
+}
+#NIVEL3 .MeteoritoLvl3.divisible.DanadoLvl3 img,
+#NIVEL3 .MeteoritoLvl3.divisible.GolpeLvl3 img { filter: brightness(2.2) drop-shadow(0 0 14px #fff); }
+#NIVEL3 .MeteoritoLvl3.fragmento img {
+    filter: hue-rotate(245deg) saturate(1.8) brightness(1.25) drop-shadow(0 0 8px rgba(215, 140, 255, .95));
 }
 
-/* Navegación con el mismo acabado de los botones de la historia. */
-.Seccion_Juego .Contenedor_LVL :is(#VolverInicio, #BotonReiniciarNivel1, #NEXT, #VerCreditosLvl3) {
-  width: auto;
-  height: auto;
-  min-height: 0;
-  padding: 12px 22px;
-  border: 1px solid #55e5ff;
-  border-radius: 4px;
-  background: linear-gradient(135deg, rgba(7, 23, 37, 0.55), rgba(5, 8, 13, 0.55));
-  color: #fff;
-  font: bold 1.25rem Arial, sans-serif;
-  box-shadow: 0 0 14px rgba(54, 211, 255, 0.55), inset 0 0 12px rgba(54, 211, 255, 0.12);
-  animation: pulso-preparado 2s ease-in-out infinite;
-  transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+/* ---- Oleada: franjas rojas de aviso ---- */
+#NIVEL3 .CarrilAlertaLvl3 {
+    position: absolute; left: 0; z-index: 4; pointer-events: none;
+    background: repeating-linear-gradient(90deg, rgba(255, 40, 40, .30) 0 26px, rgba(255, 40, 40, .08) 26px 52px);
+    border-top: 2px solid rgba(255, 80, 80, .65); border-bottom: 2px solid rgba(255, 80, 80, .65);
+    animation: parpadeoCarrilLvl3 .4s ease-in-out infinite alternate;
 }
-.Seccion_Juego .Contenedor_LVL :is(#VolverInicio, #BotonReiniciarNivel1, #NEXT, #VerCreditosLvl3):hover {
-  background: linear-gradient(135deg, rgba(11, 42, 58, 0.7), rgba(7, 17, 28, 0.7));
-  color: #fff;
-  box-shadow: 0 0 24px rgba(54, 211, 255, 0.8), inset 0 0 16px rgba(54, 211, 255, 0.2);
-  transform: translateY(-3px);
-  animation-play-state: paused;
+#NIVEL3 .CarrilAlertaLvl3::after {
+    content: "\26A0"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    font-size: clamp(14px, 3vh, 28px); color: #ffd1d1; text-shadow: 0 0 10px #ff2a2a;
 }
-.Seccion_Juego .Contenedor_LVL :is(#VolverInicio, #BotonReiniciarNivel1, #NEXT, #VerCreditosLvl3):active {
-  transform: translateY(0);
+@keyframes parpadeoCarrilLvl3 { from { opacity: .35; } to { opacity: 1; } }
+
+/* ---- Jefe cargando el anillo de fuego ---- */
+#NIVEL3 .JefeMeteoritoLvl3.JefeCargandoLvl3 { animation: cargaJefeLvl3 .18s ease-in-out infinite alternate; }
+@keyframes cargaJefeLvl3 {
+    from { filter: drop-shadow(0 0 22px rgba(255, 150, 40, .9)); }
+    to   { filter: drop-shadow(0 0 54px #fff) brightness(1.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #NIVEL3 .CarrilAlertaLvl3, #NIVEL3 .JefeMeteoritoLvl3.JefeCargandoLvl3 { animation: none; }
+}
+
+/* =====================================================================
+   NIVEL 3 · PLANETA CON DAÑO POR ETAPAS + FONDO PROPIO
+   ===================================================================== */
+/* El planeta cambia de imagen según las vidas (se quita el filtro de color anterior) */
+#NIVEL3 .Planetalvl3 { filter: none; }
+/* Fondo exclusivo del nivel 3: nebulosa ardiente (el nivel 2 conserva IMG/Fondo.jpg) */
+#NIVEL3 .Contenedorlvl3:not(.Cabezeralvl3),
+#NIVEL3:fullscreen .Contenedorlvl3:not(.Cabezeralvl3) {
+    background: #05030c url("IMG/Fondo_Nivel3.jpg") no-repeat center center / cover;
+}
+
+/* ---- Planeta centrado verticalmente en el tablero (la rotación usa transform, por eso se centra con top + margin) ---- */
+#NIVEL3 .Planetalvl3 {
+    --w: calc(clamp(200px, 16vw, 250px) * var(--e, 1));
+    width: var(--w);
+    top: 50%;
+    margin-top: calc(var(--w) * -0.49);
 }

@@ -1206,6 +1206,7 @@ prepararTarjetasFinalLvl2();
 
 function ganarLvl2() {
     if (!juegoActivoLvl2 || Vidaslvl2 <= 0) return;
+    registrarVictoriaMision(2);
 
     juegoActivoLvl2 = false;
     mantenidoLvl2 = false;

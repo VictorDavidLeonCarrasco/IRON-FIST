@@ -485,7 +485,8 @@ function actualizarVidasLvl3() {
         c.textContent = i < vidasLvl3 ? "♥" : "♡";
     });
     tableroNivel3.classList.toggle("PeligroLvl3", vidasLvl3 === 1 && juegoActivoLvl3);
-    planetaLvl3.style.setProperty("--dano", String(3 - Math.max(0, Math.min(3, vidasLvl3))));
+    const danoPlaneta = 3 - Math.max(0, Math.min(3, vidasLvl3));
+    planetaLvl3.src = "IMG/planetas_lvl2/planeta_" + danoPlaneta + ".png";
 }
 function actualizarMarcadoresLvl3() {
     document.getElementById("Tiempolvl3").textContent = Tiempolvl3;
@@ -1126,6 +1127,7 @@ function finalizarBaseLvl3() {
 }
 function ganarNivel3() {
     if (terminadoLvl3) return;
+    registrarVictoriaMision(3);
     Puntajelvl3 = OBJETIVO_NIVEL3;
     actualizarMarcadoresLvl3();
     finalizarBaseLvl3();

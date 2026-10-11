@@ -289,9 +289,7 @@ body.intro-active {
 
 
 
-/* =========================================================
-   NUEVA INTERFAZ DE REGLAS
-   ========================================================= */
+
 
 #Reglas {
     position: relative;
@@ -506,6 +504,138 @@ body.intro-active {
     }
 }
 
+@media (max-width: 900px) {
+    * {
+        box-sizing: border-box;
+    }
+
+    .Contenedor_Supremo {
+        width: 100%;
+        height: auto;
+        overflow-x: hidden;
+    }
+
+    .Seccion_01 {
+        padding: 24px 18px;
+    }
+
+    .Texto_Principal {
+        top: 0;
+        letter-spacing: 0.08em;
+        padding: 0 10px;
+    }
+
+    .Nombre {
+        font-size: clamp(3rem, 15vw, 7rem);
+    }
+
+    .Boton {
+        width: min(80vw, 420px);
+        height: 58px;
+        font-size: clamp(0.8rem, 3vw, 1.1rem);
+        letter-spacing: 0.08em;
+    }
+
+    .Contenedor_Reglas {
+        width: min(92vw, 640px);
+    }
+
+    .Regla_Card {
+        gap: 14px;
+        padding: 18px 16px;
+    }
+}
+
+@media (max-width: 680px) {
+    #Seccion_2 {
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 28px;
+    }
+
+    #Titulo_historia.titulo-historia {
+        top: 28px !important;
+        left: 50% !important;
+        width: calc(100% - 32px);
+        white-space: normal;
+        text-align: center;
+        transform: translateX(-50%);
+        font-size: clamp(1rem, 5vw, 1.8rem);
+        line-height: 1.5;
+    }
+
+    #Imagen.contenedor-imagen,
+    #Mensaje.contenedor-video-historia {
+        position: relative !important;
+        left: 50% !important;
+        top: 120px !important;
+        transform: translateX(-50%);
+        width: calc(100% - 28px);
+        height: 220px;
+        margin-bottom: 18px;
+    }
+
+    .contenedor-botones-historia {
+        position: relative !important;
+        left: 50% !important;
+        top: 130px !important;
+        transform: translateX(-50%);
+        width: calc(100% - 28px);
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .btn-preparado {
+        width: 100%;
+        min-height: 52px;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+    }
+
+    .Seccion_Juego {
+        left: 0;
+        top: 0;
+        height: auto;
+        min-height: 100vh;
+        padding: 18px 0 30px;
+    }
+
+    .Cabezera {
+        width: min(95vw, 500px);
+        grid-template-columns: repeat(2, minmax(110px, 1fr));
+        gap: 10px;
+        padding: 12px;
+        height: auto;
+    }
+
+    .Tiempo,
+    .Puntaje,
+    .VidasNivel1,
+    .ControlVolumenNivel1,
+    .Pause {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .ControlVolumenNivel1 {
+        justify-content: center;
+    }
+
+    .Contenedor {
+        width: min(95vw, 500px);
+        height: 440px;
+    }
+
+    .Planeta {
+        width: 220px;
+        left: 70%;
+    }
+
+    .Limite {
+        left: 68%;
+    }
+}
 
 
 /*SEGUNDA SECCION------------------------------------------------------------------------------------------------------*/

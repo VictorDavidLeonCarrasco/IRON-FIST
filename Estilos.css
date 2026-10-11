@@ -793,7 +793,22 @@ font-family: 'Press Start 2P', cursive; text-align: center;
 font-size: 60px;position: relative; top: 0%; left: -110%; padding-bottom: 2%;}
    
 
-.Tituloar_Juego_5 {font-family: 'Press Start 2P', cursive; text-align: center; font-size: 60px;}
+.Tituloar_Juego_5 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    font-size: 60px;
+    line-height: 1.25;
+    letter-spacing: 0.045em;
+    color: #edf8ff;
+    text-shadow: 0 2px 0 #638ca5, 0 0 12px rgba(161, 222, 255, 0.4);
+    max-width: 94%;
+}
+.Tituloar_Juego_5 span {
+    display: inline-block;
+    color: #36dcff;
+    text-shadow: 0 2px 0 #087ea5, 0 0 8px rgba(0, 210, 255, 0.9), 0 0 22px rgba(0, 174, 255, 0.6);
+}
 
 .Contenedor_Mensaje_Star{height: 60%; width: 100%; left: 0%;  background: transparent;
 position: absolute; top: 20%; overflow: hidden; transition: 2.3s;}
@@ -4227,6 +4242,26 @@ html, body {
     transform: scale(1.05);
 }
 
+/* Navegación azul oscuro con borde fino, conservando sus dimensiones. */
+.Contenedor_LVL #VolverInicio,
+.Contenedor_LVL #BotonReiniciarNivel1,
+.Contenedor_LVL #NEXT {
+    background: rgba(17, 39, 58, 0.82);
+    border-color: transparent;
+    outline: 1px solid rgba(140, 219, 255, 0.9);
+    outline-offset: -1px;
+    box-shadow: none;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.Contenedor_LVL #VolverInicio:hover,
+.Contenedor_LVL #BotonReiniciarNivel1:hover,
+.Contenedor_LVL #NEXT:hover {
+    background: rgba(24, 54, 77, 0.9);
+    border-color: transparent;
+    color: white;
+}
+
 /* Salida del menú durante la cuenta regresiva del nivel 1. */
 #NIVEL_01 #Start.SaliendoConteoNivel1 #Contenedor_Mensaje_Star {
     opacity: 0;
@@ -4457,18 +4492,22 @@ html, body {
 .Seccion_Juego .Contenedor_LVL #VerCreditosLvl3 {
     grid-column: 3;
     justify-self: end;
-    border: 2px solid #36cfff;
+    border: 2px solid transparent;
     border-radius: 10px;
-    background: #087ee8;
+    background: rgba(17, 39, 58, 0.82);
     color: white;
     padding: 15px 22px;
     font-family: 'Press Start 2P', cursive;
     font-size: clamp(0.65rem, 1vw, 0.9rem);
-    box-shadow: 0 0 14px rgba(54, 207, 255, 0.7);
+    outline: 1px solid rgba(140, 219, 255, 0.9);
+    outline-offset: -1px;
+    box-shadow: none;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
 }
 .Seccion_Juego .Contenedor_LVL #VerCreditosLvl3:hover {
-    background: #36cfff;
-    color: #03122e;
+    background: rgba(24, 54, 77, 0.9);
+    border-color: transparent;
+    color: white;
     transform: scale(1.05);
 }
 

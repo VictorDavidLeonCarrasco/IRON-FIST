@@ -28,6 +28,16 @@ const inicioLvl3 = document.getElementById('Startlvl3');
 const planetaLvl3 = document.getElementById('Planetalvl3');
 const limiteLvl3 = tableroNivel3.querySelector('.Limitelvl3');
 
+// El planeta se daña por etapas (igual que en el nivel 2): 3 vidas = sano ... 0 vidas = destruido
+const IMAGENES_PLANETA_LVL3 = [
+    "IMG/planetas_lvl2/planeta_0.png",
+    "IMG/planetas_lvl2/planeta_1.png",
+    "IMG/planetas_lvl2/planeta_2.png",
+    "IMG/planetas_lvl2/planeta_3.png"
+];
+IMAGENES_PLANETA_LVL3.forEach(function (ruta) { const pre = new Image(); pre.src = ruta; });
+planetaLvl3.src = IMAGENES_PLANETA_LVL3[0];
+
 // Los 4 meteoritos fijos del HTML antiguo ya no se usan (ahora se crean por código).
 document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(function (m) { m.remove(); });
 
@@ -271,7 +281,7 @@ let jefeLvl3 = null;
 
 function nuevoJefeLvl3() {
     return { estado: "no", vida: VIDA_JEFE_NIVEL3, fase: 1, t: 0, x: 0, y: 0, tam: 200, destello: 0,
-        proxFuego: 2, elemento: null, muerte: 0, proxExplosion: 0, aviso: 0 };
+        proxFuego: 2, elemento: null, muerte: 0, proxExplosion: 0, aviso: 0, disparos: 0, anilloEn: 0 };
 }
 jefeLvl3 = nuevoJefeLvl3();
 
@@ -342,6 +352,8 @@ const sfxLvl3 = {
     combo: function (n) { tonoLvl3(560 + n * 55, 0.13, "triangle", 0.14); },
     elegir: function () { tonoLvl3(660, 0.07, "square", 0.09, 990); },
     fase: function () { tonoLvl3(200, 0.6, "sawtooth", 0.18, 60); ruidoLvl3(0.5, 0.25, 700); },
+    oleada: function () { tonoLvl3(760, 0.12, "square", 0.11); tonoLvl3(760, 0.12, "square", 0.11, 0, 0.22); tonoLvl3(1000, 0.22, "square", 0.11, 0, 0.44); },
+    carga: function () { tonoLvl3(110, 0.7, "sawtooth", 0.14, 480); ruidoLvl3(0.55, 0.12, 500); },
     fuego: function (fase) {
         // Rugido de furia: gruñido grave, chillido que cae y ráfaga de aire
         const furia = fase === 3;
@@ -485,8 +497,9 @@ function actualizarVidasLvl3() {
         c.textContent = i < vidasLvl3 ? "♥" : "♡";
     });
     tableroNivel3.classList.toggle("PeligroLvl3", vidasLvl3 === 1 && juegoActivoLvl3);
-    const danoPlaneta = 3 - Math.max(0, Math.min(3, vidasLvl3));
-    planetaLvl3.src = "IMG/planetas_lvl2/planeta_" + danoPlaneta + ".png";
+    const etapaPlaneta = 3 - Math.max(0, Math.min(3, vidasLvl3));
+    planetaLvl3.style.setProperty("--dano", String(etapaPlaneta));
+    if (planetaLvl3.getAttribute("src") !== IMAGENES_PLANETA_LVL3[etapaPlaneta]) planetaLvl3.src = IMAGENES_PLANETA_LVL3[etapaPlaneta];
 }
 function actualizarMarcadoresLvl3() {
     document.getElementById("Tiempolvl3").textContent = Tiempolvl3;
@@ -579,30 +592,38 @@ function efectoImpactoPlanetaLvl3() {
    METEORITOS (normal, rápido, grande)
    --------------------------------------------------------------------- */
 const TIPOS_METEORITO_LVL3 = {
-    normal: { tam: 74, vel: 1.00, hp: 1, pts: 1 },
-    rapido: { tam: 50, vel: 1.65, hp: 1, pts: 1 },
-    grande: { tam: 118, vel: 0.62, hp: 2, pts: 2 }
+    normal:    { tam: 74,  vel: 1.00, hp: 1, pts: 1 },
+    rapido:    { tam: 50,  vel: 1.65, hp: 1, pts: 1 },
+    grande:    { tam: 118, vel: 0.62, hp: 2, pts: 2 },
+    // NUEVO nivel 3: blindado (aguanta 3 disparos) y divisible (se parte en 2 fragmentos veloces)
+    blindado:  { tam: 100, vel: 0.80, hp: 3, pts: 3 },
+    divisible: { tam: 92,  vel: 0.90, hp: 1, pts: 1, divide: true },
+    fragmento: { tam: 44,  vel: 1.45, hp: 1, pts: 1 }
 };
-function dificultadLvl3() { return 1 + Math.min(0.35, tJuegoLvl3 / 130); }
+// La dificultad sube más rápido que en el nivel 2 (hasta +50 %)
+function dificultadLvl3() { return 1 + Math.min(0.5, tJuegoLvl3 / 100); }
 function elegirTipoLvl3() {
     const r = Math.random(), t = tJuegoLvl3;
-    if (t > 8 && r < 0.17) return "grande";
-    if (t > 4 && r < 0.40) return "rapido";
+    if (t > 8 && r < 0.12) return "grande";
+    if (t > 10 && r < 0.24) return "blindado";
+    if (t > 6 && r < 0.38) return "divisible";
+    if (t > 4 && r < 0.58) return "rapido";
     return "normal";
 }
 function calcularSpawnLvl3() {
-    const base = Math.max(0.5, 1.05 - tJuegoLvl3 / 85);
+    const base = Math.max(0.45, 1.0 - tJuegoLvl3 / 80);
     return base * (0.75 + Math.random() * 0.5);
 }
-function maxMeteoritosLvl3() { return Math.min(7, 4 + Math.floor(tJuegoLvl3 / 18)); }
+function maxMeteoritosLvl3() { return Math.min(8, 4 + Math.floor(tJuegoLvl3 / 15)); }
 
-function crearMeteoritoLvl3(W, H) {
-    const clave = elegirTipoLvl3(), tipo = TIPOS_METEORITO_LVL3[clave];
+function crearMeteoritoLvl3(W, H, forzado) {
+    forzado = forzado || {};
+    const clave = forzado.clave || elegirTipoLvl3(), tipo = TIPOS_METEORITO_LVL3[clave];
     const tam = tipo.tam * escalaLvl3;
-    const x0 = -tam;
-    const y0 = tam * 0.55 + Math.random() * Math.max(10, H - tam * 1.1);
+    const x0 = forzado.x !== undefined ? forzado.x : -tam;
+    const y0 = forzado.y !== undefined ? forzado.y : tam * 0.55 + Math.random() * Math.max(10, H - tam * 1.1);
     const vx = W / 5.3 * tipo.vel * dificultadLvl3();
-    const vy = (Math.random() * 2 - 1) * H * 0.035;
+    const vy = forzado.vy !== undefined ? forzado.vy : (Math.random() * 2 - 1) * H * 0.035;
     const el = document.createElement("div");
     el.className = "MeteoritoLvl3 " + clave;
     el.style.width = tam + "px"; el.style.height = tam + "px";
@@ -612,10 +633,81 @@ function crearMeteoritoLvl3(W, H) {
     const img = document.createElement("img");
     img.src = "IMG/Metiorito.png"; img.alt = ""; img.draggable = false;
     el.appendChild(estela); el.appendChild(img);
+    let pips = null;
+    if (tipo.hp >= 3) {   // indicador de blindaje: una barrita por golpe que aguanta
+        const b = document.createElement("span");
+        b.className = "BlindajeLvl3";
+        b.innerHTML = "<i></i><i></i><i></i>";
+        el.appendChild(b);
+        pips = b.querySelectorAll("i");
+    }
     tableroNivel3.appendChild(el);
     meteorosLvl3.push({ el: el, img: img, x: x0, y: y0, vx: vx, vy: vy, tam: tam, r: tam * 0.42,
-        hp: tipo.hp, pts: tipo.pts, giro: (Math.random() * 2 - 1) * 120, rot: Math.random() * 360, muerto: false });
+        hp: tipo.hp, pts: tipo.pts, divide: !!tipo.divide, pips: pips,
+        giro: (Math.random() * 2 - 1) * 120, rot: Math.random() * 360, muerto: false });
 }
+/* Meteorito divisible: al destruirse se parte en 2 fragmentos pequeños y rápidos */
+function dividirMeteoritoLvl3(x, y, m) {
+    if (jefeLvl3.estado !== "no") return;
+    const W = tableroNivel3.clientWidth, H = tableroNivel3.clientHeight;
+    const margen = 24 * escalaLvl3;
+    for (let k = 0; k < 2; k++) {
+        const dir = k ? 1 : -1;
+        crearMeteoritoLvl3(W, H, { clave: "fragmento", x: x,
+            y: Math.max(margen, Math.min(H - margen, y + dir * m.tam * 0.3)), vy: dir * H * 0.14 });
+    }
+    textoFlotanteLvl3(x, y - m.tam * 0.7, "¡SE DIVIDE!", "item");
+}
+
+/* ---------------------------------------------------------------------
+   OLEADAS CON AVISO: franjas rojas marcan por dónde caerá la lluvia
+   --------------------------------------------------------------------- */
+let oleadaLvl3 = { prox: 14, aviso: 0, carriles: [], num: 0 };
+function limpiarOleadaLvl3() {
+    tableroNivel3.querySelectorAll(".CarrilAlertaLvl3").forEach(function (e) { e.remove(); });
+    oleadaLvl3 = { prox: 14, aviso: 0, carriles: [], num: 0 };
+}
+function iniciarAvisoOleadaLvl3(W, H) {
+    const o = oleadaLvl3, bandas = 6, alto = H / bandas;
+    const n = Math.min(4, 3 + Math.floor(o.num / 2));            // 3 carriles, luego 4
+    const libres = [0, 1, 2, 3, 4, 5];
+    o.carriles = [];
+    for (let k = 0; k < n; k++) {
+        const idx = libres.splice(Math.floor(Math.random() * libres.length), 1)[0];
+        const c = document.createElement("div");
+        c.className = "CarrilAlertaLvl3";
+        c.style.top = (idx * alto) + "px"; c.style.height = alto + "px"; c.style.width = xLimiteLvl3() + "px";
+        tableroNivel3.appendChild(c);
+        o.carriles.push({ y: (idx + 0.5) * alto, el: c });
+    }
+    o.aviso = 1.6;
+    avisoLvl3("¡LLUVIA DE METEOROS!<small>PREPÁRATE</small>", "malo", 1500);
+    sfxLvl3.oleada();
+}
+function lanzarOleadaLvl3(W, H) {
+    const o = oleadaLvl3;
+    o.carriles.forEach(function (c, i) {
+        const clave = (o.num >= 1 && i === 1) ? "blindado" : "rapido";
+        const tam = TIPOS_METEORITO_LVL3[clave].tam * escalaLvl3;
+        crearMeteoritoLvl3(W, H, { clave: clave, x: -tam - i * W * 0.09, y: c.y, vy: 0 });
+        c.el.remove();
+    });
+    o.carriles = [];
+    o.num++;
+    o.prox = 16 + Math.random() * 5;
+}
+function actualizarOleadaLvl3(dt, W, H) {
+    const o = oleadaLvl3;
+    if (o.aviso > 0) {
+        o.aviso -= dt;
+        if (o.aviso <= 0) lanzarOleadaLvl3(W, H);
+        return;
+    }
+    o.prox -= dt;
+    // no se lanza una oleada cuando el jefe está a punto de aparecer
+    if (o.prox <= 0 && tJuegoLvl3 > 10 && Puntajelvl3 < PUNTOS_JEFE_NIVEL3 - 3) iniciarAvisoOleadaLvl3(W, H);
+}
+
 function quitarMeteoritoLvl3(m) {
     m.muerto = true; m.el.remove();
     const i = meteorosLvl3.indexOf(m);
@@ -648,6 +740,7 @@ function destruirMeteoritoLvl3(m) {
     mostrarExplosionLvl3(x, y, m.tam * 1.7);
     particulasLvl3(x, y, m.pts > 1 ? 16 : 10, "#ffb347", m.tam * 1.1);
     textoFlotanteLvl3(x, y - m.tam * 0.4, "+" + m.pts, "");
+    if (m.divide) dividirMeteoritoLvl3(x, y, m);
     if (comboLvl3 >= 2) {
         sfxLvl3.combo(comboLvl3);
         comboHudLvl3.textContent = "COMBO x" + comboLvl3;
@@ -661,6 +754,7 @@ function danarMeteoritoLvl3(m, dano, volley) {
     if (m.muerto) return;
     if (volley && !volley.acierto) { volley.acierto = true; estadisticasLvl3.aciertos++; }
     m.hp -= dano;
+    if (m.pips) m.pips.forEach(function (p, i) { p.classList.toggle("off", i >= m.hp); });
     if (m.hp <= 0) destruirMeteoritoLvl3(m);
     else {
         m.el.classList.add("GolpeLvl3", "DanadoLvl3");
@@ -860,6 +954,7 @@ function iniciarAvisoJefeLvl3() {
     if (jefeLvl3.estado !== "no") return;
     jefeLvl3.estado = "aviso";
     jefeLvl3.aviso = 2.6;
+    limpiarOleadaLvl3();
     limpiarMeteoritosLvl3(true);
     itemsLvl3.forEach(function (i) { i.el.remove(); }); itemsLvl3 = [];
     tableroNivel3.classList.add("AlertaJefeLvl3");
@@ -936,6 +1031,23 @@ function dispararBolasJefeLvl3() {
         bolasLvl3.push({ el: el, x: jefeLvl3.x + jefeLvl3.tam * 0.3, y: jefeLvl3.y, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel, r: r });
     }
 }
+/* Anillo de fuego: abanico de bolas con UN hueco para esquivar (también se pueden destruir a disparos) */
+function dispararAnilloJefeLvl3() {
+    const j = jefeLvl3, n = j.fase === 3 ? 11 : 9;
+    const hueco = 1 + Math.floor(Math.random() * (n - 2));
+    sfxLvl3.fuego(j.fase);
+    sacudirLvl3(false);
+    const vel = (j.fase === 3 ? 250 : 215) * escalaLvl3, r = 12 * escalaLvl3;
+    for (let i = 0; i < n; i++) {
+        if (i === hueco) continue;
+        const ang = (-75 + i * 150 / (n - 1)) * Math.PI / 180;
+        const el = document.createElement("div");
+        el.className = "BolaFuegoLvl3";
+        el.style.width = el.style.height = r * 2 + "px";
+        tableroNivel3.appendChild(el);
+        bolasLvl3.push({ el: el, x: j.x + j.tam * 0.3, y: j.y, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel, r: r });
+    }
+}
 function actualizarBolasLvl3(dt, W, H) {
     for (let i = bolasLvl3.length - 1; i >= 0; i--) {
         const b = bolasLvl3[i];
@@ -1009,8 +1121,29 @@ function actualizarJefeLvl3(dt, W, H) {
     const amp = H * (j.fase === 1 ? 0.08 : j.fase === 2 ? 0.15 : 0.22);
     j.y = H / 2 + Math.sin(j.t * (0.8 + j.fase * 0.25)) * amp;
     if (j.fase >= 2) {
-        j.proxFuego -= dt;
-        if (j.proxFuego <= 0 && j.x > 0) { dispararBolasJefeLvl3(); j.proxFuego = j.fase === 3 ? 1.5 : 2.4; }
+        if (j.anilloEn > 0) {
+            // carga del anillo: el jefe brilla un instante antes de lanzarlo
+            j.anilloEn -= dt;
+            if (j.anilloEn <= 0) {
+                j.elemento.classList.remove("JefeCargandoLvl3");
+                dispararAnilloJefeLvl3();
+                j.proxFuego = j.fase === 3 ? 1.5 : 2.4;
+            }
+        } else {
+            j.proxFuego -= dt;
+            if (j.proxFuego <= 0 && j.x > 0) {
+                j.disparos++;
+                if (j.disparos % (j.fase === 3 ? 2 : 3) === 0) {   // cada 3.º disparo (cada 2.º en fase 3): anillo
+                    j.anilloEn = 0.7;
+                    j.elemento.classList.add("JefeCargandoLvl3");
+                    sfxLvl3.carga();
+                    textoFlotanteLvl3(Math.max(60, j.x + j.tam * 0.45), j.y - j.tam * 0.55, "¡ANILLO!", "item");
+                } else {
+                    dispararBolasJefeLvl3();
+                    j.proxFuego = j.fase === 3 ? 1.5 : 2.4;
+                }
+            }
+        }
     }
     j.elemento.style.width = j.tam + "px"; j.elemento.style.height = j.tam + "px";
     j.elemento.style.left = j.x + "px"; j.elemento.style.top = j.y + "px";
@@ -1047,8 +1180,9 @@ function bucleLvl3(ts) {
     actualizarMarcadoresLvl3();
     if (Tiempolvl3 <= 0) { perderNivel3("TIEMPO AGOTADO"); return; }
 
-    // Aparición de meteoritos (solo antes del jefe)
+    // Aparición de meteoritos y oleadas (solo antes del jefe)
     if (jefeLvl3.estado === "no") {
+        actualizarOleadaLvl3(dt, W, H);
         acumSpawnLvl3 += dt * factor;
         if (acumSpawnLvl3 >= proximoSpawnLvl3) {
             acumSpawnLvl3 = 0;
@@ -1089,6 +1223,7 @@ function limpiarEntidadesLvl3() {
     limpiarLasersLvl3();
     itemsLvl3.forEach(function (i) { i.el.remove(); }); itemsLvl3 = [];
     limpiarJefeLvl3();
+    limpiarOleadaLvl3();
     tableroNivel3.querySelectorAll(".ExplosionMeteoritoLvl3,.ParticulaLvl3,.TextoFlotanteLvl3,.AvisoLvl3,.DestelloLvl3").forEach(function (e) { e.remove(); });
 }
 function detenerMotorLvl3() {
@@ -1127,7 +1262,6 @@ function finalizarBaseLvl3() {
 }
 function ganarNivel3() {
     if (terminadoLvl3) return;
-    registrarVictoriaMision(3);
     Puntajelvl3 = OBJETIVO_NIVEL3;
     actualizarMarcadoresLvl3();
     finalizarBaseLvl3();

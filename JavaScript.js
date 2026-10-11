@@ -4,6 +4,12 @@ Puntaje = 0 //VARIABLE DE INICIO PUNTOS
 let vidasNivel1 = 3;
 let vidasNivel1Impactadas = { Meteiorito: false, Meteiorito2: false };
 let finDelJuegoNivel1 = false;
+const imagenesPlanetaNivel1 = [
+    'IMG/planetas_lvl2/planeta_0.png',
+    'IMG/planetas_lvl2/planeta_1.png',
+    'IMG/planetas_lvl2/planeta_2.png',
+    'IMG/planetas_lvl2/planeta_3.png'
+];
 const volumenNivel1Default = 0.7;
 const objetivoPuntosNivel1 = 15;
 const segundosCuentaNivel1 = 3;
@@ -88,6 +94,8 @@ function actualizarVidasNivel1() {
         vida.classList.toggle('perdida', !restante);
         vida.textContent = restante ? '♥' : '♡';
     });
+    const planeta = document.querySelector('#NIVEL_01 .Planeta, .Planeta');
+    if (planeta) planeta.src = imagenesPlanetaNivel1[Math.max(0, Math.min(3, 3 - vidasNivel1))];
 }
 
 function aplicarVolumenNivel1(valor) {

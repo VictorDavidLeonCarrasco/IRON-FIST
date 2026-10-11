@@ -1225,8 +1225,9 @@ margin-left: 12%; }
 
 #NIVEL_02 .Contenedorlvl2:not(.Cabezeralvl2) .Planetalvl2 {
     position: absolute;
-    top: 12%;
-    left: 80%;
+    /* Centro de la zona derecha, detrás de la línea de defensa. */
+    top: 50%;
+    left: 85%;
     width: clamp(250px, 18vw, 360px);
     height: auto;
     animation: girarPlanetaLvl2 10s linear infinite;
@@ -1238,8 +1239,8 @@ margin-left: 12%; }
 }
 
 @keyframes girarPlanetaLvl2 {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 @keyframes DestelloPlanetaLvl2Anim {
@@ -2827,6 +2828,53 @@ margin-left: 12%; }
 /* Pantalla de victoria más legible */
 .GanastePantallaLvL2 h1 {
     font-size: clamp(1rem, 1.7vw, 1.7rem);
+}
+
+/* Ajuste final del Nivel 2: planeta a la derecha y línea límite azul suave. */
+#NIVEL_02 #PlanetaLvl2 {
+    position: absolute !important;
+    top: calc(50% - clamp(125px, 9vw, 180px)) !important;
+    left: calc(85% - clamp(125px, 9vw, 180px)) !important;
+    width: clamp(250px, 18vw, 360px) !important;
+    height: auto !important;
+    animation: girarPlanetaLvl2 10s linear infinite !important;
+}
+
+/* Niveles 1 y 3: misma ubicación y animación visual del planeta del Nivel 2. */
+#Seccion_Juego .Planeta,
+#NIVEL3 #Planetalvl3 {
+    position: absolute !important;
+    top: calc(50% - clamp(125px, 9vw, 180px)) !important;
+    left: calc(85% - clamp(125px, 9vw, 180px)) !important;
+    width: clamp(250px, 18vw, 360px) !important;
+    height: auto !important;
+    animation: rotation 10s linear infinite !important;
+}
+
+#Seccion_Juego .Limite,
+#NIVEL3 .Limitelvl3 {
+    position: absolute;
+    top: 0;
+    left: 70%;
+    width: 50px;
+    height: 100%;
+    border-left: 2px dashed rgba(112, 199, 220, 0.22);
+    z-index: 2;
+}
+
+#NIVEL_02 .Limitelvl2 {
+    position: absolute;
+    top: 0;
+    left: 70%;
+    width: 50px;
+    height: 100%;
+    border-left: 2px dashed rgba(112, 199, 220, 0.22);
+    z-index: 2;
+}
+
+@keyframes girarPlanetaLvl2 {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .GanastePantallaLvL2 h3 {
@@ -4955,15 +5003,32 @@ body.creditos-activos { overflow: hidden; }
     60% { transform: translate(7px, 8px); }
     80% { transform: translate(-4px, 3px); }
 }
-/* Barrera de escudo sobre la línea límite */
+/* Escudo circular alrededor del planeta del Nivel 3. */
 #NIVEL3 .BarreraEscudoLvl3 {
-    position: absolute; top: 0; bottom: 0; width: 10px; margin-left: -4px;
-    z-index: 860; pointer-events: none; opacity: 0; transition: opacity .25s;
-    background: linear-gradient(90deg, transparent, rgba(111, 233, 255, .75), transparent);
-    box-shadow: 0 0 22px #6fe9ff;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid #6fe9ff;
+    background: radial-gradient(circle, transparent 55%, rgba(111, 233, 255, .28));
+    z-index: 1490;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .25s;
+    box-shadow: 0 0 16px #6fe9ff, inset 0 0 14px rgba(111, 233, 255, .5);
 }
-#NIVEL3 .BarreraEscudoLvl3.visible { opacity: 1; animation: barreraLvl3 1.2s ease-in-out infinite; }
-@keyframes barreraLvl3 { 0%, 100% { filter: brightness(.9); } 50% { filter: brightness(1.7); } }
+#NIVEL3 .BarreraEscudoLvl3.visible { opacity: .9; animation: barreraLvl3 1.2s ease-in-out infinite; }
+@keyframes barreraLvl3 {
+    0%, 100% { box-shadow: 0 0 12px #6fe9ff, inset 0 0 10px rgba(111, 233, 255, .4); }
+    50% { box-shadow: 0 0 24px #6fe9ff, inset 0 0 18px rgba(111, 233, 255, .7); }
+}
+
+/* Al ganar o perder el Nivel 3, el cursor vuelve a ser normal. */
+#NIVEL3.FinalizadoLvl3 .Contenedorlvl3:not(.Cabezeralvl3) {
+    cursor: default !important;
+}
+#NIVEL3.FinalizadoLvl3 button {
+    cursor: pointer !important;
+}
 
 /* Barra de progreso: marca del jefe */
 #NIVEL3 .BarraProgresoLvl3 { position: absolute; left: 0; right: 0; top: 0; height: 7px; z-index: 1800;

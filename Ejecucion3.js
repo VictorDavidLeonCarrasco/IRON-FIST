@@ -27,6 +27,12 @@ const naveJugadorLvl3 = document.getElementById('NaveJugadorLvl3');
 const inicioLvl3 = document.getElementById('Startlvl3');
 const planetaLvl3 = document.getElementById('Planetalvl3');
 const limiteLvl3 = tableroNivel3.querySelector('.Limitelvl3');
+const imagenesPlanetaLvl3 = [
+    'IMG/planetas_lvl2/planeta_0.png',
+    'IMG/planetas_lvl2/planeta_1.png',
+    'IMG/planetas_lvl2/planeta_2.png',
+    'IMG/planetas_lvl2/planeta_3.png'
+];
 
 // Los 4 meteoritos fijos del HTML antiguo ya no se usan (ahora se crean por código).
 document.querySelectorAll('#NIVEL3 .Meteoritolvl3').forEach(function (m) { m.remove(); });
@@ -393,7 +399,7 @@ const comboHudLvl3 = document.createElement("div");
 comboHudLvl3.className = "ComboLvl3";
 tableroNivel3.appendChild(comboHudLvl3);
 
-const barreraLvl3 = document.createElement("div");   // escudo del planeta: barrera sobre la línea límite
+const barreraLvl3 = document.createElement("div");   // escudo circular alrededor del planeta
 barreraLvl3.className = "BarreraEscudoLvl3";
 tableroNivel3.appendChild(barreraLvl3);
 
@@ -486,6 +492,7 @@ function actualizarVidasLvl3() {
     });
     tableroNivel3.classList.toggle("PeligroLvl3", vidasLvl3 === 1 && juegoActivoLvl3);
     planetaLvl3.style.setProperty("--dano", String(3 - Math.max(0, Math.min(3, vidasLvl3))));
+    planetaLvl3.src = imagenesPlanetaLvl3[Math.max(0, Math.min(3, 3 - vidasLvl3))];
 }
 function actualizarMarcadoresLvl3() {
     document.getElementById("Tiempolvl3").textContent = Tiempolvl3;
@@ -814,7 +821,10 @@ function activarItemLvl3(it) {
     sfxLvl3.item();
     if (it.tipo === "escudo") { escudoLvl3 = true; barreraLvl3.classList.add("visible"); textoFlotanteLvl3(it.x, it.y - 20, "ESCUDO DEL PLANETA", "item"); }
     else if (it.tipo === "triple") { triplesHastaLvl3 = tJuegoLvl3 + 8; textoFlotanteLvl3(it.x, it.y - 20, "DISPARO MÚLTIPLE", "item"); }
-    else if (it.tipo === "lenta") { lentaHastaLvl3 = tJuegoLvl3 + 5; textoFlotanteLvl3(it.x, it.y - 20, "CÁMARA LENTA", "item"); }
+    else if (it.tipo === "lenta") {
+    lentaHastaLvl3 = tJuegoLvl3 + 6;
+    textoFlotanteLvl3(it.x, it.y - 20, "CÁMARA LENTA", "item");
+}
     else {
         if (vidasLvl3 < 3) { vidasLvl3++; actualizarVidasLvl3(); }
         textoFlotanteLvl3(it.x, it.y - 20, "+1 VIDA", "item");
@@ -1037,7 +1047,7 @@ function bucleLvl3(ts) {
 
     tJuegoLvl3 += dt;
     const W = tableroNivel3.clientWidth, H = tableroNivel3.clientHeight;
-    const factor = tJuegoLvl3 < lentaHastaLvl3 ? 0.4 : 1;
+    const factor = tJuegoLvl3 < lentaHastaLvl3 ? 0.15 : 1;
 
     // Tiempo límite (se detiene mientras avisa o muere el jefe)
     if (jefeLvl3.estado !== "aviso" && jefeLvl3.estado !== "muriendo") transcurridoLvl3 += dt;
@@ -1076,7 +1086,11 @@ function bucleLvl3(ts) {
     posicionarBarreraLvl3();
 }
 function posicionarBarreraLvl3() {
-    barreraLvl3.style.left = xLimiteLvl3() + "px";
+    const radio = Math.max(planetaLvl3.offsetWidth, planetaLvl3.offsetHeight) * 0.64;
+    barreraLvl3.style.width = (radio * 2) + "px";
+    barreraLvl3.style.height = (radio * 2) + "px";
+    barreraLvl3.style.left = (planetaLvl3.offsetLeft + planetaLvl3.offsetWidth / 2) + "px";
+    barreraLvl3.style.top = (planetaLvl3.offsetTop + planetaLvl3.offsetHeight / 2) + "px";
 }
 function iniciarBucleLvl3() {
     if (rafLvl3) cancelAnimationFrame(rafLvl3);
@@ -1112,6 +1126,7 @@ function filaEstadisticasLvl3(extra) {
 function finalizarBaseLvl3() {
     terminadoLvl3 = true;
     juegoActivoLvl3 = false;
+    raizNivel3.classList.add("FinalizadoLvl3");
     mantenidoLvl3 = false; teclaDisparoLvl3 = false;
     if (rafLvl3) cancelAnimationFrame(rafLvl3);
     rafLvl3 = null;
@@ -1189,6 +1204,7 @@ function prepararPartidaLvl3() {
     comboHudLvl3.classList.remove("visible");
     Tiempolvl3 = TIEMPO_NIVEL3; Puntajelvl3 = 0; vidasLvl3 = 3;
     pausadoLvl3 = false; terminadoLvl3 = false; inclinacionLvl3 = 0;
+    raizNivel3.classList.remove("FinalizadoLvl3");
     actualizarVidasLvl3();
     actualizarMarcadoresLvl3();
     document.getElementById("DialogoCreditosLvl3").close();
